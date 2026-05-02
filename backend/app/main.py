@@ -81,62 +81,12 @@ async def handle_exception(request, exc):
         content={"message": "Internal server error"}
     )
 
-# Pydantic models for request/response
-class CandidateBase(BaseModel):
-    name: Optional[str] = None
-    email: str
-    github_username: Optional[str] = None
-
-class CandidateCreate(CandidateBase):
-    pass
-
-class CandidateResponse(CandidateBase):
-    id: uuid.UUID
-    created_at: datetime
-    
-    model_config = ConfigDict(from_attributes=True)
-
-class SkillBase(BaseModel):
-    name: str
-    category: Optional[str] = None
-
-class SkillCreate(SkillBase):
-    pass
-
-class SkillResponse(SkillBase):
-    id: uuid.UUID
-    
-    model_config = ConfigDict(from_attributes=True)
-
-class JobBase(BaseModel):
-    title: str
-    description: str
-    required_skills: Optional[List[str]] = None
-    nice_to_have_skills: Optional[List[str]] = None
-
-class JobCreate(JobBase):
-    pass
-
-class JobResponse(JobBase):
-    id: uuid.UUID
-    created_at: datetime
-    
-    model_config = ConfigDict(from_attributes=True)
-
-class JDInput(BaseModel):
-    text: str
-
-class MatchRequest(BaseModel):
-    candidate_data: Dict[str, Any]
-    jd_data: Dict[str, Any]
-    github_data: Optional[Dict[str, Any]] = None
-
-class FeedbackCreate(BaseModel):
-    candidate_id: str
-    job_id: str
-    hired: bool
-    performance_score: Optional[float] = None
-    notes: Optional[str] = None
+from .schemas import (
+    CandidateBase, CandidateCreate, CandidateResponse,
+    SkillBase, SkillCreate, SkillResponse,
+    JobBase, JobCreate, JobResponse,
+    JDInput, MatchRequest, FeedbackCreate, CheckoutRequest, NoteCreate
+)
 
 # Dependency to get DB session
 def get_db():
@@ -155,25 +105,9 @@ def read_root():
 def health_check():
     return {"status": "healthy"}
 
-# Candidates Endpoints
-@app.post("/candidates/", response_model=CandidateResponse)
-def create_candidate(candidate: CandidateCreate, db: Session = Depends(get_db)):
-    db_candidate = Candidate(**candidate.model_dump())
-    db.add(db_candidate)
-    db.commit()
-    db.refresh(db_candidate)
-    return db_candidate
-
-@app.get("/candidates/", response_model=List[CandidateResponse])
-def read_candidates(db: Session = Depends(get_db)):
-    return db.query(Candidate).all()
-
-@app.get("/candidates/{candidate_id}", response_model=CandidateResponse)
-def read_candidate(candidate_id: uuid.UUID, db: Session = Depends(get_db)):
-    db_candidate = db.query(Candidate).filter(Candidate.id == candidate_id).first()
-    if db_candidate is None:
-        raise HTTPException(status_code=404, detail="Candidate not found")
-    return db_candidate
+from .routers import candidates, jobs
+app.include_router(candidates.router)
+app.include_router(jobs.router)
 
 # Skills Endpoints
 @app.post("/skills/", response_model=SkillResponse)
@@ -188,59 +122,7 @@ def create_skill(skill: SkillCreate, db: Session = Depends(get_db)):
 def read_skills(db: Session = Depends(get_db)):
     return db.query(Skill).all()
 
-# Jobs Endpoints
-@app.post("/jobs/", response_model=JobResponse)
-def create_job(job: JobCreate, db: Session = Depends(get_db)):
-    db_job = Job(**job.model_dump())
-    db.add(db_job)
-    db.commit()
-    db.refresh(db_job)
-    return db_job
-
-@app.get("/jobs/", response_model=List[JobResponse])
-def read_jobs(db: Session = Depends(get_db)):
-    return db.query(Job).all()
-
-# Resume Parsing Endpoint
-@app.post("/parse-resume/")
-async def parse_resume_endpoint(
-    file: UploadFile = File(...),
-    db: Session = Depends(get_db)
-):
-    if not file.filename.endswith('.pdf'):
-        raise HTTPException(status_code=400, detail="Only PDF files are supported")
-    
-    contents = await file.read()
-    
-    # MIME type validation
-    mime = magic.Magic(mime=True)
-    mime_type = mime.from_buffer(contents)
-    if mime_type != 'application/pdf':
-        raise HTTPException(status_code=400, detail="Invalid file type. Only PDF files are allowed.")
-    
-    pdf_file = io.BytesIO(contents)
-    
-    try:
-        result = parse_resume(pdf_file)
-        # Track event
-        track_event(db, "resume_uploaded", event_metadata={
-            "skills_count": len(result.get("skills", []))
-        })
-        track_funnel_step(db, "resume_uploaded", "main")
-        return result
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error parsing resume: {str(e)}")
-
-# JD Parsing Endpoint
-@app.post("/parse-jd/")
-async def parse_jd_endpoint(jd_input: JDInput, db: Session = Depends(get_db)):
-    try:
-        result = parse_jd(jd_input.text)
-        # Track funnel step
-        track_funnel_step(db, "jd_pasted", "main")
-        return result
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error parsing JD: {str(e)}")
+# Jobs Endpoints moved to jobs router
 
 # GitHub Data Endpoint
 @app.get("/github/{username}")

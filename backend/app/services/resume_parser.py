@@ -10,11 +10,27 @@ nlp = spacy.load("en_core_web_sm")
 def extract_text_from_pdf(pdf_file) -> str:
     """Extract text from a PDF file."""
     text = ""
-    with pdfplumber.open(pdf_file) as pdf:
-        for page in pdf.pages:
-            page_text = page.extract_text()
-            if page_text:
-                text += page_text + "\n"
+    try:
+        with pdfplumber.open(pdf_file) as pdf:
+            for page in pdf.pages:
+                page_text = page.extract_text()
+                if page_text:
+                    text += page_text + "\n"
+                
+                # Also extract from tables as fallback
+                tables = page.extract_tables()
+                for table in tables:
+                    for row in table:
+                        row_text = " ".join([str(cell) for cell in row if cell])
+                        text += row_text + "\n"
+                        
+    except Exception as e:
+        print(f"Error extracting text from PDF: {str(e)}")
+        raise ValueError(f"Failed to read PDF file: {str(e)}")
+        
+    if not text.strip():
+        raise ValueError("No extractable text found in the PDF. It might be an image-based PDF.")
+        
     return text
 
 def extract_skills(text: str) -> List[str]:

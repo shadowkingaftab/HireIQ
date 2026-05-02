@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f8fafc;
+}
+
+:root {
+  --primary: #4f46e5;       /* Indigo 600 */
+  --primary-dark: #4338ca; /* Indigo 700 */
+  --secondary: #10b981;    /* Emerald 500 */
+  --accent: #f59e0b;       /* Amber 500 */
+  --dark: #1e293b;         /* Slate 800 */
+  --light: #f1f5f9;        /* Slate 100 */
+  --border: #e2e8f0;       /* Slate 200 */
+}
+
+.bg-gradient {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Micro-interactions */
+.btn-primary {
+  @apply bg-primary text-white px-6 py-3 rounded-lg font-semibold transition;
+}
+
+.btn-primary:hover {
+  @apply bg-primary-dark shadow-lg transform -translate-y-0.5;
+}
+
+.card {
+  @apply bg-white p-6 rounded-xl shadow-md transition;
+}
+
+.card:hover {
+  @apply shadow-lg transform -translate-y-1;
+}
+
+.input-field {
+  @apply w-full p-3 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition;
+}
+
+.input-field:focus {
+  @apply ring-2 ring-primary border-transparent;
+}

@@ -494,8 +494,15 @@ async def train_ml_model_endpoint(
 
 # Assessment Endpoints
 @app.get("/assessments/{skill}/{difficulty}")
-async def get_assessment(skill: str, difficulty: str = "medium"):
-    assessment = generate_assessment(skill, difficulty)
+async def get_assessment(
+    skill: str, 
+    difficulty: str = "medium",
+    db: Session = Depends(get_db),
+    # Optional dependency if not all users are authenticated yet
+    # For now we'll just try to get it if it's there or pass None
+    current_user: Optional[str] = None
+):
+    assessment = generate_assessment(skill, difficulty, user_id=current_user)
     if not assessment:
         raise HTTPException(status_code=404, detail="No assessments found")
     return assessment
@@ -517,18 +524,21 @@ async def grade_assessment_endpoint(
     code: str,
     db: Session = Depends(get_db)
 ):
-    # In a real app, fetch the assessment from DB
-    # For now, we'll use the assessment bank
+    # Extract base ID (e.g., "py-medium-1" from "py-medium-1-4521")
+    base_id = "-".join(assessment_id.split("-")[:-1]) if "-" in assessment_id and assessment_id.split("-")[-1].isdigit() else assessment_id
+
+    # In a real app, fetch the assessment from DB using the full assessment_id
+    # For now, we'll use the assessment bank and the base_id
     assessment = next(
         (a for a in ASSESSMENT_BANK.get("Python", {}).get("medium", []) 
-         if a["problem"] == assessment_id),
+         if a.get("id") == base_id or a.get("problem") == assessment_id),
         None
     )
     if not assessment:
         # Check easy bank if medium fails
         assessment = next(
             (a for a in ASSESSMENT_BANK.get("Python", {}).get("easy", []) 
-             if a["problem"] == assessment_id),
+             if a.get("id") == base_id or a.get("problem") == assessment_id),
             None
         )
         

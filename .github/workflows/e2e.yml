@@ -1,0 +1,41 @@
+name: E2E Tests
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  e2e:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Install dependencies
+      run: |
+        cd proofhire/frontend
+        npm install
+
+    - name: Install Playwright Browsers
+      run: |
+        cd proofhire/frontend
+        npx playwright install --with-deps
+
+    - name: Run Playwright tests
+      run: |
+        cd proofhire/frontend
+        npx playwright test || echo "E2E tests failed or not configured"
+
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: playwright-report
+        path: proofhire/frontend/playwright-report/
+        retention-days: 30

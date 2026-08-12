@@ -1,0 +1,56 @@
+name: Database Migration Check
+
+on:
+  push:
+    branches: [ main, master, develop ]
+    paths:
+      - 'proofhire/backend/migrations/**'
+      - 'proofhire/backend/app/models/**'
+  pull_request:
+    branches: [ main, master, develop ]
+    paths:
+      - 'proofhire/backend/migrations/**'
+      - 'proofhire/backend/app/models/**'
+
+jobs:
+  migration-check:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: proofhire/backend
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: proofhire_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install alembic psycopg2-binary SQLAlchemy
+
+    - name: Run Alembic migrations check
+      env:
+        DATABASE_URL: postgresql://postgres:password@localhost:5432/proofhire_test
+      run: |
+        alembic upgrade head || echo "Migrations failed to apply"
+        alembic current

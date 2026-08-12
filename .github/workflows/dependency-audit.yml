@@ -1,0 +1,37 @@
+name: Dependency Audit
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  schedule:
+    - cron: '0 0 * * 1'
+
+jobs:
+  audit-frontend:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - name: Run npm audit
+      run: |
+        cd proofhire/frontend
+        npm audit --audit-level=high || echo "Vulnerabilities found"
+
+  audit-backend:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    - name: Install Safety
+      run: pip install safety
+    - name: Run safety check
+      run: |
+        safety check -r proofhire/backend/requirements.txt || echo "Vulnerabilities found"

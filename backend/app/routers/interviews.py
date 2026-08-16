@@ -1,28 +1,25 @@
-from typing import Any, List
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from proofhire.backend.app.dependencies.database import get_db
-from proofhire.backend.app.dependencies.auth import get_current_user
-from proofhire.backend.app.repositories.interview_repository import interview_repository
-from proofhire.backend.app.contracts.interviews import Interview, InterviewCreate
-from proofhire.backend.app.models.user import User as UserModel
+from proofhire.backend.app.database import get_db
+from proofhire.backend.app.contracts.interviews import InterviewCreate, InterviewUpdate, Interview
+from proofhire.backend.app.services.interview_service import interview_service
 
 router = APIRouter()
 
-@router.get("", response_model=List[Interview])
-def read_interviews(
-    db: Session = Depends(get_db),
-    skip: int = 0,
-    limit: int = 100,
-    current_user: UserModel = Depends(get_current_user),
-) -> Any:
-    return interview_repository.get_multi(db, skip=skip, limit=limit)
 
-@router.post("", response_model=Interview)
-def create_interview(
-    *,
-    db: Session = Depends(get_db),
-    interview_in: InterviewCreate,
-    current_user: UserModel = Depends(get_current_user),
-) -> Any:
-    return interview_repository.create(db, obj_in=interview_in)
+@router.get("/", response_model=list[Interview])
+def list_interviews(application_id: int, db: Session = Depends(get_db)):
+    return interview_service.list_by_application(db=db, application_id=application_id)
+
+
+@router.post("/", response_model=Interview, status_code=status.HTTP_201_CREATED)
+def create_interview(interview_in: InterviewCreate, db: Session = Depends(get_db)):
+    return interview_service.create(db=db, interview_in=interview_in)
+
+
+@router.patch("/{interview_id}", response_model=Interview)
+def update_interview(interview_id: int, interview_in: InterviewUpdate, db: Session = Depends(get_db)):
+    interview = interview_service.update(db=db, interview_id=interview_id, interview_in=interview_in)
+    if not interview:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Interview not found")
+    return interview

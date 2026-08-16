@@ -1,11 +1,17 @@
-from typing import List, Dict, Any
-from proofhire.backend.app.integrations.github.client import GithubClient
-from proofhire.backend.app.integrations.github.mapper import github_mapper
+import logging
+from typing import Any, Dict, List
+
+logger = logging.getLogger(__name__)
+
 
 class RepositoryFetcher:
-    def __init__(self, client: GithubClient):
+    def __init__(self, client: Any = None):
         self.client = client
 
-    async def fetch_all(self) -> List[Dict[str, Any]]:
-        raw_repos = await self.client.get_repos()
-        return [github_mapper.map_repo(r) for r in raw_repos]
+    async def fetch_user_repositories(self, username: str) -> List[Dict[str, Any]]:
+        if self.client is None:
+            return []
+        return await self.client.get_user_repos(username)
+
+
+repository_fetcher = RepositoryFetcher()

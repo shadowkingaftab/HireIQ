@@ -1,0 +1,27 @@
+[
+  {
+    "id": "python",
+    "type": "language",
+    "skill_id": "python"
+  },
+  {
+    "id": "fastapi",
+    "type": "framework",
+    "skill_id": "fastapi"
+  },
+  {
+    "id": "react",
+    "type": "framework",
+    "skill_id": "react"
+  },
+  {
+    "id": "docker",
+    "type": "tool",
+    "skill_id": "docker"
+  },
+  {
+    "id": "postgresql",
+    "type": "database",
+    "skill_id": "postgresql"
+  }
+]

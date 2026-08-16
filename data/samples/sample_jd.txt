@@ -1,0 +1,15 @@
+Senior Backend Engineer
+
+We are looking for a Senior Backend Engineer to build scalable APIs and services.
+
+Requirements:
+- 5+ years of Python experience
+- Experience with FastAPI or Django
+- Strong SQL skills (PostgreSQL preferred)
+- Experience with Docker and Kubernetes
+- Familiarity with CI/CD pipelines
+
+Nice-to-have:
+- Experience with LLM APIs
+- Open source contributions
+- AWS/GCP experience

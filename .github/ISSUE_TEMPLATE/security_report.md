@@ -18,3 +18,6 @@ Please provide steps to reproduce the issue.
 
 **Proposed fix**
 If you have a suggestion for how to fix the issue, please include it here.
+
+**Contact**
+Please provide contact info for follow-up questions.

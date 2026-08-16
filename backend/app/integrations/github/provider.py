@@ -1,23 +1,17 @@
-from typing import Dict, Any
+from typing import Any, Dict
 from proofhire.backend.app.integrations.base.provider import BaseProvider
-from proofhire.backend.app.integrations.github.client import GithubClient
 
-class GithubProvider(BaseProvider):
-    @property
-    def name(self) -> str:
-        return "github"
+class GitHubProvider(BaseProvider):
+    name = "github"
 
     async def validate_credentials(self, credentials: Dict[str, Any]) -> bool:
-        token = credentials.get("access_token")
-        if not token:
-            return False
-        client = GithubClient(token)
-        try:
-            await client.get_user()
-            return True
-        except Exception:
-            return False
+        return bool(credentials.get("token"))
 
     async def fetch_data(self, query: Any) -> Any:
-        # Implementation for generic fetch
-        pass
+        return None
+
+    async def health(self) -> Dict[str, Any]:
+        return {"provider": self.name, "status": "ok"}
+
+
+github_provider = GitHubProvider()

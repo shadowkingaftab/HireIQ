@@ -1,15 +1,28 @@
 from typing import List, Optional
 from sqlalchemy.orm import Session
-from proofhire.backend.app.repositories.organization_repository import organization_repository
 from proofhire.backend.app.contracts.organizations import OrganizationCreate, OrganizationUpdate
 from proofhire.backend.app.models.organization import Organization
 
 class OrganizationService:
-    def create(self, db: Session, *, org_in: OrganizationCreate) -> Organization:
-        # Business logic for org creation (e.g. slug generation)
-        return organization_repository.create(db, obj_in=org_in)
+    def list(self, db: Session) -> List[Organization]:
+        return db.query(Organization).all()
 
-    def get_by_slug(self, db: Session, *, slug: str) -> Optional[Organization]:
-        return organization_repository.get_by_slug(db, slug=slug)
+    def get(self, db: Session, *, organization_id: int) -> Optional[Organization]:
+        return db.query(Organization).filter(Organization.id == organization_id).first()
+
+    def create(self, db: Session, *, org_in: OrganizationCreate) -> Organization:
+        db_obj = Organization(**org_in.dict())
+        db.add(db_obj)
+        db.commit()
+        db.refresh(db_obj)
+        return db_obj
+
+    def update(self, db: Session, *, db_obj: Organization, obj_in: OrganizationUpdate) -> Organization:
+        for field, value in obj_in.dict(exclude_unset=True).items():
+            setattr(db_obj, field, value)
+        db.commit()
+        db.refresh(db_obj)
+        return db_obj
+
 
 organization_service = OrganizationService()

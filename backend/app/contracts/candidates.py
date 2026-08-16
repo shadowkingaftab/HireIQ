@@ -1,5 +1,6 @@
-from typing import Optional, List, Dict
+from typing import Optional, List
 from proofhire.backend.app.schemas import CoreModel, TimestampModel
+
 
 class CandidateBase(CoreModel):
     user_id: int
@@ -9,11 +10,14 @@ class CandidateBase(CoreModel):
     linkedin_url: Optional[str] = None
     skills: List[str] = []
 
+
 class CandidateCreate(CandidateBase):
     pass
 
+
 class CandidateUpdate(CandidateBase):
     pass
+
 
 class Candidate(CandidateBase, TimestampModel):
     id: int

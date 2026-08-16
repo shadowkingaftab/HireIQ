@@ -11,6 +11,9 @@ on:
 jobs:
   audit-frontend:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: proofhire/frontend
     steps:
     - uses: actions/checkout@v4
     - name: Set up Node.js
@@ -18,12 +21,13 @@ jobs:
       with:
         node-version: '20'
     - name: Run npm audit
-      run: |
-        cd proofhire/frontend
-        npm audit --audit-level=high || echo "Vulnerabilities found"
+      run: npm audit --audit-level=high || echo "Vulnerabilities found"
 
   audit-backend:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: proofhire/backend
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python
@@ -33,5 +37,4 @@ jobs:
     - name: Install Safety
       run: pip install safety
     - name: Run safety check
-      run: |
-        safety check -r proofhire/backend/requirements.txt || echo "Vulnerabilities found"
+      run: safety check -r requirements.txt || echo "Vulnerabilities found"

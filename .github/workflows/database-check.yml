@@ -52,5 +52,5 @@ jobs:
       env:
         DATABASE_URL: postgresql://postgres:password@localhost:5432/proofhire_test
       run: |
-        alembic upgrade head || echo "Migrations failed to apply"
+        alembic upgrade head
         alembic current

@@ -1,9 +1,14 @@
-from typing import Dict, Any
+import logging
+from typing import Any, Dict
 
-class GithubWebhookHandler:
-    async def handle(self, payload: Dict[str, Any]):
-        event_type = payload.get("event")
-        # Logic to process push, pull_request, etc.
-        pass
+logger = logging.getLogger(__name__)
 
-github_webhook_handler = GithubWebhookHandler()
+
+class GitHubWebhookHandler:
+    async def handle(self, payload: Dict[str, Any]) -> Dict[str, Any]:
+        event_type = payload.get("action")
+        logger.info("Handling GitHub webhook: %s", event_type)
+        return {"received": True}
+
+
+github_webhook_handler = GitHubWebhookHandler()

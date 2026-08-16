@@ -1,0 +1,20 @@
+[
+  {
+    "id": "backend_development",
+    "name": "Backend Development",
+    "description": "Building server-side applications and APIs",
+    "skill_ids": ["python", "fastapi", "postgresql", "docker"]
+  },
+  {
+    "id": "frontend_development",
+    "name": "Frontend Development",
+    "description": "Building user interfaces and client-side applications",
+    "skill_ids": ["react", "typescript", "tailwindcss"]
+  },
+  {
+    "id": "devops",
+    "name": "DevOps",
+    "description": "CI/CD, infrastructure, and deployment",
+    "skill_ids": ["docker", "kubernetes", "redis"]
+  }
+]

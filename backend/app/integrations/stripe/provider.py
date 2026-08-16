@@ -1,13 +1,16 @@
-from typing import Dict, Any
+from typing import Any, Dict
+
 from proofhire.backend.app.integrations.base.provider import BaseProvider
 
+
 class StripeProvider(BaseProvider):
-    @property
-    def name(self) -> str:
-        return "stripe"
+    name = "stripe"
 
     async def validate_credentials(self, credentials: Dict[str, Any]) -> bool:
         return bool(credentials.get("api_key"))
 
     async def fetch_data(self, query: Any) -> Any:
-        pass
+        return None
+
+    async def health(self) -> Dict[str, Any]:
+        return {"provider": self.name, "status": "ok"}

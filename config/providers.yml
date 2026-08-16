@@ -1,0 +1,39 @@
+version: 1
+
+providers:
+  github:
+    enabled: true
+    rate_limit: 5000
+    retry_attempts: 3
+    retry_base_delay: 1.0
+
+  linkedin:
+    enabled: false
+    rate_limit: 100
+    retry_attempts: 3
+    retry_base_delay: 2.0
+
+  greenhouse:
+    enabled: true
+    rate_limit: 1000
+    retry_attempts: 3
+    retry_base_delay: 1.0
+
+  stripe:
+    enabled: true
+    rate_limit: 100
+    retry_attempts: 3
+    retry_base_delay: 0.5
+
+  openai:
+    enabled: true
+    rate_limit: 60
+    retry_attempts: 3
+    retry_base_delay: 1.0
+    fallback: anthropic
+
+  anthropic:
+    enabled: true
+    rate_limit: 60
+    retry_attempts: 3
+    retry_base_delay: 1.0

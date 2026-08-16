@@ -1,0 +1,75 @@
+openapi: 3.0.3
+info:
+  title: ProofHire API
+  version: 0.1.0
+paths:
+  /api/v1/auth/login:
+    post:
+      tags: [auth]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username: { type: string }
+                password: { type: string }
+      responses:
+        "200":
+          description: OK
+  /api/v1/candidates:
+    get:
+      tags: [candidates]
+      responses:
+        "200":
+          description: OK
+    post:
+      tags: [candidates]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "201":
+          description: Created
+  /api/v1/jobs:
+    get:
+      tags: [jobs]
+      responses:
+        "200":
+          description: OK
+    post:
+      tags: [jobs]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "201":
+          description: Created
+  /api/v1/matching/jobs/{job_id}/match:
+    post:
+      tags: [matching]
+      parameters:
+        - name: job_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                candidate_ids:
+                  type: array
+                  items:
+                    type: integer
+                limit:
+                  type: integer
+      responses:
+        "200":
+          description: OK

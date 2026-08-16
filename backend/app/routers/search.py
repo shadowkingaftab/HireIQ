@@ -1,13 +1,10 @@
-from typing import Any, List
 from fastapi import APIRouter, Depends
-from proofhire.backend.app.contracts.search import GlobalSearchRequest, SearchResult
+from proofhire.backend.app.contracts.search import GlobalSearchRequest
+from proofhire.backend.app.services.search_service import search_service
 
 router = APIRouter()
 
-@router.post("", response_model=List[SearchResult])
-def search(
-    *,
-    search_in: GlobalSearchRequest,
-) -> Any:
-    # Logic to call search index would go here
-    return []
+
+@router.post("/")
+def global_search(request: GlobalSearchRequest):
+    return search_service.global_search(query=request.query, types=request.types, limit=request.limit)

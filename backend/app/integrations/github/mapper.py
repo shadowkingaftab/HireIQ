@@ -1,16 +1,13 @@
-from typing import Dict, Any
+from typing import Any, Dict
 
-class GithubMapper:
-    def map_repo(self, raw_repo: Dict[str, Any]) -> Dict[str, Any]:
+class GitHubMapper:
+    def map_repo_to_evidence(self, repo: Dict[str, Any]) -> Dict[str, Any]:
         return {
-            "external_id": str(raw_repo.get("id")),
-            "name": raw_repo.get("name"),
-            "full_name": raw_repo.get("full_name"),
-            "url": raw_repo.get("html_url"),
-            "description": raw_repo.get("description"),
-            "primary_language": raw_repo.get("language"),
-            "stargazers_count": raw_repo.get("stargazers_count"),
-            "forks_count": raw_repo.get("forks_count"),
+            "source": "github",
+            "type": "repository",
+            "content": repo,
+            "raw_id": str(repo.get("id")),
         }
 
-github_mapper = GithubMapper()
+
+github_mapper = GitHubMapper()

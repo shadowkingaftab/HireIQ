@@ -1,20 +1,13 @@
-from typing import Any, List
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from proofhire.backend.app.dependencies.database import get_db
-from proofhire.backend.app.dependencies.auth import get_current_user
-from proofhire.backend.app.repositories.matching_repository import matching_repository
-from proofhire.backend.app.contracts.matching import MatchingResult, MatchingRequest
-from proofhire.backend.app.models.user import User as UserModel
+from proofhire.backend.app.database import get_db
+from proofhire.backend.app.contracts.matching import MatchingRequest, MatchingResult
+from proofhire.backend.app.services.matching_engine import matching_engine
 
 router = APIRouter()
 
-@router.post("/run", response_model=List[MatchingResult])
-def run_matching(
-    *,
-    db: Session = Depends(get_db),
-    matching_in: MatchingRequest,
-    current_user: UserModel = Depends(get_current_user),
-) -> Any:
-    # Logic to trigger matching engine would go here
-    return matching_repository.get_matches_for_job(db, job_id=matching_in.job_id, limit=matching_in.limit)
+
+@router.post("/jobs/{job_id}/match", response_model=list[MatchingResult])
+def match_candidates_for_job(job_id: int, request: MatchingRequest, db: Session = Depends(get_db)):
+    results = matching_engine.rank_candidates(db=db, job_id=job_id, candidate_ids=request.candidate_ids, limit=request.limit)
+    return results

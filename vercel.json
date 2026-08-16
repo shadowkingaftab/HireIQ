@@ -1,0 +1,22 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "proofhire/frontend/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "proofhire/frontend/dist"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "https://proofhire-api.onrender.com/api/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "proofhire/frontend/dist/$1"
+    }
+  ]
+}

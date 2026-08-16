@@ -1,0 +1,14 @@
+{
+  "login": "example",
+  "id": 1,
+  "public_repos": 5,
+  "repositories": [
+    {
+      "id": 1,
+      "name": "example-repo",
+      "language": "Python",
+      "stargazers_count": 10,
+      "pushed_at": "2026-01-01T00:00:00Z"
+    }
+  ]
+}

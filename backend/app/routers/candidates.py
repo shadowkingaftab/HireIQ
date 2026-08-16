@@ -1,29 +1,25 @@
-from typing import Any, List
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from proofhire.backend.app.dependencies.database import get_db
-from proofhire.backend.app.dependencies.auth import get_current_user
-from proofhire.backend.app.repositories.candidate_repository import candidate_repository
-from proofhire.backend.app.contracts.candidates import Candidate, CandidateCreate, CandidateUpdate
-from proofhire.backend.app.models.user import User as UserModel
+from proofhire.backend.app.database import get_db
+from proofhire.backend.app.contracts.candidates import CandidateCreate, CandidateUpdate, Candidate
+from proofhire.backend.app.services.candidate_service import candidate_service
 
 router = APIRouter()
 
-@router.get("", response_model=List[Candidate])
-def read_candidates(
-    db: Session = Depends(get_db),
-    skip: int = 0,
-    limit: int = 100,
-    current_user: UserModel = Depends(get_current_active_superuser),
-) -> Any:
-    return candidate_repository.get_multi(db, skip=skip, limit=limit)
 
-@router.get("/me", response_model=Candidate)
-def read_candidate_me(
-    db: Session = Depends(get_db),
-    current_user: UserModel = Depends(get_current_user),
-) -> Any:
-    candidate = candidate_repository.get_by_user_id(db, user_id=current_user.id)
+@router.get("/", response_model=list[Candidate])
+def list_candidates(db: Session = Depends(get_db)):
+    return candidate_service.list(db=db)
+
+
+@router.post("/", response_model=Candidate, status_code=status.HTTP_201_CREATED)
+def create_candidate(candidate_in: CandidateCreate, db: Session = Depends(get_db)):
+    return candidate_service.create(db=db, candidate_in=candidate_in)
+
+
+@router.get("/{candidate_id}", response_model=Candidate)
+def get_candidate(candidate_id: int, db: Session = Depends(get_db)):
+    candidate = candidate_service.get(db=db, candidate_id=candidate_id)
     if not candidate:
-        raise HTTPException(status_code=404, detail="Candidate profile not found")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Candidate not found")
     return candidate

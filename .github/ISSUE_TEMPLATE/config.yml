@@ -3,3 +3,6 @@ contact_links:
   - name: ProofHire Support
     url: https://github.com/your-org/proofhire/discussions
     about: Please ask questions in our discussions forum.
+  - name: Security Policy
+    url: https://github.com/your-org/proofhire/blob/main/SECURITY.md
+    about: Please review our security policy before reporting vulnerabilities.

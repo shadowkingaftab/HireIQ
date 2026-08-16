@@ -1,0 +1,37 @@
+[
+  {
+    "id": "r1",
+    "source_id": "python",
+    "target_id": "fastapi",
+    "type": "subset_of",
+    "weight": 0.9
+  },
+  {
+    "id": "r2",
+    "source_id": "fastapi",
+    "target_id": "python",
+    "type": "requires",
+    "weight": 0.9
+  },
+  {
+    "id": "r3",
+    "source_id": "docker",
+    "target_id": "fastapi",
+    "type": "related",
+    "weight": 0.7
+  },
+  {
+    "id": "r4",
+    "source_id": "postgresql",
+    "target_id": "fastapi",
+    "type": "related",
+    "weight": 0.8
+  },
+  {
+    "id": "r5",
+    "source_id": "react",
+    "target_id": "fastapi",
+    "type": "related",
+    "weight": 0.6
+  }
+]

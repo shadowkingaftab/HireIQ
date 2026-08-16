@@ -1,0 +1,27 @@
+version: 1
+
+weights:
+  skill_overlap: 0.4
+  experience: 0.3
+  evidence_quality: 0.3
+
+calibration:
+  min_score: 0.0
+  max_score: 1.0
+  uncertainty_penalty: 0.1
+
+evidence:
+  reliability_scores:
+    github: 0.8
+    assessment: 0.9
+    resume: 0.5
+    certification: 0.85
+    linkedin: 0.6
+
+  freshness_max_age_days: 90
+  min_evidence_count: 1
+
+uncertainty:
+  low_threshold: 0.3
+  medium_threshold: 0.6
+  high_threshold: 0.8

@@ -1,19 +1,25 @@
-from typing import Any, List
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from proofhire.backend.app.dependencies.database import get_db
-from proofhire.backend.app.dependencies.auth import get_current_user
-from proofhire.backend.app.repositories.evidence_repository import evidence_repository
-from proofhire.backend.app.contracts.evidence import Evidence, EvidenceCreate
-from proofhire.backend.app.models.user import User as UserModel
+from proofhire.backend.app.database import get_db
+from proofhire.backend.app.contracts.evidence import EvidenceCreate, EvidenceUpdate, Evidence
+from proofhire.backend.app.services.evidence_service import evidence_service
 
 router = APIRouter()
 
-@router.get("", response_model=List[Evidence])
-def read_evidence(
-    db: Session = Depends(get_db),
-    skip: int = 0,
-    limit: int = 100,
-    current_user: UserModel = Depends(get_current_user),
-) -> Any:
-    return evidence_repository.get_multi(db, skip=skip, limit=limit)
+
+@router.get("/candidates/{candidate_id}", response_model=list[Evidence])
+def list_evidence(candidate_id: int, db: Session = Depends(get_db)):
+    return evidence_service.list_by_candidate(db=db, candidate_id=candidate_id)
+
+
+@router.post("/candidates/{candidate_id}", response_model=Evidence, status_code=status.HTTP_201_CREATED)
+def create_evidence(candidate_id: int, evidence_in: EvidenceCreate, db: Session = Depends(get_db)):
+    return evidence_service.create(db=db, candidate_id=candidate_id, evidence_in=evidence_in)
+
+
+@router.patch("/{evidence_id}", response_model=Evidence)
+def update_evidence(evidence_id: int, evidence_in: EvidenceUpdate, db: Session = Depends(get_db)):
+    evidence = evidence_service.update(db=db, evidence_id=evidence_id, evidence_in=evidence_in)
+    if not evidence:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Evidence not found")
+    return evidence

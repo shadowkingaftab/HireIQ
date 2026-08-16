@@ -1,16 +1,31 @@
-from typing import Dict, List, Set, Any
+import logging
+from typing import Any, Dict, List
 
-class SkillOntology:
+logger = logging.getLogger(__name__)
+
+
+class Ontology:
     def __init__(self):
-        # Mapping of skill IDs to metadata
-        self._skills: Dict[str, Dict[str, Any]] = {}
-        # Hierarchy: category -> subcategory -> skill_ids
-        self._hierarchy: Dict[str, Any] = {}
+        self._nodes: Dict[str, Dict[str, Any]] = {}
+        self._taxonomy: Dict[str, List[str]] = {}
 
-    def get_skill_metadata(self, skill_id: str) -> Dict[str, Any]:
-        return self._skills.get(skill_id, {})
+    def register_node(self, node_id: str, properties: Dict[str, Any]) -> None:
+        self._nodes[node_id] = properties
 
-    def get_children(self, category: str) -> List[str]:
-        return self._hierarchy.get(category, [])
+    def add_category(self, category: str, skills: List[str]) -> None:
+        self._taxonomy[category] = skills
 
-ontology = SkillOntology()
+    def get_category(self, skill: str) -> Optional[str]:
+        for category, skills in self._taxonomy.items():
+            if skill in skills:
+                return category
+        return None
+
+    def related(self, skill: str) -> List[str]:
+        category = self.get_category(skill)
+        if not category:
+            return []
+        return [s for s in self._taxonomy.get(category, []) if s != skill]
+
+
+ontology = Ontology()

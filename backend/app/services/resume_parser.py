@@ -1,13 +1,8 @@
-from typing import Dict, Any
+from typing import Any, Dict, Optional
 
 class ResumeParser:
-    def parse(self, *, resume_content: bytes) -> Dict[str, Any]:
-        # Placeholder for AI-powered resume parsing logic
-        return {
-            "skills": ["python", "fastapi", "react"],
-            "experience_years": 5,
-            "education": "BS Computer Science",
-            "summary": "Full stack developer with 5 years of experience."
-        }
+    async def parse(self, resume_id: str) -> Dict[str, Any]:
+        return {"resume_id": resume_id, "skills": [], "experience": []}
+
 
 resume_parser = ResumeParser()

@@ -1,0 +1,35 @@
+version: 1
+
+pipeline:
+  - name: feature_builder
+    enabled: true
+  - name: graph_matcher
+    enabled: true
+    weight: 0.4
+  - name: semantic_matcher
+    enabled: true
+    weight: 0.3
+  - name: experience_matcher
+    enabled: true
+    weight: 0.3
+  - name: evidence_quality_matcher
+    enabled: true
+    weight: 0.3
+
+fairness:
+  enabled: true
+  max_disparity: 0.3
+  protected_attributes:
+    - gender
+    - ethnicity
+    - age
+
+caching:
+  enabled: true
+  ttl_seconds: 3600
+  backend: redis
+
+explanation:
+  enabled: true
+  include_citations: true
+  max_skills_display: 10

@@ -1,10 +1,19 @@
-from typing import List, Dict, Any
+import logging
+from typing import Any, Dict, List
 
-class VisualizationPayloadBuilder:
-    def build_d3_payload(self, nodes: List[str], edges: List[Dict[str, Any]]) -> Dict[str, Any]:
-        return {
-            "nodes": [{"id": n} for n in nodes],
-            "links": [{"source": e["from"], "target": e["to"], "type": e["type"]} for e in edges]
-        }
+logger = logging.getLogger(__name__)
 
-viz_builder = VisualizationPayloadBuilder()
+
+class VisualizationPayload:
+    def __init__(self, nodes: List[Dict[str, Any]], edges: List[Dict[str, Any]]):
+        self.nodes = nodes
+        self.edges = edges
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {"nodes": self.nodes, "edges": self.edges}
+
+    def filter_by_type(self, node_type: str) -> "VisualizationPayload":
+        filtered_nodes = [n for n in self.nodes if n.get("type") == node_type]
+        node_ids = {n["id"] for n in filtered_nodes}
+        filtered_edges = [e for e in self.edges if e["source"] in node_ids and e["target"] in node_ids]
+        return VisualizationPayload(nodes=filtered_nodes, edges=filtered_edges)

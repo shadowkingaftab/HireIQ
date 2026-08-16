@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>Recruiter Report</title></head>
+<body>
+  <h1>Recruiter Report: {{ recruiter_name }}</h1>
+  <p>Generated at: {{ generated_at }}</p>
+  <h2>Activity Summary</h2>
+  <p>Searches: {{ searches }}</p>
+  <p>Views: {{ views }}</p>
+  <p>Shortlists: {{ shortlists }}</p>
+  <h2>Top Sources</h2>
+  <ul>
+    {% for source in top_sources %}
+    <li>{{ source.source }}: {{ source.count }}</li>
+    {% endfor %}
+  </ul>
+</body>
+</html>

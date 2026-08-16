@@ -1,11 +1,13 @@
 from typing import Optional, List, Dict, Any
 from proofhire.backend.app.schemas import CoreModel
 
+
 class AnalyticsBase(CoreModel):
     organization_id: int
     metric_name: str
     value: float
     dimensions: Optional[Dict[str, str]] = None
+
 
 class AnalyticsSummary(CoreModel):
     total_applications: int

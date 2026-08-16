@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "email": "admin@proofhire.io",
+    "full_name": "Admin User",
+    "role": "admin",
+    "password": "admin123"
+  },
+  {
+    "id": 2,
+    "email": "recruiter@proofhire.io",
+    "full_name": "Recruiter User",
+    "role": "recruiter",
+    "password": "recruiter123"
+  },
+  {
+    "id": 3,
+    "email": "candidate@proofhire.io",
+    "full_name": "Candidate User",
+    "role": "candidate",
+    "password": "candidate123"
+  }
+]

@@ -1,0 +1,9 @@
+{
+  "job_id": 1,
+  "organization_id": 1,
+  "recruiter_id": 1,
+  "title": "Backend Engineer",
+  "description": "Build APIs",
+  "requirements": "Python, FastAPI",
+  "status": "open"
+}

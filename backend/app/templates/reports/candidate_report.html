@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>Candidate Report</title></head>
+<body>
+  <h1>Candidate Report: {{ candidate_name }}</h1>
+  <p>Generated at: {{ generated_at }}</p>
+  <h2>Summary</h2>
+  <p>{{ summary }}</p>
+  <h2>Skills</h2>
+  <ul>
+    {% for skill in skills %}
+    <li>{{ skill }}</li>
+    {% endfor %}
+  </ul>
+  <h2>Evidence</h2>
+  <ul>
+    {% for item in evidence %}
+    <li>{{ item.source }}: {{ item.description }}</li>
+    {% endfor %}
+  </ul>
+</body>
+</html>

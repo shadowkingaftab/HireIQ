@@ -10,6 +10,10 @@ jobs:
   e2e:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: proofhire/frontend
+
     steps:
     - uses: actions/checkout@v4
 
@@ -17,21 +21,16 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '20'
+        cache: 'npm'
 
     - name: Install dependencies
-      run: |
-        cd proofhire/frontend
-        npm install
+      run: npm ci
 
     - name: Install Playwright Browsers
-      run: |
-        cd proofhire/frontend
-        npx playwright install --with-deps
+      run: npx playwright install --with-deps chromium
 
     - name: Run Playwright tests
-      run: |
-        cd proofhire/frontend
-        npx playwright test || echo "E2E tests failed or not configured"
+      run: npx playwright test
 
     - uses: actions/upload-artifact@v4
       if: always()

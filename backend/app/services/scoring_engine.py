@@ -1,25 +1,30 @@
-from typing import Dict, Any, List
-from proofhire.backend.app.models.job import Job
-from proofhire.backend.app.models.candidate import Candidate
+from typing import List, Dict, Any
+from proofhire.backend.app.matching.feature_builder import feature_builder
+from proofhire.backend.app.matching.graph_matcher import graph_matcher
+from proofhire.backend.app.matching.experience_matcher import experience_matcher
+from proofhire.backend.app.matching.evidence_quality_matcher import evidence_quality_matcher
+from proofhire.backend.app.matching.uncertainty import uncertainty
+from proofhire.backend.app.matching.score_calibrator import score_calibrator
 
 class ScoringEngine:
-    def calculate_score(self, *, job: Job, candidate: Candidate) -> Dict[str, Any]:
-        # Placeholder for complex scoring logic
-        job_skills = set(job.ideal_skills)
-        candidate_skills = set(candidate.skills_data.get("skills", []))
-        
-        matched = list(job_skills.intersection(candidate_skills))
-        missing = list(job_skills.difference(candidate_skills))
-        
-        score = 0.0
-        if job_skills:
-            score = (len(matched) / len(job_skills)) * 100
-            
+    def calculate_score(self, *, job: Dict[str, Any], candidate: Dict[str, Any]) -> Dict[str, Any]:
+        features = feature_builder.build_for_pair(job=job, candidate=candidate)
+        graph_score = graph_matcher.match(job=job, candidate=candidate)
+        experience_score = experience_matcher.match(job=job, candidate=candidate)
+        evidence_score = evidence_quality_matcher.match(job=job, candidate=candidate)
+        total = (
+            0.4 * graph_score.get("score", 0.0)
+            + 0.3 * experience_score.get("score", 0.0)
+            + 0.3 * evidence_score.get("score", 0.0)
+        )
+        calibrated = score_calibrator.calibrate(total)
+        unc = uncertainty.estimate(score=calibrated, evidence_count=features.get("evidence_count", 0))
         return {
-            "total_score": round(score, 2),
-            "matched_skills": matched,
-            "missing_skills": missing,
-            "reasoning": f"Matched {len(matched)} out of {len(job_skills)} required skills."
+            "total_score": calibrated,
+            "matched_skills": graph_score.get("matched_skills", []),
+            "missing_skills": graph_score.get("missing_skills", []),
+            "reasoning": {"features": features, "uncertainty": unc},
         }
+
 
 scoring_engine = ScoringEngine()

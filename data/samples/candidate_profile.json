@@ -1,0 +1,26 @@
+{
+  "id": 1,
+  "user_id": 3,
+  "name": "Candidate User",
+  "email": "candidate@proofhire.io",
+  "summary": "Full-stack engineer with 5 years of experience.",
+  "skills": ["python", "fastapi", "react", "docker", "postgresql"],
+  "experience_years": 5,
+  "github_url": "https://github.com/octocat",
+  "evidence": [
+    {
+      "id": 1,
+      "type": "github_repo",
+      "title": "Hello-World",
+      "url": "https://github.com/octocat/Hello-World",
+      "verified": true
+    }
+  ],
+  "capabilities": [
+    {
+      "id": "backend_development",
+      "name": "Backend Development",
+      "confidence": 0.9
+    }
+  ]
+}

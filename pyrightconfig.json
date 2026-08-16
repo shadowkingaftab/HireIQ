@@ -1,0 +1,16 @@
+{
+  "reportMissingImports": true,
+  "reportMissingTypeStubs": true,
+  "pythonVersion": "3.11",
+  "typeCheckingMode": "basic",
+  "exclude": [
+    "**/node_modules",
+    "**/__pycache__",
+    "**/.venv",
+    "**/venv",
+    "**/dist",
+    "**/build"
+  ],
+  "venvPath": ".",
+  "venv": ".venv"
+}

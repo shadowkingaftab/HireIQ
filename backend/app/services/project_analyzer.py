@@ -1,11 +1,8 @@
-from typing import List, Dict, Any
+from typing import Any, Dict, List
 
 class ProjectAnalyzer:
-    def analyze_project(self, *, project_data: Dict[str, Any]) -> Dict[str, Any]:
-        # Higher-level project impact analysis
-        return {
-            "innovation_score": 0.8,
-            "domain_expertise": ["fintech", "ai"]
-        }
+    def analyze(self, *, projects: List[Dict[str, Any]]) -> Dict[str, Any]:
+        return {"count": len(projects), "complexity": "unknown"}
+
 
 project_analyzer = ProjectAnalyzer()

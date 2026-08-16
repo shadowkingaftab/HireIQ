@@ -1,0 +1,6 @@
+{
+  "profile": "default",
+  "allowed_languages": ["python", "javascript", "sql"],
+  "blocked_imports": ["os", "subprocess", "socket"],
+  "max_output_size": "1mb"
+}

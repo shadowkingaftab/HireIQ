@@ -1,5 +1,7 @@
 from typing import Optional, List, Dict, Any
-from proofhire.backend.app.schemas import CoreModel
+from datetime import datetime
+from proofhire.backend.app.schemas import CoreModel, TimestampModel
+
 
 class ReportBase(CoreModel):
     organization_id: int
@@ -7,7 +9,12 @@ class ReportBase(CoreModel):
     type: str
     parameters: Optional[Dict[str, Any]] = None
 
-class Report(ReportBase):
+
+class ReportCreate(ReportBase):
+    pass
+
+
+class Report(ReportBase, TimestampModel):
     id: int
     file_url: Optional[str] = None
     generated_at: Optional[datetime] = None

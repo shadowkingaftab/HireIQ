@@ -1,10 +1,26 @@
-from typing import List, Dict, Any
+import logging
+from typing import Any, Dict, List, Optional
 
-class SimilarityCalculator:
-    def calculate_skill_similarity(self, skill_a: str, skill_b: str) -> float:
-        # Distance based similarity in the graph (0.0 to 1.0)
-        if skill_a == skill_b:
-            return 1.0
-        return 0.0
+logger = logging.getLogger(__name__)
 
-similarity_calculator = SimilarityCalculator()
+
+class Similarity:
+    def jaccard(self, a: List[str], b: List[str]) -> float:
+        set_a = set(a)
+        set_b = set(b)
+        if not set_a and not set_b:
+            return 0.0
+        return len(set_a.intersection(set_b)) / len(set_a.union(set_b))
+
+    def cosine(self, a: List[float], b: List[float]) -> float:
+        if len(a) != len(b) or not a:
+            return 0.0
+        dot = sum(x * y for x, y in zip(a, b))
+        norm_a = sum(x * x for x in a) ** 0.5
+        norm_b = sum(y * y for y in b) ** 0.5
+        if norm_a == 0 or norm_b == 0:
+            return 0.0
+        return dot / (norm_a * norm_b)
+
+
+similarity = Similarity()

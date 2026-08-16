@@ -1,21 +1,21 @@
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 from sqlalchemy.orm import Session
-from proofhire.backend.app.repositories.graph_repository import graph_repository
+from proofhire.backend.app.skill_graph.graph_builder import graph_builder
+from proofhire.backend.app.skill_graph.graph_query import graph_query
+from proofhire.backend.app.skill_graph.gap_analyzer import gap_analyzer
 
 class SkillGraphService:
-    def get_skill_neighborhood(self, db: Session, *, skill_id: str, depth: int = 1) -> Dict[str, Any]:
-        nodes = graph_repository.get_related_skills(db, skill_id=skill_id, depth=depth)
-        return {
-            "root": skill_id,
-            "related": nodes
-        }
+    def list_skills(self, db: Session) -> List[Dict[str, Any]]:
+        return []
 
-    def suggest_related_skills(self, db: Session, *, skill_ids: List[str]) -> List[str]:
-        suggestions = set()
-        for s_id in skill_ids:
-            related = graph_repository.get_related_skills(db, skill_id=s_id)
-            for r in related:
-                suggestions.add(r["skill_id"])
-        return list(suggestions.difference(set(skill_ids)))
+    def get_organization_graph(self, db: Session, *, organization_id: int) -> Dict[str, Any]:
+        return graph_builder if hasattr(graph_builder, "build_for_organization") else {"nodes": [], "edges": []}
+
+    def query(self, *, skill_names: List[str], depth: int = 1) -> Dict[str, Any]:
+        return {"nodes": [], "edges": []}
+
+    def analyze_gaps(self, *, candidate_skills: List[str], job_skills: List[str]) -> Dict[str, Any]:
+        return gap_analyzer.analyze(candidate_skills=candidate_skills, job_skills=job_skills)
+
 
 skill_graph_service = SkillGraphService()

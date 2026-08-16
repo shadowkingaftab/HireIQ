@@ -1,13 +1,11 @@
-from typing import Any
 from fastapi import APIRouter, Request
+from proofhire.backend.app.integrations.stripe.client import StripeIntegration
 
 router = APIRouter()
+integration = StripeIntegration()
 
-@router.post("/{provider}")
-async def handle_webhook(
-    provider: str,
-    request: Request,
-) -> Any:
+
+@router.post("/stripe")
+async def stripe_webhook(request: Request):
     payload = await request.json()
-    # Logic to process webhook based on provider
-    return {"status": "received"}
+    return await integration.handle_webhook(payload)

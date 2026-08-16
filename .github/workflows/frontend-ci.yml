@@ -28,13 +28,19 @@ jobs:
         cache-dependency-path: proofhire/frontend/package.json
 
     - name: Install dependencies
-      run: npm install
+      run: npm ci
 
     - name: Lint
-      run: npm run lint || echo "Linting failed, but continuing for now"
+      run: npm run lint
 
     - name: Build
       run: npm run build
 
     - name: Test
-      run: npm test || echo "Tests failed, but continuing for now"
+      run: npm test -- --coverage
+
+    - name: Upload coverage
+      uses: codecov/codecov-action@v4
+      with:
+        files: ./coverage/lcov.info
+        fail_ci_if_error: false

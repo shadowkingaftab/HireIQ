@@ -1,17 +1,12 @@
-from typing import Any, Dict
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from proofhire.backend.app.dependencies.database import get_db
-from proofhire.backend.app.dependencies.auth import get_current_user
-from proofhire.backend.app.repositories.analytics_repository import analytics_repository
-from proofhire.backend.app.models.user import User as UserModel
+from proofhire.backend.app.database import get_db
+from proofhire.backend.app.services.analytics_service import analytics_service
+from proofhire.backend.app.contracts.analytics import AnalyticsSummary
 
 router = APIRouter()
 
-@router.get("/org/{org_id}")
-def read_org_analytics(
-    org_id: int,
-    db: Session = Depends(get_db),
-    current_user: UserModel = Depends(get_current_user),
-) -> Any:
-    return analytics_repository.get_org_stats(db, organization_id=org_id)
+
+@router.get("/organizations/{organization_id}/summary", response_model=AnalyticsSummary)
+def get_analytics_summary(organization_id: int, db: Session = Depends(get_db)):
+    return analytics_service.summary(db=db, organization_id=organization_id)

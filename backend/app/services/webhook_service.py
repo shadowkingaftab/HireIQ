@@ -1,10 +1,8 @@
-from typing import Dict, Any
-from sqlalchemy.orm import Session
-from proofhire.backend.app.models.notification import WebhookEvent
+from typing import Any, Dict, Optional
 
 class WebhookService:
-    def trigger_event(self, db: Session, *, organization_id: int, event_type: str, payload: Dict[str, Any]):
-        # Logic to find registered webhooks for the org and queue them
+    def send(self, *, event: str, payload: Dict[str, Any]) -> None:
         pass
+
 
 webhook_service = WebhookService()

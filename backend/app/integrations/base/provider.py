@@ -1,16 +1,14 @@
-from abc import ABC, abstractmethod
-from typing import Any, Dict, List
+from typing import Any, Dict
 
-class BaseProvider(ABC):
-    @property
-    @abstractmethod
-    def name(self) -> str:
-        pass
 
-    @abstractmethod
+class BaseProvider:
+    name: str = "base"
+
     async def validate_credentials(self, credentials: Dict[str, Any]) -> bool:
-        pass
+        raise NotImplementedError
 
-    @abstractmethod
     async def fetch_data(self, query: Any) -> Any:
-        pass
+        raise NotImplementedError
+
+    async def health(self) -> Dict[str, Any]:
+        return {"provider": self.name, "status": "unknown"}

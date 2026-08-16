@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [ main, master ]
   schedule:
-    - cron: '0 0 * * 1' # Every Monday at midnight
+    - cron: '0 0 * * 1'
 
 jobs:
   analyze:
@@ -45,3 +45,18 @@ jobs:
       run: pip install bandit
     - name: Run Bandit
       run: bandit -r proofhire/backend -ll
+
+  npm-audit:
+    name: npm Audit (Frontend)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: proofhire/frontend
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - name: Run npm audit
+      run: npm audit --audit-level=high

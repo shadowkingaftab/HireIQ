@@ -1,0 +1,32 @@
+[
+  {
+    "id": "web_development",
+    "name": "Web Development",
+    "description": "Building web applications",
+    "parent_id": null
+  },
+  {
+    "id": "backend_development",
+    "name": "Backend Development",
+    "description": "Server-side development",
+    "parent_id": "web_development"
+  },
+  {
+    "id": "frontend_development",
+    "name": "Frontend Development",
+    "description": "Client-side development",
+    "parent_id": "web_development"
+  },
+  {
+    "id": "devops",
+    "name": "DevOps",
+    "description": "Operations and deployment",
+    "parent_id": "web_development"
+  },
+  {
+    "id": "data_engineering",
+    "name": "Data Engineering",
+    "description": "Data pipelines and warehousing",
+    "parent_id": null
+  }
+]

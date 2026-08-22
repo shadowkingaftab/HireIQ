@@ -1,0 +1,42 @@
+name: Deployment
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: proofhire
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+        cache-dependency-path: proofhire/frontend/package.json
+
+    - name: Install frontend dependencies
+      run: |
+        cd proofhire/frontend
+        npm ci
+
+    - name: Build frontend
+      run: |
+        cd proofhire/frontend
+        npm run build
+
+    - name: Deploy to Render
+      uses: johnbeynon/render-deploy@v0.0.8
+      with:
+        service-id: ${{ secrets.RENDER_SERVICE_ID }}
+        api-key: ${{ secrets.RENDER_API_KEY }}
+        wait-for-deploy: true
+        retries: 3
+        timeout: 300

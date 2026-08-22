@@ -1,0 +1,22 @@
+[
+  {
+    "from_skill_id": "python",
+    "to_skill_id": "fastapi",
+    "relation_type": "subset_of"
+  },
+  {
+    "from_skill_id": "fastapi",
+    "to_skill_id": "python",
+    "relation_type": "requires"
+  },
+  {
+    "from_skill_id": "docker",
+    "to_skill_id": "fastapi",
+    "relation_type": "related"
+  },
+  {
+    "from_skill_id": "postgresql",
+    "to_skill_id": "fastapi",
+    "relation_type": "related"
+  }
+]

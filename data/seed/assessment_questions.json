@@ -1,0 +1,27 @@
+[
+  {
+    "id": "q1",
+    "assessment_id": 1,
+    "type": "multiple_choice",
+    "prompt": "What is the time complexity of binary search?",
+    "options": ["O(n)", "O(log n)", "O(n log n)", "O(1)"],
+    "correct_index": 1,
+    "difficulty": "easy"
+  },
+  {
+    "id": "q2",
+    "assessment_id": 1,
+    "type": "code",
+    "prompt": "Write a Python function to reverse a string.",
+    "language": "python",
+    "tests": [
+      {
+        "name": "test_reverse",
+        "function": "reverse",
+        "args": ["hello"],
+        "expected": "olleh"
+      }
+    ],
+    "difficulty": "medium"
+  }
+]

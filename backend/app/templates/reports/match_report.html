@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>Match Report</title></head>
+<body>
+  <h1>Match Report</h1>
+  <p>Generated at: {{ generated_at }}</p>
+  <h2>Job: {{ job_title }}</h2>
+  <h2>Candidates</h2>
+  <table border="1" cellpadding="6" cellspacing="0">
+    <thead>
+      <tr><th>Candidate</th><th>Score</th><th>Evidence Score</th><th>Confidence</th></tr>
+    </thead>
+    <tbody>
+      {% for candidate in candidates %}
+      <tr>
+        <td>{{ candidate.name }}</td>
+        <td>{{ candidate.score }}</td>
+        <td>{{ candidate.evidence_score }}</td>
+        <td>{{ candidate.confidence }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</body>
+</html>

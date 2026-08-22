@@ -1,0 +1,14 @@
+{
+  "assessment_id": "assessment-1",
+  "title": "Python Skills Assessment",
+  "duration_minutes": 30,
+  "questions": [
+    {
+      "id": 1,
+      "type": "multiple_choice",
+      "prompt": "What is Python?",
+      "options": ["A snake", "A programming language", "A movie", "A game"],
+      "correct_index": 1
+    }
+  ]
+}

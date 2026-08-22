@@ -1,0 +1,10 @@
+logging:
+  level: INFO
+  format: json
+  outputs:
+    - type: console
+      format: json
+    - type: file
+      path: /var/log/proofhire/app.log
+      rotation: daily
+      retention: 14d

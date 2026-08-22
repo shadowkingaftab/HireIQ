@@ -1,0 +1,42 @@
+services:
+  - type: web
+    name: proofhire-api
+    runtime: python
+    plan: standard
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn proofhire.backend.app.main:app --host 0.0.0.0 --port $PORT --workers 4
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: proofhire-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          name: proofhire-redis
+          type: redis
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+    autoDeploy: true
+    healthCheckPath: /api/v1/health
+
+  - type: worker
+    name: proofhire-worker
+    runtime: python
+    plan: standard
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m proofhire.backend.app.workers.worker
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: proofhire-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          name: proofhire-redis
+          type: redis
+          property: connectionString

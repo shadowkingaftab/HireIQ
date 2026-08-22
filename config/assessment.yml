@@ -1,0 +1,37 @@
+version: 1
+
+adaptive:
+  enabled: true
+  initial_difficulty: medium
+  min_questions: 5
+  max_questions: 20
+  mastery_threshold: 0.8
+  struggle_threshold: 0.3
+
+anti_cheat:
+  enabled: true
+  max_window_switches: 3
+  max_paste_events: 2
+  max_tab_switches: 2
+  flag_on_anomaly: true
+
+plagiarism:
+  enabled: true
+  similarity_threshold: 0.8
+  check_submissions: true
+
+rubric:
+  default_weight: 1.0
+  criteria:
+    - name: correctness
+      weight: 0.6
+    - name: performance
+      weight: 0.2
+    - name: style
+      weight: 0.2
+
+sandbox:
+  enabled: true
+  timeout_seconds: 30
+  memory_limit_mb: 256
+  network_disabled: true

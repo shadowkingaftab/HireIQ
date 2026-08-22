@@ -1,0 +1,38 @@
+app:
+  name: ProofHire
+  version: 0.1.0
+  environment: development
+
+server:
+  host: 0.0.0.0
+  port: 8000
+  workers: 4
+  reload: false
+
+database:
+  pool_size: 5
+  max_overflow: 10
+  echo: false
+
+redis:
+  max_connections: 50
+  socket_timeout: 5
+
+logging:
+  level: INFO
+  format: json
+
+ai:
+  default_provider: openai
+  fallback_provider: anthropic
+  max_retries: 3
+  timeout_seconds: 30
+
+evidence:
+  freshness_max_age_days: 90
+  min_reliability_score: 0.3
+
+matching:
+  default_limit: 10
+  min_score_threshold: 0.25
+  cache_ttl_seconds: 3600

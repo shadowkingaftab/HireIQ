@@ -1,0 +1,42 @@
+{
+  "info": {
+    "name": "ProofHire",
+    "schema": "https://schema.postman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/v1/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"user@example.com\",\n  \"password\": \"secret\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Candidates",
+      "item": [
+        {
+          "name": "List Candidates",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/v1/candidates"
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "name": "baseUrl",
+      "value": "http://localhost:8000"
+    }
+  ]
+}

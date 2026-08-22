@@ -1,0 +1,32 @@
+[
+  {
+    "id": "python",
+    "name": "Python",
+    "category": "language",
+    "description": "General-purpose programming language"
+  },
+  {
+    "id": "fastapi",
+    "name": "FastAPI",
+    "category": "framework",
+    "description": "Modern Python web framework"
+  },
+  {
+    "id": "docker",
+    "name": "Docker",
+    "category": "tooling",
+    "description": "Containerization platform"
+  },
+  {
+    "id": "postgresql",
+    "name": "PostgreSQL",
+    "category": "database",
+    "description": "Relational database"
+  },
+  {
+    "id": "react",
+    "name": "React",
+    "category": "framework",
+    "description": "JavaScript UI library"
+  }
+]

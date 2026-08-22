@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "title": "Senior Backend Engineer",
+    "description": "Build scalable APIs and services.",
+    "location": "Remote",
+    "status": "open",
+    "skills": ["python", "fastapi", "postgresql", "docker"]
+  },
+  {
+    "id": 2,
+    "title": "Frontend Engineer",
+    "description": "Build modern web interfaces.",
+    "location": "Remote",
+    "status": "open",
+    "skills": ["react", "typescript", "tailwindcss"]
+  }
+]

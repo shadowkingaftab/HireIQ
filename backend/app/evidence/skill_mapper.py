@@ -9,7 +9,7 @@ class SkillMapper:
         if not text_content:
             return []
         try:
-            from proofhire.backend.app.ai.extraction import extraction
+            from backend.app.ai.extraction import extraction
             import asyncio
             return asyncio.run(extraction.extract_skills(text_content))
         except Exception:
@@ -18,3 +18,4 @@ class SkillMapper:
 
 
 skill_mapper = SkillMapper()
+

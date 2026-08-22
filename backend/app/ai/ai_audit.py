@@ -3,8 +3,8 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 
-from proofhire.backend.app.ai.hallucination_guard import HallucinationGuard
-from proofhire.backend.app.ai.citation_builder import CitationBuilder
+from backend.app.ai.hallucination_guard import HallucinationGuard
+from backend.app.ai.citation_builder import CitationBuilder
 
 logger = logging.getLogger(__name__)
 
@@ -93,3 +93,4 @@ class AIAudit:
 
 
 ai_audit = AIAudit()
+

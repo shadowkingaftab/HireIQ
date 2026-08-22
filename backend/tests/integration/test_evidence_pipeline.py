@@ -1,7 +1,7 @@
 import pytest
 from httpx import AsyncClient
 
-from proofhire.backend.main import app
+from backend.main import app
 
 
 @pytest.mark.asyncio
@@ -18,3 +18,4 @@ async def test_evidence_ingest_and_list():
             headers={"Authorization": "Bearer candidate-token"},
         )
         assert list_resp.status_code == 200
+

@@ -46,3 +46,6 @@ class SkillGraph:
                     visited.add(neighbor)
                     queue.append(path + [neighbor])
         return []
+
+
+graph_builder = SkillGraph()

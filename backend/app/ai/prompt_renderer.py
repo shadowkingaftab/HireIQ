@@ -1,7 +1,7 @@
 import logging
 from typing import Any, Dict, Optional
 
-from proofhire.backend.app.ai.prompt_registry import PromptRegistry, PromptTemplate
+from backend.app.ai.prompt_registry import PromptRegistry, PromptTemplate
 
 logger = logging.getLogger(__name__)
 
@@ -34,3 +34,4 @@ class PromptRenderer:
 
 
 prompt_renderer = PromptRenderer()
+

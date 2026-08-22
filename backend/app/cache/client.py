@@ -1,7 +1,7 @@
 import logging
 from typing import Any, Generic, Optional, TypeVar
 
-from proofhire.backend.app.core.config import settings
+from backend.app.core.config import settings
 
 logger = logging.getLogger(__name__)
 
@@ -66,3 +66,4 @@ class CacheClient:
 
 
 cache_client = CacheClient()
+

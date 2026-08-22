@@ -1,7 +1,7 @@
-from sqlalchemy import Column, Integer, Text, ForeignKey, Float
+from sqlalchemy import Column, Integer, Text, ForeignKey, Float, String
 from sqlalchemy.orm import relationship
-from proofhire.backend.app.database import Base
-from proofhire.backend.app.models.base import TimestampMixin
+from backend.app.database import Base
+from backend.app.models.base import TimestampMixin
 
 class Feedback(Base, TimestampMixin):
     __tablename__ = "feedbacks"
@@ -22,3 +22,6 @@ class Feedback(Base, TimestampMixin):
 
     def __repr__(self):
         return f"<Feedback(app_id={self.application_id}, rating={self.rating})>"
+
+
+

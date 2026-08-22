@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, JSON, Boolean
 from sqlalchemy.orm import relationship
-from proofhire.backend.app.database import Base
-from proofhire.backend.app.models.base import TimestampMixin
+from backend.app.database import Base
+from backend.app.models.base import TimestampMixin
 
 class ExternalAccount(Base, TimestampMixin):
     __tablename__ = "external_accounts"
@@ -23,3 +23,4 @@ class ExternalAccount(Base, TimestampMixin):
 
     def __repr__(self):
         return f"<ExternalAccount(provider={self.provider}, username={self.username})>"
+

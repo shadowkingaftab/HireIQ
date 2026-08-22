@@ -1,7 +1,7 @@
 import logging
 from typing import Any, Dict, List, Optional
 
-from proofhire.backend.app.ai.inference_router import InferenceRouter, TaskKind
+from backend.app.ai.inference_router import InferenceRouter, TaskKind
 
 logger = logging.getLogger(__name__)
 
@@ -11,7 +11,7 @@ class Extraction:
         self.router = router or InferenceRouter()
 
     async def extract_skills(self, text: str, model_override: Optional[str] = None) -> List[str]:
-        from proofhire.backend.app.ai.prompt_renderer import PromptRenderer
+        from backend.app.ai.prompt_renderer import PromptRenderer
         renderer = PromptRenderer()
         prompt = renderer.render("skill_extraction", {"input": text})
         result = await self.router.route(
@@ -25,7 +25,7 @@ class Extraction:
         return [s for s in skills if isinstance(s, str)]
 
     async def extract_experience(self, text: str, model_override: Optional[str] = None) -> Dict[str, Any]:
-        from proofhire.backend.app.ai.prompt_renderer import PromptRenderer
+        from backend.app.ai.prompt_renderer import PromptRenderer
         renderer = PromptRenderer()
         prompt = (
             "Extract work experience from the following text. "
@@ -53,3 +53,4 @@ class Extraction:
 
 
 extraction = Extraction()
+

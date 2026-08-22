@@ -1,11 +1,12 @@
 from typing import List, Optional
 from sqlalchemy.orm import Session
-from proofhire.backend.app.models.evidence import Evidence, EvidenceSkillLink
-from proofhire.backend.app.contracts.evidence import EvidenceCreate, EvidenceUpdate
-from proofhire.backend.app.evidence.normalizer import normalizer
-from proofhire.backend.app.evidence.validator import validator
-from proofhire.backend.app.evidence.deduplicator import deduplicator
-from proofhire.backend.app.evidence.aggregator import aggregator
+from backend.app.models.evidence import Evidence
+from backend.app.models.evidence_skill_link import EvidenceSkillLink
+from backend.app.contracts.evidence import EvidenceCreate, EvidenceUpdate
+from backend.app.evidence.normalizer import normalizer
+from backend.app.evidence.validator import validator
+from backend.app.evidence.deduplicator import deduplicator
+from backend.app.evidence.aggregator import aggregator
 
 class EvidenceService:
     def list_by_candidate(self, db: Session, *, candidate_id: int) -> List[Evidence]:

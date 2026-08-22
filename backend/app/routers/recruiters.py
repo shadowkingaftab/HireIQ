@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from proofhire.backend.app.database import get_db
-from proofhire.backend.app.contracts.recruiters import RecruiterCreate, RecruiterUpdate, Recruiter
-from proofhire.backend.app.services.recruiter_service import recruiter_service
+from backend.app.database import get_db
+from backend.app.contracts.recruiters import RecruiterCreate, RecruiterUpdate, Recruiter
+from backend.app.services.recruiter_service import recruiter_service
 
 router = APIRouter()
 
@@ -23,3 +23,4 @@ def get_recruiter(recruiter_id: int, db: Session = Depends(get_db)):
     if not recruiter:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Recruiter not found")
     return recruiter
+

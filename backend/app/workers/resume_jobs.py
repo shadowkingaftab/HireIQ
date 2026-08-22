@@ -10,7 +10,8 @@ async def process_resume_job(payload: Dict[str, Any]) -> None:
         logger.warning("Missing resume_id in resume job payload")
         return
     try:
-        from proofhire.backend.app.services.resume_parser import resume_parser
+        from backend.app.services.resume_parser import resume_parser
         await resume_parser.parse(resume_id)
     except Exception:
         logger.exception("Resume job failed for %s", resume_id)
+

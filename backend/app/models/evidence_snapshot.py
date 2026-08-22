@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, ForeignKey, JSON, DateTime, func
 from sqlalchemy.orm import relationship
-from proofhire.backend.app.database import Base
-from proofhire.backend.app.models.base import TimestampMixin
+from backend.app.database import Base
+from backend.app.models.base import TimestampMixin
 
 class EvidenceSnapshot(Base, TimestampMixin):
     __tablename__ = "evidence_snapshots"
@@ -12,3 +12,4 @@ class EvidenceSnapshot(Base, TimestampMixin):
     captured_at = Column(DateTime(timezone=True), server_default=func.now())
 
     evidence = relationship("Evidence", back_populates="snapshots")
+

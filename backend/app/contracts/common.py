@@ -1,5 +1,5 @@
 from typing import Optional, List, Dict, Any
-from proofhire.backend.app.schemas import CoreModel
+from backend.app.schemas import CoreModel
 
 
 class SearchParams(CoreModel):
@@ -12,3 +12,4 @@ class SearchParams(CoreModel):
 class SortParams(CoreModel):
     field: str
     order: str = "asc"
+

@@ -31,8 +31,8 @@ services:
 
   backend:
     build:
-      context: .
-      dockerfile: infrastructure/docker/backend.Dockerfile
+      context: ./backend
+      dockerfile: ../infrastructure/docker/backend.Dockerfile
     ports:
       - "8000:8000"
     environment:
@@ -45,7 +45,7 @@ services:
       redis:
         condition: service_healthy
     volumes:
-      - ./proofhire/backend:/app/app
+       - ./backend/app:/app/app
 
   worker:
     build:

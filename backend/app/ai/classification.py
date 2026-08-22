@@ -1,7 +1,7 @@
 import logging
 from typing import Any, Dict, List, Optional
 
-from proofhire.backend.app.ai.inference_router import InferenceRouter, TaskKind
+from backend.app.ai.inference_router import InferenceRouter, TaskKind
 
 logger = logging.getLogger(__name__)
 
@@ -11,7 +11,7 @@ class Classification:
         self.router = router or InferenceRouter()
 
     async def classify_evidence_strength(self, evidence_text: str, model_override: Optional[str] = None) -> Dict[str, Any]:
-        from proofhire.backend.app.ai.prompt_renderer import PromptRenderer
+        from backend.app.ai.prompt_renderer import PromptRenderer
         renderer = PromptRenderer()
         prompt = renderer.render("evidence_classifier", {"evidence": evidence_text})
         result = await self.router.route(
@@ -48,3 +48,4 @@ class Classification:
 
 
 classification = Classification()
+

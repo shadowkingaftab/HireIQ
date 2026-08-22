@@ -1,14 +1,14 @@
 from typing import Any, Dict, List
 
-from proofhire.backend.app.analytics.candidate_analytics import CandidateAnalytics
-from proofhire.backend.app.analytics.recruiter_analytics import RecruiterAnalytics
-from proofhire.backend.app.analytics.organization_analytics import OrganizationAnalytics
-from proofhire.backend.app.analytics.funnel_analytics import FunnelAnalytics
-from proofhire.backend.app.analytics.hiring_velocity import HiringVelocity
-from proofhire.backend.app.analytics.sourcing_analytics import SourcingAnalytics
-from proofhire.backend.app.analytics.model_analytics import ModelAnalytics
-from proofhire.backend.app.analytics.evidence_analytics import EvidenceAnalytics
-from proofhire.backend.app.analytics.assessment_analytics import AssessmentAnalytics
+from backend.app.analytics.candidate_analytics import CandidateAnalytics
+from backend.app.analytics.recruiter_analytics import RecruiterAnalytics
+from backend.app.analytics.organization_analytics import OrganizationAnalytics
+from backend.app.analytics.funnel_analytics import FunnelAnalytics
+from backend.app.analytics.hiring_velocity import HiringVelocity
+from backend.app.analytics.sourcing_analytics import SourcingAnalytics
+from backend.app.analytics.model_analytics import ModelAnalytics
+from backend.app.analytics.evidence_analytics import EvidenceAnalytics
+from backend.app.analytics.assessment_analytics import AssessmentAnalytics
 
 
 class AnalyticsQueries:
@@ -33,3 +33,4 @@ class AnalyticsQueries:
         self.model = model_analytics or ModelAnalytics(db=None)
         self.evidence = evidence_analytics or EvidenceAnalytics(db=None)
         self.assessment = assessment_analytics or AssessmentAnalytics(db=None)
+

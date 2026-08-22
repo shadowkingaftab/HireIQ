@@ -1,7 +1,7 @@
 from typing import Optional, List
 from pydantic import Field
-from proofhire.backend.app.schemas import CoreModel, TimestampModel
-from proofhire.backend.app.core.constants import JobStatus
+from backend.app.schemas import CoreModel, TimestampModel
+from backend.app.core.constants import JobStatus
 
 
 class JobBase(CoreModel):
@@ -26,3 +26,4 @@ class Job(JobBase, TimestampModel):
     id: int
     organization_id: int
     recruiter_id: int
+

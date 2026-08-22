@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
-from proofhire.backend.app.database import Base
-from proofhire.backend.app.models.base import TimestampMixin
+from backend.app.database import Base
+from backend.app.models.base import TimestampMixin
 
 class EvidenceSource(Base, TimestampMixin):
     __tablename__ = "evidence_sources"
@@ -12,3 +12,4 @@ class EvidenceSource(Base, TimestampMixin):
     is_active = Column(Boolean, default=True)
 
     evidence = relationship("Evidence", back_populates="source")
+

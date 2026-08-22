@@ -1,7 +1,7 @@
 import logging
 from typing import Any, Dict, List, Optional
 
-from proofhire.backend.app.ai.inference_router import InferenceRouter, TaskKind
+from backend.app.ai.inference_router import InferenceRouter, TaskKind
 
 logger = logging.getLogger(__name__)
 
@@ -15,7 +15,7 @@ class Reranking:
     ) -> List[Dict[str, Any]]:
         if not candidates:
             return []
-        from proofhire.backend.app.ai.prompt_renderer import PromptRenderer
+        from backend.app.ai.prompt_renderer import PromptRenderer
         renderer = PromptRenderer()
         candidates_text = "\n".join(
             f"- {c.get('name', c.get('candidate_id', 'unknown'))}: {c.get('text', '')[:300]}"
@@ -46,3 +46,4 @@ class Reranking:
 
 
 reranking = Reranking()
+

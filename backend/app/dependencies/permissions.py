@@ -1,6 +1,6 @@
 from typing import List
-from proofhire.backend.app.core.constants import UserRole
-from proofhire.backend.app.dependencies.auth import get_current_active_user
+from backend.app.core.constants import UserRole
+from backend.app.dependencies.auth import get_current_active_user
 
 def require_roles(roles: List[UserRole]):
     def checker(current_user = Depends(get_current_active_user)):
@@ -8,3 +8,4 @@ def require_roles(roles: List[UserRole]):
             raise HTTPException(status_code=403, detail="Forbidden")
         return current_user
     return checker
+

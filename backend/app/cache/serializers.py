@@ -1,8 +1,8 @@
 import json
 from typing import Any, Optional
 
-from proofhire.backend.app.cache.client import cache_client
-from proofhire.backend.app.cache.keys import CacheKeys
+from backend.app.cache.client import cache_client
+from backend.app.cache.keys import CacheKeys
 
 
 class CacheSerializer:
@@ -39,3 +39,4 @@ class Cached:
 
     def job_key(self, job_id: str) -> str:
         return CacheKeys.job(job_id)
+

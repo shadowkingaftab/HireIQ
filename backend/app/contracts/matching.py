@@ -1,5 +1,5 @@
 from typing import Optional, List, Dict, Any
-from proofhire.backend.app.schemas import CoreModel
+from backend.app.schemas import CoreModel
 
 
 class MatchingResult(CoreModel):
@@ -15,3 +15,4 @@ class MatchingRequest(CoreModel):
     job_id: int
     candidate_ids: Optional[List[int]] = None
     limit: int = 10
+

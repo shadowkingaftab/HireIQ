@@ -1,8 +1,8 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Enum
 from sqlalchemy.orm import relationship
-from proofhire.backend.app.database import Base
-from proofhire.backend.app.models.base import TimestampMixin
-from proofhire.backend.app.core.constants import UserRole
+from backend.app.database import Base
+from backend.app.models.base import TimestampMixin
+from backend.app.core.constants import UserRole
 
 class OrganizationMember(Base, TimestampMixin):
     __tablename__ = "organization_members"
@@ -18,3 +18,4 @@ class OrganizationMember(Base, TimestampMixin):
 
     def __repr__(self):
         return f"<OrganizationMember(org_id={self.organization_id}, user_id={self.user_id})>"
+

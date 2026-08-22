@@ -1,7 +1,7 @@
 from typing import List, Optional
 from sqlalchemy.orm import Session
-from proofhire.backend.app.contracts.recruiters import RecruiterCreate, RecruiterUpdate
-from proofhire.backend.app.models.recruiter import Recruiter
+from backend.app.contracts.recruiters import RecruiterCreate, RecruiterUpdate
+from backend.app.models.recruiter import Recruiter
 
 class RecruiterService:
     def list_by_organization(self, db: Session, *, organization_id: int) -> List[Recruiter]:
@@ -19,3 +19,4 @@ class RecruiterService:
 
 
 recruiter_service = RecruiterService()
+

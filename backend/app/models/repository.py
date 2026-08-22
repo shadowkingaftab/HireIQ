@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Text, ForeignKey, JSON
 from sqlalchemy.orm import relationship
-from proofhire.backend.app.database import Base
-from proofhire.backend.app.models.base import TimestampMixin
+from backend.app.database import Base
+from backend.app.models.base import TimestampMixin
 
 class Repository(Base, TimestampMixin):
     __tablename__ = "repositories"
@@ -23,17 +23,4 @@ class Repository(Base, TimestampMixin):
     # Relationships
     contributions = relationship("Contribution", back_populates="repository")
 
-class Contribution(Base, TimestampMixin):
-    __tablename__ = "contributions"
 
-    id = Column(Integer, primary_key=True, index=True)
-    repository_id = Column(Integer, ForeignKey("repositories.id", ondelete="CASCADE"), nullable=False)
-    candidate_id = Column(Integer, ForeignKey("candidates.id", ondelete="CASCADE"), nullable=False)
-    
-    type = Column(String(50)) # commit, pull_request, issue
-    external_id = Column(String(255))
-    details = Column(JSON)
-    
-    # Relationships
-    repository = relationship("Repository", back_populates="contributions")
-    candidate = relationship("Candidate")

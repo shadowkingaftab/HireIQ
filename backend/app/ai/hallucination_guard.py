@@ -14,7 +14,7 @@ class HallucinationGuard:
         if self.router is None:
             return {"supported": True, "confidence": 0.5, "reason": "no_guard_configured"}
         try:
-            from proofhire.backend.app.ai.inference_router import TaskKind
+            from backend.app.ai.inference_router import TaskKind
             prompt = (
                 "Determine if the claim is supported by the evidence. "
                 "Return JSON with 'supported' (boolean), 'confidence' (0-1), and 'reason'.\n\n"
@@ -36,3 +36,4 @@ class HallucinationGuard:
 
 
 hallucination_guard = HallucinationGuard()
+

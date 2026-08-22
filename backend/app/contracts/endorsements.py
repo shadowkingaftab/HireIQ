@@ -1,5 +1,5 @@
 from typing import Optional, List
-from proofhire.backend.app.schemas import CoreModel, TimestampModel
+from backend.app.schemas import CoreModel, TimestampModel
 
 
 class EndorsementBase(CoreModel):
@@ -15,3 +15,4 @@ class EndorsementCreate(EndorsementBase):
 
 class Endorsement(EndorsementBase, TimestampModel):
     id: int
+

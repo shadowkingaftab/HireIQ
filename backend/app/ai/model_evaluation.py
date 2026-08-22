@@ -2,7 +2,7 @@ import logging
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
-from proofhire.backend.app.ai.evaluator import EvalResult, Evaluator
+from backend.app.ai.evaluator import EvalResult, Evaluator
 
 logger = logging.getLogger(__name__)
 
@@ -64,3 +64,4 @@ class ModelEvaluation:
 
 
 model_evaluation = ModelEvaluation()
+

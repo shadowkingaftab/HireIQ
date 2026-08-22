@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from proofhire.backend.app.repositories.base_repository import BaseRepository
-from proofhire.backend.app.models.recruiter import Recruiter
+from backend.app.repositories.base_repository import BaseRepository
+from backend.app.models.recruiter import Recruiter
 
 class RecruiterRepository(BaseRepository[Recruiter]):
     def get_by_organization(self, db: Session, *, organization_id: int) -> list:
@@ -8,3 +8,4 @@ class RecruiterRepository(BaseRepository[Recruiter]):
 
 
 recruiter_repository = RecruiterRepository(Recruiter)
+

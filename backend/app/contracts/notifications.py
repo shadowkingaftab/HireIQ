@@ -1,6 +1,6 @@
 from typing import Optional, List, Dict, Any
 from datetime import datetime
-from proofhire.backend.app.schemas import CoreModel, TimestampModel
+from backend.app.schemas import CoreModel, TimestampModel
 
 
 class NotificationBase(CoreModel):
@@ -13,3 +13,4 @@ class NotificationBase(CoreModel):
 
 class Notification(NotificationBase, TimestampModel):
     id: int
+

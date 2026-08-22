@@ -1,4 +1,4 @@
-from proofhire.backend.app.matching.scorer import Scorer
+from backend.app.matching.scorer import Scorer
 
 
 def test_skill_overlap_scoring():
@@ -23,3 +23,4 @@ def test_exact_match():
     candidate = {"skills": ["python", "django"]}
     score = scorer.score(job, candidate)
     assert score == 1.0
+

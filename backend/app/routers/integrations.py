@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
-from proofhire.backend.app.integrations.stripe.client import StripeIntegration
-from proofhire.backend.app.contracts.integrations import IntegrationCreate, Integration
+from backend.app.integrations.stripe.client import StripeIntegration
+from backend.app.contracts.integrations import IntegrationCreate, Integration
 
 router = APIRouter()
 integration = StripeIntegration()
@@ -14,3 +14,4 @@ def list_integrations():
 @router.post("/", response_model=Integration)
 def create_integration(integration_in: IntegrationCreate):
     return integration.handle_webhook(payload={})
+

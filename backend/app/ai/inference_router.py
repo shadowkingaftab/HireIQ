@@ -2,8 +2,8 @@ import logging
 from enum import Enum
 from typing import Any, Dict, Optional
 
-from proofhire.backend.app.ai.model_registry import ModelInfo
-from proofhire.backend.app.ai.llm_service import LLMService
+from backend.app.ai.model_registry import ModelInfo
+from backend.app.ai.llm_service import LLMService
 
 logger = logging.getLogger(__name__)
 
@@ -37,7 +37,7 @@ class InferenceRouter:
         return await handler(payload, model_override)
 
     async def _handle_embedding(self, payload: Dict[str, Any], model_override: Optional[str]) -> Any:
-        from proofhire.backend.app.ai.embedding_service import EmbeddingService
+        from backend.app.ai.embedding_service import EmbeddingService
         service = EmbeddingService(registry=self.registry)
         return await service.embed_text(payload.get("text", ""), model_name=model_override)
 
@@ -83,3 +83,4 @@ class InferenceRouter:
 
 
 inference_router = InferenceRouter()
+

@@ -1,6 +1,6 @@
 from typing import Any, Dict, List, Optional
 
-from proofhire.backend.app.execution.task_graph import TaskGraph
+from backend.app.execution.task_graph import TaskGraph
 
 
 class DependencyResolver:
@@ -25,3 +25,4 @@ class DependencyResolver:
         for node in self.graph.nodes:
             visit(node)
         return order
+

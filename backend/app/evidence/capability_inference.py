@@ -9,7 +9,7 @@ class CapabilityInference:
         if not skills:
             return []
         try:
-            from proofhire.backend.app.ai.inference_router import InferenceRouter, TaskKind
+            from backend.app.ai.inference_router import InferenceRouter, TaskKind
             router = InferenceRouter()
             prompt = f"Infer higher-level capabilities from these skills: {', '.join(skills)}. Return JSON with 'capabilities' array."
             result = router.route(task=TaskKind.EXTRACTION, payload={"prompt": prompt})
@@ -22,3 +22,4 @@ class CapabilityInference:
 
 
 capability_inference = CapabilityInference()
+

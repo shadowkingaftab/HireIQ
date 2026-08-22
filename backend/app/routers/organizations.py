@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from proofhire.backend.app.database import get_db
-from proofhire.backend.app.contracts.organizations import OrganizationCreate, OrganizationUpdate, Organization
-from proofhire.backend.app.services.organization_service import organization_service
+from backend.app.database import get_db
+from backend.app.contracts.organizations import OrganizationCreate, OrganizationUpdate, Organization
+from backend.app.services.organization_service import organization_service
 
 router = APIRouter()
 
@@ -23,3 +23,4 @@ def get_organization(organization_id: int, db: Session = Depends(get_db)):
     if not org:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Organization not found")
     return org
+

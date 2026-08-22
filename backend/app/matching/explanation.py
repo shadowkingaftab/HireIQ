@@ -1,8 +1,8 @@
 import logging
 from typing import Any, Dict, List, Optional
 
-from proofhire.backend.app.ai.citation_builder import citation_builder
-from proofhire.backend.app.evidence.explanation_builder import explanation_builder
+from backend.app.ai.citation_builder import citation_builder
+from backend.app.evidence.explanation_builder import explanation_builder
 
 logger = logging.getLogger(__name__)
 
@@ -25,3 +25,4 @@ class Explanation:
 
 
 explanation = Explanation()
+

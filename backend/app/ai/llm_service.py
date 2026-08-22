@@ -1,7 +1,7 @@
 import logging
 from typing import Any, Dict, List, Optional, Union
 
-from proofhire.backend.app.ai.model_registry import ModelRegistry, ModelInfo
+from backend.app.ai.model_registry import ModelRegistry, ModelInfo
 
 logger = logging.getLogger(__name__)
 
@@ -88,3 +88,4 @@ class LLMService:
 
 
 llm_service = LLMService()
+

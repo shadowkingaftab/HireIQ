@@ -1,6 +1,6 @@
 from typing import Optional
 from datetime import datetime
-from proofhire.backend.app.schemas import CoreModel
+from backend.app.schemas import CoreModel
 
 
 class SubscriptionBase(CoreModel):
@@ -16,3 +16,4 @@ class SubscriptionCreate(SubscriptionBase):
 
 class Subscription(SubscriptionBase):
     id: int
+

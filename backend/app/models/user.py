@@ -1,8 +1,8 @@
 from sqlalchemy import Boolean, Column, Integer, String, Enum, Table, ForeignKey
 from sqlalchemy.orm import relationship
-from proofhire.backend.app.database import Base
-from proofhire.backend.app.models.base import TimestampMixin
-from proofhire.backend.app.core.constants import UserRole
+from backend.app.database import Base
+from backend.app.models.base import TimestampMixin
+from backend.app.core.constants import UserRole
 
 # Association table for User-Role (Many-to-Many)
 user_roles = Table(
@@ -32,3 +32,4 @@ class User(Base, TimestampMixin):
 
     def __repr__(self):
         return f"<User(email={self.email}, full_name={self.full_name})>"
+

@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Integer, ForeignKey
 from sqlalchemy.orm import relationship
-from proofhire.backend.app.database import Base
-from proofhire.backend.app.models.base import TimestampMixin
+from backend.app.database import Base
+from backend.app.models.base import TimestampMixin
 
 class FileAsset(Base, TimestampMixin):
     __tablename__ = "file_assets"
@@ -11,3 +11,4 @@ class FileAsset(Base, TimestampMixin):
     content_type = Column(String(100))
     size = Column(Integer)
     uploaded_by = Column(Integer, ForeignKey("users.id"))
+

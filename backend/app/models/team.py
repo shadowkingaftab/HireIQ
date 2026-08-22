@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Text, ForeignKey, Table
 from sqlalchemy.orm import relationship
-from proofhire.backend.app.database import Base
-from proofhire.backend.app.models.base import TimestampMixin
+from backend.app.database import Base
+from backend.app.models.base import TimestampMixin
 
 # Association table for Team-User (Many-to-Many)
 team_members = Table(
@@ -25,3 +25,4 @@ class Team(Base, TimestampMixin):
 
     def __repr__(self):
         return f"<Team(name={self.name}, org_id={self.organization_id})>"
+

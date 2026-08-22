@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from proofhire.backend.app.database import get_db
-from proofhire.backend.app.contracts.applications import ApplicationCreate, ApplicationUpdate, Application
-from proofhire.backend.app.services.application_service import application_service
+from backend.app.database import get_db
+from backend.app.contracts.applications import ApplicationCreate, ApplicationUpdate, Application
+from backend.app.services.application_service import application_service
 
 router = APIRouter()
 
@@ -23,3 +23,4 @@ def update_application(application_id: int, app_in: ApplicationUpdate, db: Sessi
     if not app:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Application not found")
     return app
+

@@ -1,5 +1,5 @@
 from typing import Optional, List, Dict, Any
-from proofhire.backend.app.schemas import CoreModel
+from backend.app.schemas import CoreModel
 
 
 class SearchResult(CoreModel):
@@ -13,3 +13,4 @@ class GlobalSearchRequest(CoreModel):
     query: str
     types: List[str] = ["job", "candidate"]
     limit: int = 10
+

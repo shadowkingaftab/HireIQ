@@ -1,5 +1,5 @@
 from typing import Optional, List, Dict, Any
-from proofhire.backend.app.schemas import CoreModel
+from backend.app.schemas import CoreModel
 
 
 class IntegrationBase(CoreModel):
@@ -16,3 +16,4 @@ class IntegrationCreate(IntegrationBase):
 class Integration(IntegrationBase):
     id: int
     organization_id: int
+

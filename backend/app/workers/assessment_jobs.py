@@ -11,7 +11,8 @@ async def run_assessment_job(payload: Dict[str, Any]) -> None:
         logger.warning("Missing assessment_id or candidate_id in assessment job payload")
         return
     try:
-        from proofhire.backend.app.assessment.test_executor import test_executor
+        from backend.app.assessment.test_executor import test_executor
         await test_executor.run(assessment_id=assessment_id, candidate_id=candidate_id)
     except Exception:
         logger.exception("Assessment job failed for %s", assessment_id)
+

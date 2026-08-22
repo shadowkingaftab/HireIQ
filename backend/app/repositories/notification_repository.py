@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from proofhire.backend.app.repositories.base_repository import BaseRepository
-from proofhire.backend.app.models.notification import Notification
+from backend.app.repositories.base_repository import BaseRepository
+from backend.app.models.notification import Notification
 
 class NotificationRepository(BaseRepository[Notification]):
     def list_for_user(self, db: Session, *, user_id: int) -> list:
@@ -16,3 +16,4 @@ class NotificationRepository(BaseRepository[Notification]):
 
 
 notification_repository = NotificationRepository(Notification)
+

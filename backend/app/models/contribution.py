@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, ForeignKey, String, Text, JSON
 from sqlalchemy.orm import relationship
-from proofhire.backend.app.database import Base
-from proofhire.backend.app.models.base import TimestampMixin
+from backend.app.database import Base
+from backend.app.models.base import TimestampMixin
 
 class Contribution(Base, TimestampMixin):
     __tablename__ = "contributions"
@@ -15,3 +15,4 @@ class Contribution(Base, TimestampMixin):
 
     repository = relationship("Repository", back_populates="contributions")
     candidate = relationship("Candidate")
+

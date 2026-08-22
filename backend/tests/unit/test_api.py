@@ -1,6 +1,6 @@
 import pytest
 
-from proofhire.backend.app.core.config import Settings
+from backend.app.core.config import Settings
 
 
 def test_settings_defaults():
@@ -12,3 +12,4 @@ def test_settings_defaults():
 def test_settings_db_url_assembly():
     settings = Settings(POSTGRES_USER="user", POSTGRES_PASSWORD="pass", POSTGRES_SERVER="localhost", POSTGRES_DB="db")
     assert settings.DATABASE_URL == "postgresql://user:pass@localhost/db"
+

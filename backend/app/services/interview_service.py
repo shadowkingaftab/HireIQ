@@ -1,7 +1,7 @@
 from typing import List, Optional
 from sqlalchemy.orm import Session
-from proofhire.backend.app.contracts.interviews import InterviewCreate, InterviewUpdate
-from proofhire.backend.app.models.interview import Interview
+from backend.app.contracts.interviews import InterviewCreate, InterviewUpdate
+from backend.app.models.interview import Interview
 
 class InterviewService:
     def list_by_application(self, db: Session, *, application_id: int) -> List[Interview]:
@@ -26,3 +26,4 @@ class InterviewService:
 
 
 interview_service = InterviewService()
+

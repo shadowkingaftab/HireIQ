@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, ForeignKey, String, Text, JSON
 from sqlalchemy.orm import relationship
-from proofhire.backend.app.database import Base
-from proofhire.backend.app.models.base import TimestampMixin
+from backend.app.database import Base
+from backend.app.models.base import TimestampMixin
 
 class Recommendation(Base, TimestampMixin):
     __tablename__ = "recommendations"
@@ -10,3 +10,4 @@ class Recommendation(Base, TimestampMixin):
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     type = Column(String(50), nullable=False)
     content = Column(JSON, nullable=False)
+

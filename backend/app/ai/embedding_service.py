@@ -1,7 +1,7 @@
 import logging
 from typing import List, Optional
 
-from proofhire.backend.app.ai.model_registry import ModelRegistry, ModelInfo
+from backend.app.ai.model_registry import ModelRegistry, ModelInfo
 
 logger = logging.getLogger(__name__)
 
@@ -54,3 +54,4 @@ class EmbeddingService:
 
 
 embedding_service = EmbeddingService()
+

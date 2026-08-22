@@ -1,5 +1,5 @@
 from fastapi.testclient import TestClient
-from proofhire.backend.main import app
+from backend.main import app
 
 client = TestClient(app)
 
@@ -16,3 +16,4 @@ def test_tenant_isolation():
 def test_cross_tenant_job_access():
     response = client.get("/api/v1/jobs/999", headers={"Authorization": "Bearer tenant-a-token"})
     assert response.status_code in (404, 401, 403)
+

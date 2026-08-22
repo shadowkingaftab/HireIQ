@@ -1,6 +1,6 @@
-from proofhire.backend.app.services.assessment_service import AssessmentService
-from proofhire.backend.app.matching.scorer import Scorer
-from proofhire.backend.app.skill_graph.skill_graph import SkillGraph
+from backend.app.services.assessment_service import AssessmentService
+from backend.app.matching.scorer import Scorer
+from backend.app.skill_graph.skill_graph import SkillGraph
 
 
 def test_assessment_generation():
@@ -23,3 +23,4 @@ def test_skill_graph_traversal():
     graph.add_skill(graph.Skill(id="b", name="B"))
     graph.add_edge("a", "b", "requires")
     assert graph.has_path("a", "b")
+

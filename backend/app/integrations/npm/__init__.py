@@ -1,4 +1,5 @@
-from proofhire.backend.app.integrations.base.provider import BaseProvider
-from proofhire.backend.app.integrations.npm.provider import NpmProvider
+from backend.app.integrations.base.provider import BaseProvider
+from backend.app.integrations.npm.provider import NpmProvider
 
 __all__ = ["NpmProvider"]
+

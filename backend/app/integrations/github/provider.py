@@ -1,5 +1,5 @@
 from typing import Any, Dict
-from proofhire.backend.app.integrations.base.provider import BaseProvider
+from backend.app.integrations.base.provider import BaseProvider
 
 class GitHubProvider(BaseProvider):
     name = "github"
@@ -15,3 +15,4 @@ class GitHubProvider(BaseProvider):
 
 
 github_provider = GitHubProvider()
+

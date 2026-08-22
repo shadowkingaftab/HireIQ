@@ -52,7 +52,7 @@ class Evaluator:
         if self.router is None:
             return 0.5
         try:
-            from proofhire.backend.app.ai.inference_router import TaskKind
+            from backend.app.ai.inference_router import TaskKind
             result = await self.router.route(
                 task=TaskKind.EVALUATION,
                 payload={
@@ -68,3 +68,4 @@ class Evaluator:
 
 
 evaluator = Evaluator()
+

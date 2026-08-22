@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, ForeignKey, String, Text, Boolean
 from sqlalchemy.orm import relationship
-from proofhire.backend.app.database import Base
-from proofhire.backend.app.models.base import TimestampMixin
+from backend.app.database import Base
+from backend.app.models.base import TimestampMixin
 
 class DataConsent(Base, TimestampMixin):
     __tablename__ = "data_consents"
@@ -11,3 +11,4 @@ class DataConsent(Base, TimestampMixin):
     purpose = Column(String(100), nullable=False)
     granted = Column(Boolean, default=False)
     consent_text = Column(Text)
+

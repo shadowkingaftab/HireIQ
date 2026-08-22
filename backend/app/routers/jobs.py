@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from proofhire.backend.app.database import get_db
-from proofhire.backend.app.contracts.jobs import JobCreate, JobUpdate, Job
-from proofhire.backend.app.services.job_service import job_service
+from backend.app.database import get_db
+from backend.app.contracts.jobs import JobCreate, JobUpdate, Job
+from backend.app.services.job_service import job_service
 
 router = APIRouter()
 
@@ -23,3 +23,4 @@ def get_job(job_id: int, db: Session = Depends(get_db)):
     if not job:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Job not found")
     return job
+

@@ -1,8 +1,8 @@
 import logging
 from typing import Any, Dict, List, Optional
 
-from proofhire.backend.app.events.event_bus import Event, EventBus, event_bus
-from proofhire.backend.app.events.event_types import EventType
+from backend.app.events.event_bus import Event, EventBus, event_bus
+from backend.app.events.event_types import EventType
 
 logger = logging.getLogger(__name__)
 
@@ -52,3 +52,4 @@ class EventPublisher:
 
 
 publishers = EventPublisher()
+

@@ -2,10 +2,10 @@ import asyncio
 import logging
 from typing import Any, Dict, List, Optional
 
-from proofhire.backend.app.execution.execution_plan import ExecutionPlan
-from proofhire.backend.app.execution.execution_context import ExecutionContext
-from proofhire.backend.app.execution.task_graph import TaskGraph
-from proofhire.backend.app.execution.dependency_resolver import DependencyResolver
+from backend.app.execution.execution_plan import ExecutionPlan
+from backend.app.execution.execution_context import ExecutionContext
+from backend.app.execution.task_graph import TaskGraph
+from backend.app.execution.dependency_resolver import DependencyResolver
 
 logger = logging.getLogger(__name__)
 
@@ -41,3 +41,4 @@ class TaskScheduler:
     async def _execute(self, task_id: str, context: ExecutionContext) -> Any:
         logger.debug("Executing task %s", task_id)
         return {"task_id": task_id, "status": "completed"}
+

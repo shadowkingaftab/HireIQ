@@ -1,5 +1,5 @@
 from typing import Any, Dict, Optional
-from proofhire.backend.app.integrations.base.provider import BaseProvider
+from backend.app.integrations.base.provider import BaseProvider
 
 class ProviderRegistry:
     def __init__(self):
@@ -15,3 +15,4 @@ class ProviderRegistry:
         return list(self._providers.keys())
 
 provider_registry = ProviderRegistry()
+

@@ -10,8 +10,9 @@ async def run_matching_job(payload: Dict[str, Any]) -> None:
         logger.warning("Missing job_id in matching job payload")
         return
     try:
-        from proofhire.backend.app.matching.pipeline import MatchingPipeline
+        from backend.app.matching.pipeline import MatchingPipeline
         pipeline = MatchingPipeline()
         await pipeline.run_for_job(job_id)
     except Exception:
         logger.exception("Matching job failed for job %s", job_id)
+

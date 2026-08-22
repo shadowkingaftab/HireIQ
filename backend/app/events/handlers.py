@@ -1,8 +1,8 @@
 import logging
 from typing import Any, Dict
 
-from proofhire.backend.app.events.event_bus import Event, event_bus
-from proofhire.backend.app.events.event_types import EventType
+from backend.app.events.event_bus import Event, event_bus
+from backend.app.events.event_types import EventType
 
 logger = logging.getLogger(__name__)
 
@@ -34,3 +34,4 @@ def _handle_match_computed(event: Event) -> None:
 
 def _handle_assessment_completed(event: Event) -> None:
     logger.debug("Handling assessment completed: %s", event.entity_id)
+

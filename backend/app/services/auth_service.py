@@ -1,9 +1,9 @@
 from typing import Any, Dict, Optional
 from sqlalchemy.orm import Session
-from proofhire.backend.app.core.security import create_access_token, verify_password, get_password_hash
-from proofhire.backend.app.models.user import User
-from proofhire.backend.app.models.refresh_token import RefreshToken
-from proofhire.backend.app.core.config import settings
+from backend.app.core.security import create_access_token, verify_password, get_password_hash
+from backend.app.models.user import User
+from backend.app.models.refresh_token import RefreshToken
+from backend.app.core.config import settings
 
 class AuthService:
     def authenticate(self, db: Session, *, email: str, password: str) -> Optional[User]:
@@ -32,3 +32,4 @@ class AuthService:
 
 
 auth_service = AuthService()
+

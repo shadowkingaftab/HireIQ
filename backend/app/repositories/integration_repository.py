@@ -1,8 +1,9 @@
 from sqlalchemy.orm import Session
-from proofhire.backend.app.repositories.base_repository import BaseRepository
-from proofhire.backend.app.models.integration_connection import IntegrationConnection
+from backend.app.repositories.base_repository import BaseRepository
+from backend.app.models.integration_connection import IntegrationConnection
 
 class IntegrationRepository(BaseRepository[IntegrationConnection]):
     pass
 
 integration_repository = IntegrationRepository(IntegrationConnection)
+

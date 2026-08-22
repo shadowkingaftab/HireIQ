@@ -1,6 +1,7 @@
+from typing import Optional
 from sqlalchemy.orm import Session
-from proofhire.backend.app.repositories.base_repository import BaseRepository
-from proofhire.backend.app.models.user import User
+from backend.app.repositories.base_repository import BaseRepository
+from backend.app.models.user import User
 
 class UserRepository(BaseRepository[User]):
     def get_by_email(self, db: Session, *, email: str) -> Optional[User]:
@@ -8,3 +9,5 @@ class UserRepository(BaseRepository[User]):
 
 
 user_repository = UserRepository(User)
+
+

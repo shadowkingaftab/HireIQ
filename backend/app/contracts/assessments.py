@@ -1,5 +1,5 @@
 from typing import Optional, List, Dict, Any
-from proofhire.backend.app.schemas import CoreModel, TimestampModel
+from backend.app.schemas import CoreModel, TimestampModel
 
 
 class AssessmentBase(CoreModel):
@@ -20,3 +20,4 @@ class AssessmentUpdate(AssessmentBase):
 class Assessment(AssessmentBase, TimestampModel):
     id: int
     organization_id: int
+

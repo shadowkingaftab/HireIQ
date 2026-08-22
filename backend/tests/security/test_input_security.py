@@ -1,5 +1,5 @@
 from fastapi.testclient import TestClient
-from proofhire.backend.main import app
+from backend.main import app
 
 client = TestClient(app)
 
@@ -20,3 +20,4 @@ def test_oversized_payload():
     payload = {"name": "A" * 10000}
     response = client.post("/api/v1/jobs", json=payload, headers={"Authorization": "Bearer recruiter-token"})
     assert response.status_code in (400, 401, 422)
+

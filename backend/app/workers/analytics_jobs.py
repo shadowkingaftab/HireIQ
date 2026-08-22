@@ -10,8 +10,9 @@ async def run_analytics_job(payload: Dict[str, Any]) -> None:
         logger.warning("Missing organization_id in analytics job payload")
         return
     try:
-        from proofhire.backend.app.analytics.analytics_queries import AnalyticsQueries
+        from backend.app.analytics.analytics_queries import AnalyticsQueries
         queries = AnalyticsQueries()
         await queries.organization.overview(organization_id)
     except Exception:
         logger.exception("Analytics job failed for org %s", organization_id)
+

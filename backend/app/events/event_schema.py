@@ -1,7 +1,7 @@
 from typing import Any, Dict, Optional
 
 from pydantic import BaseModel, Field
-from proofhire.backend.app.events.event_types import EventType
+from backend.app.events.event_types import EventType
 
 
 class EventSchema(BaseModel):
@@ -15,3 +15,4 @@ class EventSchema(BaseModel):
 
     class Config:
         use_enum_values = True
+

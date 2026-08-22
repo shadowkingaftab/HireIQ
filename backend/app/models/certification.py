@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
-from proofhire.backend.app.database import Base
-from proofhire.backend.app.models.base import TimestampMixin
+from backend.app.database import Base
+from backend.app.models.base import TimestampMixin
 
 class Certification(Base, TimestampMixin):
     __tablename__ = "certifications"
@@ -13,3 +13,4 @@ class Certification(Base, TimestampMixin):
     issued_at = Column(DateTime(timezone=True))
     expires_at = Column(DateTime(timezone=True))
     credential_url = Column(String(512))
+

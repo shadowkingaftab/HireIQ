@@ -7,8 +7,8 @@ logger = logging.getLogger(__name__)
 
 async def run_cleanup_job() -> None:
     try:
-        from proofhire.backend.app.governance.retention_policy import retention_policy
-        from proofhire.backend.app.evidence.contracts import NormalizedEvidence
+        from backend.app.governance.retention_policy import retention_policy
+        from backend.app.evidence.contracts import NormalizedEvidence
 
         now = datetime.now(timezone.utc).isoformat()
         rules = retention_policy.list_rules()
@@ -16,3 +16,4 @@ async def run_cleanup_job() -> None:
         logger.info("Cleanup job evaluated %s rules, %s expired", len(rules), len(expired))
     except Exception:
         logger.exception("Cleanup job failed")
+

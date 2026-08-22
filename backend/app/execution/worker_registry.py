@@ -1,6 +1,6 @@
 from typing import Any, Dict, Optional
 
-from proofhire.backend.app.execution.execution_plan import ExecutionPlan
+from backend.app.execution.execution_plan import ExecutionPlan
 
 
 class WorkerRegistry:
@@ -18,3 +18,4 @@ class WorkerRegistry:
 
 
 worker_registry = WorkerRegistry()
+

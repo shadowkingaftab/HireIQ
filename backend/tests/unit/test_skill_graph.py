@@ -1,7 +1,7 @@
 import pytest
 
-from proofhire.backend.app.utils.skill_ontology import SkillOntology
-from proofhire.backend.app.utils.skill_adjacency import SkillAdjacency
+from backend.app.utils.skill_ontology import SkillOntology
+from backend.app.utils.skill_adjacency import SkillAdjacency
 
 
 def test_skill_ontology_normalize():
@@ -18,3 +18,4 @@ def test_skill_adjacency_neighbors():
     graph.add_edge("python", "fastapi")
     assert graph.neighbors("python") == {"django", "fastapi"}
     assert graph.neighbors("java") == set()
+

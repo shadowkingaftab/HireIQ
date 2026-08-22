@@ -1,6 +1,6 @@
-from sqlalchemy import Column, Integer, String, JSON, DateTime, func
-from proofhire.backend.app.database import Base
-from proofhire.backend.app.models.base import TimestampMixin
+from sqlalchemy import Column, Integer, String, Text, JSON, DateTime, func
+from backend.app.database import Base
+from backend.app.models.base import TimestampMixin
 
 class SearchIndex(Base, TimestampMixin):
     __tablename__ = "search_indices"
@@ -17,3 +17,4 @@ class SearchIndex(Base, TimestampMixin):
 
     def __repr__(self):
         return f"<SearchIndex(entity={self.entity_type}, id={self.entity_id})>"
+

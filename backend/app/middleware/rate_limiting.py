@@ -6,7 +6,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 from starlette.responses import JSONResponse, Response
 
-from proofhire.backend.app.core.exceptions import AppError
+from backend.app.core.exceptions import AppError
 
 logger = logging.getLogger(__name__)
 
@@ -58,3 +58,4 @@ class RateLimitingMiddleware(BaseHTTPMiddleware):
         except Exception:
             logger.exception("Rate limit check failed for %s", key)
             return True, self.default_limit, 0
+

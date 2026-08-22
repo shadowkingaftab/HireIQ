@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, JSON, Float
 from sqlalchemy.orm import relationship
-from proofhire.backend.app.database import Base
-from proofhire.backend.app.models.base import TimestampMixin
+from backend.app.database import Base
+from backend.app.models.base import TimestampMixin
 
 class CodingSession(Base, TimestampMixin):
     __tablename__ = "coding_sessions"
@@ -25,3 +25,4 @@ class CodingSession(Base, TimestampMixin):
 
     def __repr__(self):
         return f"<CodingSession(candidate_id={self.candidate_id}, status={self.status})>"
+

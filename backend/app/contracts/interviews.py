@@ -1,6 +1,6 @@
 from typing import Optional, List
 from datetime import datetime
-from proofhire.backend.app.schemas import CoreModel, TimestampModel
+from backend.app.schemas import CoreModel, TimestampModel
 
 
 class InterviewBase(CoreModel):
@@ -24,3 +24,4 @@ class InterviewUpdate(CoreModel):
 class Interview(InterviewBase, TimestampModel):
     id: int
     status: str = "scheduled"
+

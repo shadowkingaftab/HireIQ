@@ -1,6 +1,6 @@
 from typing import List, Dict, Any
 from sqlalchemy.orm import Session
-from proofhire.backend.app.models.notification import Notification
+from backend.app.models.notification import Notification
 
 class NotificationService:
     def send_notification(self, db: Session, *, user_id: int, title: str, message: str, type: str):
@@ -16,3 +16,4 @@ class NotificationService:
         return notification
 
 notification_service = NotificationService()
+

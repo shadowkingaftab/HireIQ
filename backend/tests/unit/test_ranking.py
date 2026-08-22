@@ -1,6 +1,6 @@
 import pytest
 
-from proofhire.backend.app.search.ranking import Ranker
+from backend.app.search.ranking import Ranker
 
 
 def test_ranker_empty_input():
@@ -18,3 +18,4 @@ def test_ranker_scores_descending():
     ranked = ranker.rank_candidates(candidates, "python")
     assert ranked[0]["candidate_id"] == "2"
     assert ranked[1]["candidate_id"] == "1"
+

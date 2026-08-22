@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from proofhire.backend.app.repositories.base_repository import BaseRepository
-from proofhire.backend.app.models.job import Job
+from backend.app.repositories.base_repository import BaseRepository
+from backend.app.models.job import Job
 
 class JobRepository(BaseRepository[Job]):
     def get_by_organization(self, db: Session, *, organization_id: int) -> list:
@@ -8,3 +8,4 @@ class JobRepository(BaseRepository[Job]):
 
 
 job_repository = JobRepository(Job)
+

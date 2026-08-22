@@ -1,8 +1,8 @@
 import logging
 from typing import Any, Dict, List
 
-from proofhire.backend.app.assessment.answer_evaluator import evaluator as answer_evaluator
-from proofhire.backend.app.assessment.result_builder import result_builder
+from backend.app.assessment.answer_evaluator import evaluator as answer_evaluator
+from backend.app.assessment.result_builder import result_builder
 
 logger = logging.getLogger(__name__)
 
@@ -21,3 +21,4 @@ class TestExecutor:
 
 
 test_executor = TestExecutor()
+

@@ -1,6 +1,6 @@
 from typing import List
 from fastapi import Depends, HTTPException, status
-from proofhire.backend.app.core.constants import UserRole
+from backend.app.core.constants import UserRole
 # This will be properly implemented once we have the user model and dependency
 # For now, it's a structural placeholder for the permission logic
 
@@ -18,3 +18,4 @@ class PermissionChecker:
 
 def has_role(roles: List[UserRole]):
     return PermissionChecker(roles)
+

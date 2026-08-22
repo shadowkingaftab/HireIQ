@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from proofhire.backend.app.repositories.base_repository import BaseRepository
-from proofhire.backend.app.models.match_result import MatchResult
+from backend.app.repositories.base_repository import BaseRepository
+from backend.app.models.match_result import MatchResult
 
 class MatchResultRepository(BaseRepository[MatchResult]):
     def list_by_job(self, db: Session, *, job_id: int) -> list:
@@ -8,3 +8,4 @@ class MatchResultRepository(BaseRepository[MatchResult]):
 
 
 match_result_repository = MatchResultRepository(MatchResult)
+

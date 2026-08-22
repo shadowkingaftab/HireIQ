@@ -1,10 +1,10 @@
 from fastapi import Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from proofhire.backend.app.dependencies.database import get_db
-from proofhire.backend.app.dependencies.auth import get_current_user
-from proofhire.backend.app.models.user import User
-from proofhire.backend.app.models.organization import Organization
-from proofhire.backend.app.models.organization_member import OrganizationMember
+from backend.app.dependencies.database import get_db
+from backend.app.dependencies.auth import get_current_user
+from backend.app.models.user import User
+from backend.app.models.organization import Organization
+from backend.app.models.organization_member import OrganizationMember
 
 async def get_current_organization(
     org_id: int,
@@ -28,3 +28,4 @@ async def get_current_organization(
         raise HTTPException(status_code=404, detail="Organization not found")
         
     return org
+

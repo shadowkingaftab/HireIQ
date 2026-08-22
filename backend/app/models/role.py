@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Table, ForeignKey
 from sqlalchemy.orm import relationship
-from proofhire.backend.app.database import Base
-from proofhire.backend.app.models.base import TimestampMixin
+from backend.app.database import Base
+from backend.app.models.base import TimestampMixin
 
 # Association table for Role-Permission (Many-to-Many)
 role_permissions = Table(
@@ -24,3 +24,4 @@ class Role(Base, TimestampMixin):
 
     def __repr__(self):
         return f"<Role(name={self.name})>"
+

@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from proofhire.backend.app.database import get_db
-from proofhire.backend.app.contracts.users import UserCreate, UserUpdate, User
-from proofhire.backend.app.services.user_service import user_service
+from backend.app.database import get_db
+from backend.app.contracts.users import UserCreate, UserUpdate, User
+from backend.app.services.user_service import user_service
 
 router = APIRouter()
 
@@ -36,3 +36,4 @@ def update_user(user_id: int, user_in: UserUpdate, db: Session = Depends(get_db)
 @router.delete("/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_user(user_id: int, db: Session = Depends(get_db)):
     user_service.delete(db=db, user_id=user_id)
+

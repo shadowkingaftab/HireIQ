@@ -1,6 +1,6 @@
 from typing import Optional, List
 from pydantic import EmailStr, Field
-from proofhire.backend.app.schemas import CoreModel
+from backend.app.schemas import CoreModel
 
 
 class UserBase(CoreModel):
@@ -27,3 +27,4 @@ class UserInDBBase(UserBase):
 
 class User(UserInDBBase):
     pass
+

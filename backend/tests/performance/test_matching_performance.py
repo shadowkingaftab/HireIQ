@@ -1,6 +1,6 @@
 import time
-from proofhire.backend.app.matching.matcher import Matcher
-from proofhire.backend.app.matching.scorer import Scorer
+from backend.app.matching.matcher import Matcher
+from backend.app.matching.scorer import Scorer
 
 
 def test_matching_latency():
@@ -23,3 +23,4 @@ def test_scoring_throughput():
     elapsed = time.time() - start
     assert elapsed < 2.0
     assert all(0.0 <= s <= 1.0 for s in scores)
+

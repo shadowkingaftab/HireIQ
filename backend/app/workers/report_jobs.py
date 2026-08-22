@@ -10,7 +10,8 @@ async def generate_report_job(payload: Dict[str, Any]) -> None:
         logger.warning("Missing report_id in report job payload")
         return
     try:
-        from proofhire.backend.app.services.report_service import report_service
+        from backend.app.services.report_service import report_service
         await report_service.generate(report_id=report_id)
     except Exception:
         logger.exception("Report job failed for %s", report_id)
+

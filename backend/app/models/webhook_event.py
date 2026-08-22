@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, JSON, DateTime
 from sqlalchemy.orm import relationship
-from proofhire.backend.app.database import Base
-from proofhire.backend.app.models.base import TimestampMixin
+from backend.app.database import Base
+from backend.app.models.base import TimestampMixin
 
 class WebhookEvent(Base, TimestampMixin):
     __tablename__ = "webhook_events"
@@ -12,3 +12,4 @@ class WebhookEvent(Base, TimestampMixin):
     payload = Column(JSON, nullable=False)
     processed = Column(String(20), default="pending")
     processed_at = Column(DateTime(timezone=True))
+

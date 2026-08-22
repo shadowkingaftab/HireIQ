@@ -1,5 +1,5 @@
-from proofhire.backend.app.skill_graph.skill_graph import SkillGraph
-from proofhire.backend.app.models.skill import Skill
+from backend.app.skill_graph.skill_graph import SkillGraph
+from backend.app.models.skill import Skill
 
 
 def test_skill_graph_operations():
@@ -19,3 +19,4 @@ def test_graph_degree():
         graph.add_edge(str(0), str(i), "requires")
     related = graph.get_related_skills("0")
     assert len(related) == 99
+

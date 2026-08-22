@@ -1,6 +1,6 @@
 from typing import Optional, List, Dict, Any
-from proofhire.backend.app.schemas import CoreModel, TimestampModel
-from proofhire.backend.app.core.constants import ApplicationStatus
+from backend.app.schemas import CoreModel, TimestampModel
+from backend.app.core.constants import ApplicationStatus
 
 
 class ApplicationBase(CoreModel):
@@ -21,3 +21,4 @@ class ApplicationUpdate(CoreModel):
 class Application(ApplicationBase, TimestampModel):
     id: int
     score: Optional[float] = None
+

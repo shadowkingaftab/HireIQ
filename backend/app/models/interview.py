@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Text
 from sqlalchemy.orm import relationship
-from proofhire.backend.app.database import Base
-from proofhire.backend.app.models.base import TimestampMixin
+from backend.app.database import Base
+from backend.app.models.base import TimestampMixin
 
 class Interview(Base, TimestampMixin):
     __tablename__ = "interviews"
@@ -22,3 +22,4 @@ class Interview(Base, TimestampMixin):
 
     def __repr__(self):
         return f"<Interview(app_id={self.application_id}, scheduled_at={self.scheduled_at})>"
+

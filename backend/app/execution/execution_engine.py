@@ -1,9 +1,9 @@
 import logging
 from typing import Any, Dict, Optional
 
-from proofhire.backend.app.execution.execution_context import ExecutionContext
-from proofhire.backend.app.execution.execution_plan import ExecutionPlan
-from proofhire.backend.app.execution.task_scheduler import TaskScheduler
+from backend.app.execution.execution_context import ExecutionContext
+from backend.app.execution.execution_plan import ExecutionPlan
+from backend.app.execution.task_scheduler import TaskScheduler
 
 logger = logging.getLogger(__name__)
 
@@ -26,3 +26,4 @@ class ExecutionEngine:
 
 
 execution_engine = ExecutionEngine()
+

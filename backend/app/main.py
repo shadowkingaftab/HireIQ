@@ -1,9 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from proofhire.backend.app.core.config import settings
-from proofhire.backend.app.core.exception_handlers import add_exception_handlers
-from proofhire.backend.app.lifecycle import register_lifecycle_handlers
-from proofhire.backend.app.routers import (
+from backend.app.core.config import settings
+from backend.app.core.exception_handlers import add_exception_handlers
+from backend.app.lifecycle import register_lifecycle_handlers
+import backend.app.models
+from backend.app.routers import (
     admin, analytics, applications, assessments, auth, candidates, 
     endorsements, evidence, feedback, health, integrations, interviews, 
     jobs, matching, notifications, organizations, recruiters, reports, 
@@ -54,3 +55,5 @@ app.include_router(admin.router, prefix=f"{settings.API_V1_STR}/admin", tags=["a
 @app.get("/")
 async def root():
     return {"message": "Welcome to ProofHire API", "version": settings.VERSION}
+
+

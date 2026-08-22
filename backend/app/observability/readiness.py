@@ -1,7 +1,8 @@
+from typing import Optional
 import logging
 from typing import Any, Dict
 
-from proofhire.backend.app.observability.health_checks import HealthCheck, HealthResult, health_checks
+from backend.app.observability.health_checks import HealthCheck, HealthResult, health_checks
 
 logger = logging.getLogger(__name__)
 
@@ -45,3 +46,5 @@ class ReadinessProbe:
 
 
 readiness = ReadinessProbe()
+
+

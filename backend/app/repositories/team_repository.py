@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from proofhire.backend.app.repositories.base_repository import BaseRepository
-from proofhire.backend.app.models.team import Team
+from backend.app.repositories.base_repository import BaseRepository
+from backend.app.models.team import Team
 
 class TeamRepository(BaseRepository[Team]):
     def list_by_organization(self, db: Session, *, organization_id: int) -> list:
@@ -8,3 +8,4 @@ class TeamRepository(BaseRepository[Team]):
 
 
 team_repository = TeamRepository(Team)
+

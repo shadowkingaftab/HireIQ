@@ -1,5 +1,5 @@
 from typing import Optional, List, Dict, Any
-from proofhire.backend.app.schemas import CoreModel
+from backend.app.schemas import CoreModel
 
 
 class AdminAction(CoreModel):
@@ -14,3 +14,4 @@ class SystemStats(CoreModel):
     org_count: int
     job_count: int
     active_connections: int
+

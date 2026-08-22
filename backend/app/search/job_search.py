@@ -1,9 +1,9 @@
 import logging
 from typing import Any, Dict, List, Optional
 
-from proofhire.backend.app.search.semantic_search import SemanticSearch
-from proofhire.backend.app.search.filters import SearchFilters
-from proofhire.backend.app.search.ranking import Ranker
+from backend.app.search.semantic_search import SemanticSearch
+from backend.app.search.filters import SearchFilters
+from backend.app.search.ranking import Ranker
 
 logger = logging.getLogger(__name__)
 
@@ -77,3 +77,4 @@ class JobSearch:
 
 
 job_search = JobSearch(search_index=None, graph_db=None)
+

@@ -1,7 +1,7 @@
 import pytest
 from httpx import AsyncClient
 
-from proofhire.backend.main import app
+from backend.main import app
 
 
 @pytest.mark.asyncio
@@ -19,3 +19,4 @@ async def test_login_and_refresh():
                 headers={"Authorization": f"Bearer {token}"},
             )
             assert me_resp.status_code == 200
+

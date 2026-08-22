@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
-from proofhire.backend.app.contracts.admin import AdminAction, SystemStats
-from proofhire.backend.app.services.audit_service import audit_service
+from backend.app.contracts.admin import AdminAction, SystemStats
+from backend.app.services.audit_service import audit_service
 
 router = APIRouter()
 
@@ -14,3 +14,4 @@ def admin_action(action: AdminAction):
 @router.get("/stats", response_model=SystemStats)
 def system_stats():
     return SystemStats(user_count=0, org_count=0, job_count=0, active_connections=0)
+

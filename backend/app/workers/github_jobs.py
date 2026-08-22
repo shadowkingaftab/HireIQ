@@ -11,7 +11,8 @@ async def sync_github_profile_job(payload: Dict[str, Any]) -> None:
         logger.warning("Missing username or candidate_id in github job payload")
         return
     try:
-        from proofhire.backend.app.services.github_fetcher import github_fetcher
+        from backend.app.services.github_fetcher import github_fetcher
         await github_fetcher.fetch_user_repos(username=username)
     except Exception:
         logger.exception("GitHub sync job failed for %s", username)
+

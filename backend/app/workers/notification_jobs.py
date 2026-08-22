@@ -10,7 +10,8 @@ async def send_notification_job(payload: Dict[str, Any]) -> None:
         logger.warning("Missing user_id in notification job payload")
         return
     try:
-        from proofhire.backend.app.services.notification_service import notification_service
+        from backend.app.services.notification_service import notification_service
         await notification_service.send_notification(user_id=user_id, title=payload.get("title"), message=payload.get("message"))
     except Exception:
         logger.exception("Notification job failed for user %s", user_id)
+

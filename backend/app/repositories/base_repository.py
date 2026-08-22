@@ -1,4 +1,4 @@
-from typing import Generic, List, Optional, TypeVar
+from typing import Generic, List, Optional, TypeVar, Any
 from sqlalchemy.orm import Session
 from sqlalchemy import select
 
@@ -33,3 +33,4 @@ class BaseRepository(Generic[T]):
         if db_obj:
             db.delete(db_obj)
             db.commit()
+

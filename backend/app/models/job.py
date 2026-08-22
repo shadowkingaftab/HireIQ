@@ -1,8 +1,8 @@
 from sqlalchemy import Column, Integer, String, Text, ForeignKey, Enum, JSON
 from sqlalchemy.orm import relationship
-from proofhire.backend.app.database import Base
-from proofhire.backend.app.models.base import TimestampMixin
-from proofhire.backend.app.core.constants import JobStatus
+from backend.app.database import Base
+from backend.app.models.base import TimestampMixin
+from backend.app.core.constants import JobStatus
 
 class Job(Base, TimestampMixin):
     __tablename__ = "jobs"
@@ -31,3 +31,4 @@ class Job(Base, TimestampMixin):
 
     def __repr__(self):
         return f"<Job(title={self.title}, status={self.status})>"
+

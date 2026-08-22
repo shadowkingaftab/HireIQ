@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Float, ForeignKey, JSON
 from sqlalchemy.orm import relationship
-from proofhire.backend.app.database import Base
-from proofhire.backend.app.models.base import TimestampMixin
+from backend.app.database import Base
+from backend.app.models.base import TimestampMixin
 
 class CapabilityScore(Base, TimestampMixin):
     __tablename__ = "capability_scores"
@@ -22,3 +22,4 @@ class CapabilityScore(Base, TimestampMixin):
 
     def __repr__(self):
         return f"<CapabilityScore(candidate_id={self.candidate_id}, capability={self.capability_name}, score={self.score})>"
+

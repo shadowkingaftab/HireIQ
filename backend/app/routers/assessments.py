@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from proofhire.backend.app.database import get_db
-from proofhire.backend.app.contracts.assessments import AssessmentCreate, AssessmentUpdate, Assessment
-from proofhire.backend.app.services.assessment_engine import assessment_engine
+from backend.app.database import get_db
+from backend.app.contracts.assessments import AssessmentCreate, AssessmentUpdate, Assessment
+from backend.app.services.assessment_engine import assessment_engine
 
 router = APIRouter()
 
@@ -23,3 +23,4 @@ def get_assessment(assessment_id: int, db: Session = Depends(get_db)):
     if not assessment:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Assessment not found")
     return assessment
+

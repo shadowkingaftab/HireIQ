@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
-from proofhire.backend.app.database import Base
-from proofhire.backend.app.models.base import TimestampMixin
+from backend.app.database import Base
+from backend.app.models.base import TimestampMixin
 
 class Achievement(Base, TimestampMixin):
     __tablename__ = "achievements"
@@ -11,3 +11,4 @@ class Achievement(Base, TimestampMixin):
     title = Column(String(255), nullable=False)
     description = Column(Text)
     earned_at = Column(DateTime(timezone=True))
+

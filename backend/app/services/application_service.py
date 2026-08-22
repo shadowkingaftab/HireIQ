@@ -1,8 +1,8 @@
 from typing import List, Optional
 from sqlalchemy.orm import Session
-from proofhire.backend.app.repositories.application_repository import application_repository
-from proofhire.backend.app.contracts.applications import ApplicationCreate, ApplicationUpdate
-from proofhire.backend.app.models.application import Application
+from backend.app.repositories.application_repository import application_repository
+from backend.app.contracts.applications import ApplicationCreate, ApplicationUpdate
+from backend.app.models.application import Application
 
 class ApplicationService:
     def apply(self, db: Session, *, app_in: ApplicationCreate) -> Application:
@@ -14,4 +14,9 @@ class ApplicationService:
         # Update logic
         return application_repository.update(db, db_obj=db_obj, obj_in={"status": status})
 
+    def list(self, db: Session) -> List[Application]:
+        return application_repository.list(db)
+
 application_service = ApplicationService()
+
+

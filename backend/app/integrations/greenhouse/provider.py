@@ -1,5 +1,5 @@
 from typing import Any, Dict
-from proofhire.backend.app.integrations.base.provider import BaseProvider
+from backend.app.integrations.base.provider import BaseProvider
 
 class GreenhouseProvider(BaseProvider):
     name = "greenhouse"
@@ -12,3 +12,4 @@ class GreenhouseProvider(BaseProvider):
 
     async def health(self) -> Dict[str, Any]:
         return {"provider": self.name, "status": "ok"}
+

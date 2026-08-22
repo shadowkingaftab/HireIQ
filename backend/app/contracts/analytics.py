@@ -1,5 +1,5 @@
 from typing import Optional, List, Dict, Any
-from proofhire.backend.app.schemas import CoreModel
+from backend.app.schemas import CoreModel
 
 
 class AnalyticsBase(CoreModel):
@@ -14,3 +14,4 @@ class AnalyticsSummary(CoreModel):
     total_jobs: int
     conversion_rate: float
     time_to_hire_days: float
+

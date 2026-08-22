@@ -1,5 +1,5 @@
 from fastapi.testclient import TestClient
-from proofhire.backend.main import app
+from backend.main import app
 
 client = TestClient(app)
 
@@ -17,3 +17,4 @@ def test_openapi():
     assert "paths" in data
     assert "/api/v1/auth/login" in data["paths"]
     assert "/api/v1/jobs" in data["paths"]
+

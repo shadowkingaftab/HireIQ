@@ -1,9 +1,9 @@
 import logging
 from typing import Optional
 
-from proofhire.backend.app.storage.base import BaseStorage
-from proofhire.backend.app.storage.local import LocalStorage
-from proofhire.backend.app.storage.object_storage import ObjectStorage
+from backend.app.storage.base import BaseStorage
+from backend.app.storage.local import LocalStorage
+from backend.app.storage.object_storage import ObjectStorage
 
 logger = logging.getLogger(__name__)
 
@@ -34,3 +34,4 @@ class FileService:
 
 
 file_service = FileService()
+

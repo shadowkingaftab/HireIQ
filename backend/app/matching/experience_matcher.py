@@ -1,6 +1,6 @@
 from typing import Dict, Any
-from proofhire.backend.app.models.job import Job
-from proofhire.backend.app.models.candidate import Candidate
+from backend.app.models.job import Job
+from backend.app.models.candidate import Candidate
 
 class ExperienceMatcher:
     def match(self, *, job: Job, candidate: Candidate) -> Dict[str, Any]:
@@ -8,3 +8,4 @@ class ExperienceMatcher:
         return {"score": 0.9, "years": 5}
 
 experience_matcher = ExperienceMatcher()
+

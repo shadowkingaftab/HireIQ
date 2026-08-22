@@ -1,9 +1,9 @@
 import logging
 from typing import Any, Dict, List
 
-from proofhire.backend.app.evidence.contracts import NormalizedEvidence
-from proofhire.backend.app.evidence.confidence import confidence as confidence_service
-from proofhire.backend.app.evidence.reliability import reliability as reliability_service
+from backend.app.evidence.contracts import NormalizedEvidence
+from backend.app.evidence.confidence import confidence as confidence_service
+from backend.app.evidence.reliability import reliability as reliability_service
 
 logger = logging.getLogger(__name__)
 
@@ -32,3 +32,4 @@ class Aggregator:
 
 
 aggregator = Aggregator()
+

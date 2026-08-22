@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
 
-from proofhire.backend.app.storage.base import BaseStorage
+from backend.app.storage.base import BaseStorage
 
 logger = logging.getLogger(__name__)
 
@@ -50,3 +50,4 @@ class LocalStorage(BaseStorage):
 
 
 local_storage = LocalStorage()
+

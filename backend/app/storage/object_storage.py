@@ -1,7 +1,7 @@
 import logging
 from typing import Optional
 
-from proofhire.backend.app.storage.base import BaseStorage
+from backend.app.storage.base import BaseStorage
 
 logger = logging.getLogger(__name__)
 
@@ -59,3 +59,4 @@ class ObjectStorage(BaseStorage):
     async def signed_url(self, path: str, expires_in: int = 3600) -> str:
         client = await self._get_client()
         return client.generate_presigned_url("get_object", Params={"Bucket": self.bucket, "Key": path}, ExpiresIn=expires_in)
+

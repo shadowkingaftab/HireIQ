@@ -1,5 +1,5 @@
 from fastapi.testclient import TestClient
-from proofhire.backend.main import app
+from backend.main import app
 
 client = TestClient(app)
 
@@ -17,3 +17,4 @@ def test_recruiter_access():
 def test_candidate_access_denied():
     response = client.get("/api/v1/users", headers={"Authorization": "Bearer candidate-token"})
     assert response.status_code in (403, 401)
+

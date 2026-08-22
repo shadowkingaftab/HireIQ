@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from proofhire.backend.app.database import get_db
-from proofhire.backend.app.contracts.evidence import EvidenceCreate, EvidenceUpdate, Evidence
-from proofhire.backend.app.services.evidence_service import evidence_service
+from backend.app.database import get_db
+from backend.app.contracts.evidence import EvidenceCreate, EvidenceUpdate, Evidence
+from backend.app.services.evidence_service import evidence_service
 
 router = APIRouter()
 
@@ -23,3 +23,4 @@ def update_evidence(evidence_id: int, evidence_in: EvidenceUpdate, db: Session =
     if not evidence:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Evidence not found")
     return evidence
+

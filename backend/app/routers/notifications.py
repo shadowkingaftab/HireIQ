@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from proofhire.backend.app.database import get_db
-from proofhire.backend.app.contracts.notifications import Notification
-from proofhire.backend.app.services.notification_service import notification_service
+from backend.app.database import get_db
+from backend.app.contracts.notifications import Notification
+from backend.app.services.notification_service import notification_service
 
 router = APIRouter()
 
@@ -18,3 +18,4 @@ def mark_read(notification_id: int, db: Session = Depends(get_db)):
     if not notification:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Notification not found")
     return notification
+

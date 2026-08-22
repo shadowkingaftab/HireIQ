@@ -1,7 +1,7 @@
 import logging
 from typing import Any, Dict, Optional
 
-from proofhire.backend.app.evidence.contracts import NormalizedEvidence
+from backend.app.evidence.contracts import NormalizedEvidence
 
 logger = logging.getLogger(__name__)
 
@@ -24,3 +24,4 @@ class Normalizer:
 
 
 normalizer = Normalizer()
+

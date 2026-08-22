@@ -1,8 +1,8 @@
 from typing import List, Dict, Any, Optional
 from sqlalchemy.orm import Session
-from proofhire.backend.app.skill_graph.graph_builder import graph_builder
-from proofhire.backend.app.skill_graph.graph_query import graph_query
-from proofhire.backend.app.skill_graph.gap_analyzer import gap_analyzer
+from backend.app.skill_graph.graph_builder import graph_builder
+from backend.app.skill_graph.graph_query import graph_query
+from backend.app.skill_graph.gap_analyzer import gap_analyzer
 
 class SkillGraphService:
     def list_skills(self, db: Session) -> List[Dict[str, Any]]:
@@ -19,3 +19,4 @@ class SkillGraphService:
 
 
 skill_graph_service = SkillGraphService()
+

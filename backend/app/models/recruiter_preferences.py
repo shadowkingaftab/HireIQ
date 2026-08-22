@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, ForeignKey, JSON, Boolean
 from sqlalchemy.orm import relationship
-from proofhire.backend.app.database import Base
-from proofhire.backend.app.models.base import TimestampMixin
+from backend.app.database import Base
+from backend.app.models.base import TimestampMixin
 
 class RecruiterPreferences(Base, TimestampMixin):
     __tablename__ = "recruiter_preferences"
@@ -19,3 +19,4 @@ class RecruiterPreferences(Base, TimestampMixin):
 
     def __repr__(self):
         return f"<RecruiterPreferences(recruiter_id={self.recruiter_id})>"
+

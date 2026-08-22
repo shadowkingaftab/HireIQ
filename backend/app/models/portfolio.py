@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Text, ForeignKey, JSON
 from sqlalchemy.orm import relationship
-from proofhire.backend.app.database import Base
-from proofhire.backend.app.models.base import TimestampMixin
+from backend.app.database import Base
+from backend.app.models.base import TimestampMixin
 
 class Portfolio(Base, TimestampMixin):
     __tablename__ = "portfolios"
@@ -11,6 +11,7 @@ class Portfolio(Base, TimestampMixin):
     title = Column(String(255))
     description = Column(Text)
     url = Column(String(512))
-    metadata = Column(JSON, default=dict)
+    metadata_fields = Column(JSON, default=dict)
 
     candidate = relationship("Candidate", back_populates="portfolios")
+

@@ -2,7 +2,7 @@ import logging
 import traceback
 from typing import Any, Dict, List, Optional
 
-from proofhire.backend.app.core.config import settings
+from backend.app.core.config import settings
 
 logger = logging.getLogger(__name__)
 
@@ -50,3 +50,4 @@ class ErrorReporting:
 
 
 error_reporting = ErrorReporting()
+

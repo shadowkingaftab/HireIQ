@@ -1,6 +1,6 @@
 from typing import Any, Dict, Optional
 from sqlalchemy.orm import Session
-from proofhire.backend.app.models.data_consent import DataConsent
+from backend.app.models.data_consent import DataConsent
 
 class ConsentService:
     def grant(self, db: Session, *, user_id: int, purpose: str) -> DataConsent:
@@ -20,3 +20,4 @@ class ConsentService:
 
 
 consent_service = ConsentService()
+

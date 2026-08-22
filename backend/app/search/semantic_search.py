@@ -2,7 +2,7 @@ import logging
 import math
 from typing import Any, Dict, List, Optional
 
-from proofhire.backend.app.core.config import settings
+from backend.app.core.config import settings
 
 logger = logging.getLogger(__name__)
 
@@ -71,3 +71,4 @@ class SemanticSearch:
 
 
 semantic_search = SemanticSearch(vector_store=None)
+

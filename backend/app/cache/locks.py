@@ -3,8 +3,8 @@ import logging
 import time
 from typing import Optional
 
-from proofhire.backend.app.cache.client import cache_client
-from proofhire.backend.app.cache.keys import CacheKeys
+from backend.app.cache.client import cache_client
+from backend.app.cache.keys import CacheKeys
 
 logger = logging.getLogger(__name__)
 
@@ -50,3 +50,4 @@ async def with_lock(key: str, coro_func, ttl: int = 30):
         return await coro_func()
     finally:
         await lock.release()
+

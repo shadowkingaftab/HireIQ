@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
-from proofhire.backend.app.database import Base
-from proofhire.backend.app.models.base import TimestampMixin
+from backend.app.database import Base
+from backend.app.models.base import TimestampMixin
 
 class Permission(Base, TimestampMixin):
     __tablename__ = "permissions"
@@ -15,3 +15,4 @@ class Permission(Base, TimestampMixin):
 
     def __repr__(self):
         return f"<Permission(name={self.name})>"
+

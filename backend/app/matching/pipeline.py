@@ -1,9 +1,9 @@
 from typing import List, Dict, Any
 from sqlalchemy.orm import Session
-from proofhire.backend.app.models.job import Job
-from proofhire.backend.app.models.candidate import Candidate
-from proofhire.backend.app.matching.semantic_matcher import semantic_matcher
-from proofhire.backend.app.matching.capability_matcher import capability_matcher
+from backend.app.models.job import Job
+from backend.app.models.candidate import Candidate
+from backend.app.matching.semantic_matcher import semantic_matcher
+from backend.app.matching.capability_matcher import capability_matcher
 
 class MatchingPipeline:
     def execute(self, db: Session, *, job: Job, candidate: Candidate) -> Dict[str, Any]:
@@ -21,3 +21,4 @@ class MatchingPipeline:
         }
 
 matching_pipeline = MatchingPipeline()
+

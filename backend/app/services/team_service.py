@@ -1,7 +1,7 @@
 from typing import List, Optional
 from sqlalchemy.orm import Session
-from proofhire.backend.app.contracts.teams import TeamCreate, TeamUpdate
-from proofhire.backend.app.models.team import Team
+from backend.app.contracts.teams import TeamCreate, TeamUpdate
+from backend.app.models.team import Team
 
 class TeamService:
     def list_by_organization(self, db: Session, *, organization_id: int) -> List[Team]:
@@ -23,3 +23,4 @@ class TeamService:
 
 
 team_service = TeamService()
+

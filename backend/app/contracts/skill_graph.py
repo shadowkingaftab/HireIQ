@@ -1,5 +1,5 @@
 from typing import Optional, List, Dict, Any
-from proofhire.backend.app.schemas import CoreModel, TimestampModel
+from backend.app.schemas import CoreModel, TimestampModel
 
 
 class SkillBase(CoreModel):
@@ -15,3 +15,4 @@ class SkillNode(SkillBase):
 class SkillGraphQuery(CoreModel):
     skill_names: List[str]
     depth: int = 1
+

@@ -1,7 +1,7 @@
 from typing import List, Dict, Any
 from sqlalchemy.orm import Session
-from proofhire.backend.app.models.assessment import Assessment
-from proofhire.backend.app.models.coding_session import CodingSession
+from backend.app.models.assessment import Assessment
+from backend.app.models.coding_session import CodingSession
 
 class AssessmentEngine:
     def start_session(self, db: Session, *, assessment_id: int, candidate_id: int) -> CodingSession:
@@ -25,4 +25,9 @@ class AssessmentEngine:
         db.refresh(session)
         return session
 
+    def list(self, db: Session) -> List[Assessment]:
+        return db.query(Assessment).all()
+
 assessment_engine = AssessmentEngine()
+
+

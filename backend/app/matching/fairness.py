@@ -1,7 +1,7 @@
 import logging
 from typing import Any, Dict, List, Optional
 
-from proofhire.backend.app.governance.fairness_governance import fairness_governance
+from backend.app.governance.fairness_governance import fairness_governance
 
 logger = logging.getLogger(__name__)
 
@@ -20,3 +20,4 @@ class Fairness:
 
 
 fairness = Fairness()
+

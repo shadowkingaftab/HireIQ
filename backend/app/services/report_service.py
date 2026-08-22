@@ -1,9 +1,9 @@
 from typing import List, Optional
 from sqlalchemy.orm import Session
-from proofhire.backend.app.contracts.reports import ReportCreate
-from proofhire.backend.app.models.report import Report
-from proofhire.backend.app.storage.file_service import file_service
-from proofhire.backend.app.templates.reports import render_template
+from backend.app.contracts.reports import ReportCreate
+from backend.app.models.report import Report
+from backend.app.storage.file_service import file_service
+from backend.app.templates.reports import render_template
 
 class ReportService:
     def list_by_organization(self, db: Session, *, organization_id: int) -> List[Report]:
@@ -24,3 +24,4 @@ class ReportService:
 
 
 report_service = ReportService()
+

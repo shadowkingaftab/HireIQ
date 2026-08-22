@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Text, ForeignKey
 from sqlalchemy.orm import relationship
-from proofhire.backend.app.database import Base
-from proofhire.backend.app.models.base import TimestampMixin
+from backend.app.database import Base
+from backend.app.models.base import TimestampMixin
 
 class Endorsement(Base, TimestampMixin):
     __tablename__ = "endorsements"
@@ -20,3 +20,4 @@ class Endorsement(Base, TimestampMixin):
 
     def __repr__(self):
         return f"<Endorsement(candidate_id={self.candidate_id}, skill_id={self.skill_id})>"
+

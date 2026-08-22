@@ -1,8 +1,8 @@
 import logging
 from typing import List, Optional, Set
 
-from proofhire.backend.app.cache.client import cache_client
-from proofhire.backend.app.cache.keys import CacheKeys
+from backend.app.cache.client import cache_client
+from backend.app.cache.keys import CacheKeys
 
 logger = logging.getLogger(__name__)
 
@@ -44,3 +44,4 @@ class CacheInvalidation:
 
 
 cache_invalidation = CacheInvalidation()
+

@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Enum
 from sqlalchemy.orm import relationship
-from proofhire.backend.app.database import Base
-from proofhire.backend.app.models.base import TimestampMixin
+from backend.app.database import Base
+from backend.app.models.base import TimestampMixin
 import uuid
 
 class Invitation(Base, TimestampMixin):
@@ -22,3 +22,4 @@ class Invitation(Base, TimestampMixin):
 
     def __repr__(self):
         return f"<Invitation(email={self.email}, org_id={self.organization_id})>"
+

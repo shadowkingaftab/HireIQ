@@ -1,6 +1,6 @@
-from proofhire.backend.app.matching.matcher import Matcher
-from proofhire.backend.app.matching.scorer import Scorer
-from proofhire.backend.app.matching.eligibility_filter import EligibilityFilter
+from backend.app.matching.matcher import Matcher
+from backend.app.matching.scorer import Scorer
+from backend.app.matching.eligibility_filter import EligibilityFilter
 
 
 def test_matcher_returns_results():
@@ -27,3 +27,4 @@ def test_eligibility_filter():
     candidates = [{"experience_years": 5}, {"experience_years": 1}]
     filtered = filt.filter(candidates, job)
     assert len(filtered) == 1
+

@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
-from proofhire.backend.app.core.exceptions import AppError
-from proofhire.backend.app.core.logging import get_logger
+from backend.app.core.exceptions import AppError
+from backend.app.core.logging import get_logger
 
 logger = get_logger(__name__)
 

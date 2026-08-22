@@ -5,7 +5,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 from starlette.responses import Response
 
-from proofhire.backend.app.core.exceptions import ForbiddenError
+from backend.app.core.exceptions import ForbiddenError
 
 logger = logging.getLogger(__name__)
 
@@ -24,3 +24,4 @@ class TenantContextMiddleware(BaseHTTPMiddleware):
         request.state.organization_id = organization_id
         response = await call_next(request)
         return response
+

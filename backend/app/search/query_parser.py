@@ -2,7 +2,7 @@ import re
 import uuid
 from typing import Any, Dict, List, Optional
 
-from proofhire.backend.app.core.feature_flags import feature_flags
+from backend.app.core.feature_flags import feature_flags
 
 
 class ParsedQuery:
@@ -61,3 +61,4 @@ class QueryParser:
 
 
 query_parser = QueryParser()
+

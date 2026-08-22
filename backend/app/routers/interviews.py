@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from proofhire.backend.app.database import get_db
-from proofhire.backend.app.contracts.interviews import InterviewCreate, InterviewUpdate, Interview
-from proofhire.backend.app.services.interview_service import interview_service
+from backend.app.database import get_db
+from backend.app.contracts.interviews import InterviewCreate, InterviewUpdate, Interview
+from backend.app.services.interview_service import interview_service
 
 router = APIRouter()
 
@@ -23,3 +23,4 @@ def update_interview(interview_id: int, interview_in: InterviewUpdate, db: Sessi
     if not interview:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Interview not found")
     return interview
+

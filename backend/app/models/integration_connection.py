@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, JSON, Boolean
 from sqlalchemy.orm import relationship
-from proofhire.backend.app.database import Base
-from proofhire.backend.app.models.base import TimestampMixin
+from backend.app.database import Base
+from backend.app.models.base import TimestampMixin
 
 class IntegrationConnection(Base, TimestampMixin):
     __tablename__ = "integration_connections"
@@ -18,3 +18,4 @@ class IntegrationConnection(Base, TimestampMixin):
 
     def __repr__(self):
         return f"<IntegrationConnection(provider={self.provider}, org_id={self.organization_id})>"
+

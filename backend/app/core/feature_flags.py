@@ -1,5 +1,5 @@
 from typing import Dict, Optional
-from proofhire.backend.app.core.config import settings
+from backend.app.core.config import settings
 
 
 class FeatureFlags:
@@ -23,3 +23,4 @@ class FeatureFlags:
 
 
 feature_flags = FeatureFlags()
+

@@ -1,22 +1,30 @@
-import { Link } from 'react-router-dom';
+import Hero from "../components/landing/Hero";
+import TrustStrip from "../components/landing/TrustStrip";
+import HowItWorks from "../components/landing/HowItWorks";
+import FlagshipDemo from "../components/landing/FlagshipDemo";
+import Pathways from "../components/landing/Pathways";
+import FinalCta from "../components/landing/FinalCta";
+import Stack from "../components/ui/Stack";
 
 export default function Home() {
   return (
-    <div className="container">
-      <h1>ProofHire</h1>
-      <p>Evidence-first hiring intelligence platform.</p>
-      
-      <div style={{ marginTop: '2rem', display: 'flex', gap: '1rem' }}>
-        <Link to="/login" style={{ padding: '0.5rem 1rem', backgroundColor: '#007bff', color: 'white', textDecoration: 'none', borderRadius: '4px' }}>
-          Login
-        </Link>
-        <Link to="/signup" style={{ padding: '0.5rem 1rem', backgroundColor: '#28a745', color: 'white', textDecoration: 'none', borderRadius: '4px' }}>
-          Sign Up
-        </Link>
-        <Link to="/dashboard" style={{ padding: '0.5rem 1rem', backgroundColor: '#6c757d', color: 'white', textDecoration: 'none', borderRadius: '4px' }}>
-          Dashboard
-        </Link>
+    <Stack gap="none">
+      <Hero />
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+        <TrustStrip />
       </div>
-    </div>
+      <div className="py-20 lg:py-28">
+        <HowItWorks />
+      </div>
+      <div className="border-t border-line-subtle bg-surface-1/40 py-20 lg:py-28">
+        <FlagshipDemo />
+      </div>
+      <div className="py-20 lg:py-28">
+        <Pathways />
+      </div>
+      <div className="pb-24 lg:pb-32">
+        <FinalCta />
+      </div>
+    </Stack>
   );
 }

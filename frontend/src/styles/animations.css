@@ -30,6 +30,15 @@
   to { transform: translateX(0); }
 }
 
+@keyframes ph-float {
+  from { transform: translateY(-3px); }
+  to { transform: translateY(3px); }
+}
+
+@keyframes ph-dash-flow {
+  to { stroke-dashoffset: -28; }
+}
+
 @keyframes ph-shimmer {
   from { background-position: 200% 0; }
   to { background-position: -200% 0; }
@@ -45,4 +54,14 @@
   );
   background-size: 200% 100%;
   animation: ph-shimmer 1.8s linear infinite;
+}
+
+/* Landing visualization primitives — slow ambient drift + flowing proof path */
+.ph-float {
+  animation: ph-float 5.5s ease-in-out infinite alternate;
+}
+
+.ph-edge-flow {
+  stroke-dasharray: 6 8;
+  animation: ph-dash-flow 1.4s linear infinite;
 }

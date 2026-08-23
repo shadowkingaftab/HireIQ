@@ -23,6 +23,7 @@ export const typeScale = {
   "page-sm": { size: "1.4375rem", lineHeight: 1.22, tracking: "-0.018em", weight: 620 },
   section: { size: "1.25rem", lineHeight: 1.32, tracking: "-0.014em", weight: 600 },
   "section-sm": { size: "1.0625rem", lineHeight: 1.38, tracking: "-0.01em", weight: 600 },
+  "body-lg": { size: "1.125rem", lineHeight: 1.62, tracking: "0em", weight: 420 },
   body: { size: "1rem", lineHeight: 1.6, tracking: "0em", weight: 420 },
   "body-sm": { size: "0.875rem", lineHeight: 1.55, tracking: "0em", weight: 420 },
   meta: { size: "0.8125rem", lineHeight: 1.45, tracking: "0em", weight: 450 },

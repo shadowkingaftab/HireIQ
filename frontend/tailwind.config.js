@@ -101,6 +101,7 @@ export default {
         section: ["1.25rem", { lineHeight: "1.32", letterSpacing: "-0.014em", fontWeight: "600" }],
         "section-sm": ["1.0625rem", { lineHeight: "1.38", letterSpacing: "-0.01em", fontWeight: "600" }],
         // Body scale (base 16px remains untouched)
+        "body-lg": ["1.125rem", { lineHeight: "1.62", letterSpacing: "0em", fontWeight: "420" }],
         body: ["1rem", { lineHeight: "1.6", letterSpacing: "0em", fontWeight: "420" }],
         "body-sm": ["0.875rem", { lineHeight: "1.55", fontWeight: "420" }],
         // Metadata scale — evidence IDs, timestamps, captions

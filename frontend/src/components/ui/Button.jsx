@@ -1,4 +1,5 @@
 import { forwardRef } from "react";
+import { Link } from "react-router-dom";
 
 const variants = {
   primary:
@@ -30,7 +31,9 @@ function Spinner() {
 
 /**
  * ProofHire button.
- * Focus rings come from the global :focus-visible treatment in globals.css.
+ * Renders an anchor when `href` is given and a router Link when `to` is
+ * given — same visual API across all three elements. Focus rings come from
+ * the global :focus-visible treatment in globals.css.
  */
 const Button = forwardRef(function Button(
   {
@@ -43,10 +46,36 @@ const Button = forwardRef(function Button(
     trailingIcon: TrailingIcon,
     className = "",
     children,
+    to,
+    href,
     ...props
   },
   ref
 ) {
+  const classes = `inline-flex select-none items-center justify-center whitespace-nowrap font-medium transition-colors duration-150 ease-out focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
+    variants[variant]
+  } ${sizes[size]} ${className}`;
+
+  if (to && !disabled && !loading) {
+    return (
+      <Link ref={ref} to={to} className={classes} {...props}>
+        {LeadingIcon && <LeadingIcon size={size === "sm" ? 14 : 16} aria-hidden="true" />}
+        {children}
+        {TrailingIcon && <TrailingIcon size={size === "sm" ? 14 : 16} aria-hidden="true" />}
+      </Link>
+    );
+  }
+
+  if (href && !disabled && !loading) {
+    return (
+      <a ref={ref} href={href} className={classes} {...props}>
+        {LeadingIcon && <LeadingIcon size={size === "sm" ? 14 : 16} aria-hidden="true" />}
+        {children}
+        {TrailingIcon && <TrailingIcon size={size === "sm" ? 14 : 16} aria-hidden="true" />}
+      </a>
+    );
+  }
+
   const isDisabled = disabled || loading;
   return (
     <button
@@ -54,9 +83,7 @@ const Button = forwardRef(function Button(
       type={type}
       disabled={isDisabled}
       aria-busy={loading || undefined}
-      className={`inline-flex select-none items-center justify-center whitespace-nowrap font-medium transition-colors duration-150 ease-out focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${
-        variants[variant]
-      } ${sizes[size]} ${className}`}
+      className={classes}
       {...props}
     >
       {loading ? (

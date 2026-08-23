@@ -1,8 +1,5 @@
-import { Navigate } from "react-router-dom";
-import { useAuthStore } from "../store/authStore";
+import ProtectedRoute from "./ProtectedRoute";
 
 export default function RecruiterRoute({ children }) {
-  const user = useAuthStore((s) => s.user);
-  if (user?.role !== "recruiter") return <Navigate to="/" replace />;
-  return children;
+  return <ProtectedRoute roles={["recruiter", "admin"]}>{children}</ProtectedRoute>;
 }

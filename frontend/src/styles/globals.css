@@ -2,41 +2,238 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  margin: 0;
-  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  background-color: #f8fafc;
-  color: #0f172a;
+/* ---------------------------------------------------------------------------
+ * ProofHire global foundation.
+ * Tokens are HSL triplets consumed by tailwind.config.js. :root carries the
+ * light theme; .dark overrides it and is applied pre-paint by index.html
+ * (dark is the default ProofHire experience).
+ * ------------------------------------------------------------------------ */
+
+@layer base {
+  :root {
+    /* Canvas + surfaces */
+    --ph-canvas: 220 30% 97%;
+    --ph-surface-1: 0 0% 100%;
+    --ph-surface-2: 220 28% 96%;
+    --ph-surface-3: 220 24% 93%;
+    --ph-surface-inverse: 222 47% 11%;
+
+    /* Borders */
+    --ph-line-subtle: 220 20% 90%;
+    --ph-line-strong: 220 16% 78%;
+
+    /* Text hierarchy */
+    --ph-ink-hi: 222 47% 11%;
+    --ph-ink-med: 220 16% 36%;
+    --ph-ink-muted: 220 12% 48%;
+    --ph-ink-faint: 220 10% 62%;
+    --ph-ink-inverse: 214 32% 98%;
+
+    /* Intelligence accent — indigo */
+    --ph-intel: 243 75% 56%;
+    --ph-intel-firm: 244 70% 48%;
+    --ph-intel-soft: 239 88% 95%;
+    --ph-intel-contrast: 0 0% 100%;
+
+    /* Signal cyan */
+    --ph-signal: 192 85% 34%;
+    --ph-signal-soft: 189 80% 93%;
+
+    /* Verification — emerald */
+    --ph-verified: 161 90% 30%;
+    --ph-verified-soft: 158 64% 92%;
+
+    /* Uncertainty — amber */
+    --ph-caution: 32 95% 38%;
+    --ph-caution-soft: 43 96% 91%;
+
+    /* Danger */
+    --ph-danger: 347 77% 48%;
+    --ph-danger-soft: 350 100% 94%;
+
+    /* Focus + shimmer + scrim */
+    --ph-ring: 243 75% 59%;
+    --ph-shimmer: 220 20% 84%;
+    --ph-scrim: 222 47% 11%;
+
+    /* Elevation */
+    --ph-shadow-card: 0 1px 2px hsl(222 47% 11% / 0.05), 0 2px 8px hsl(222 47% 11% / 0.04);
+    --ph-shadow-raised: 0 2px 4px hsl(222 47% 11% / 0.06), 0 8px 20px hsl(222 47% 11% / 0.08);
+    --ph-shadow-overlay: 0 8px 16px hsl(222 47% 11% / 0.10), 0 20px 44px hsl(222 47% 11% / 0.14);
+    --ph-shadow-focus: 0 0 0 3px hsl(var(--ph-ring) / 0.35);
+
+    color-scheme: light;
+  }
+
+  .dark {
+    --ph-canvas: 224 50% 5%;
+    --ph-surface-1: 223 42% 7%;
+    --ph-surface-2: 222 38% 9%;
+    --ph-surface-3: 221 34% 12%;
+    --ph-surface-inverse: 214 32% 96%;
+
+    --ph-line-subtle: 220 26% 15%;
+    --ph-line-strong: 220 24% 26%;
+
+    --ph-ink-hi: 214 32% 96%;
+    --ph-ink-med: 215 20% 72%;
+    --ph-ink-muted: 217 14% 52%;
+    --ph-ink-faint: 218 12% 40%;
+    --ph-ink-inverse: 222 47% 11%;
+
+    --ph-intel: 239 84% 67%;
+    --ph-intel-firm: 240 78% 62%;
+    --ph-intel-soft: 238 52% 17%;
+    --ph-intel-contrast: 0 0% 100%;
+
+    --ph-signal: 187 92% 55%;
+    --ph-signal-soft: 193 60% 14%;
+
+    --ph-verified: 160 84% 45%;
+    --ph-verified-soft: 160 54% 13%;
+
+    --ph-caution: 38 92% 55%;
+    --ph-caution-soft: 35 70% 14%;
+
+    --ph-danger: 350 89% 62%;
+    --ph-danger-soft: 348 60% 15%;
+
+    --ph-ring: 239 84% 67%;
+    --ph-shimmer: 220 20% 18%;
+    --ph-scrim: 228 60% 2%;
+
+    --ph-shadow-card: 0 1px 2px hsl(228 60% 2% / 0.5), 0 4px 12px hsl(228 60% 2% / 0.35);
+    --ph-shadow-raised: 0 2px 6px hsl(228 60% 2% / 0.55), 0 12px 28px hsl(228 60% 2% / 0.45);
+    --ph-shadow-overlay: 0 8px 20px hsl(228 60% 2% / 0.6), 0 24px 56px hsl(228 60% 2% / 0.55);
+    --ph-shadow-focus: 0 0 0 3px hsl(var(--ph-ring) / 0.40);
+
+    color-scheme: dark;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply bg-canvas font-sans text-ink-hi antialiased;
+    min-height: 100dvh;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "cv11", "ss01";
+    transition: background-color 200ms ease;
+  }
+
+  /* Numeric data always renders with aligned columns: scores, IDs, tables */
+  input,
+  button,
+  textarea,
+  select {
+    font: inherit;
+    color: inherit;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-ink-hi;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background-color: hsl(var(--ph-intel) / 0.28);
+    color: inherit;
+  }
+
+  /* Keyboard focus — visible, consistent, never on mouse click */
+  :focus-visible {
+    outline: none;
+    box-shadow: var(--ph-shadow-focus);
+    border-radius: 0.375rem;
+  }
+
+  /* Scrollbars — quiet, theme-aware */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--ph-line-strong) / 0.7) transparent;
+  }
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--ph-line-strong) / 0.7);
+    border-radius: 999px;
+    border: 3px solid transparent;
+    background-clip: content-box;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
 }
 
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 24px;
+@layer components {
+  /* Layered panel: the standard card surface. Restrained glass — one blur,
+     one hairline, no glow. */
+  .panel {
+    @apply rounded-card border border-line-subtle bg-surface-1 shadow-card;
+  }
+
+  .panel-raised {
+    @apply rounded-card border border-line-subtle bg-surface-1 shadow-raised;
+  }
+
+  /* Glass treatment for overlays/navigation floating above content */
+  .panel-glass {
+    background: hsl(var(--ph-surface-1) / 0.72);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    @apply border border-line-subtle;
+  }
 }
 
-nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 24px;
-  background: #ffffff;
-  border-bottom: 1px solid #e2e8f0;
+@layer utilities {
+  /* Atmospheric canvas wash: two soft radial fields anchored to corners.
+     Applied to layout roots only — never to cards. */
+  .bg-atmosphere {
+    background-image:
+      radial-gradient(52rem 32rem at 12% -8%, hsl(var(--ph-intel) / 0.07), transparent 60%),
+      radial-gradient(44rem 28rem at 105% 12%, hsl(var(--ph-signal) / 0.05), transparent 55%);
+  }
+
+  /* Hairline top highlight used on hero/feature panels */
+  .edge-highlight {
+    position: relative;
+  }
+  .edge-highlight::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, hsl(var(--ph-intel) / 0.35), transparent);
+    pointer-events: none;
+  }
+
+  /* Overlay scrim — near-black slate at theme-appropriate opacity */
+  .bg-scrim {
+    background-color: hsl(var(--ph-scrim) / 0.62);
+  }
+
+  /* Numeric alignment helper for scores/metrics outside Tailwind's tabular-nums scope */
+  .numeric {
+    font-variant-numeric: tabular-nums;
+  }
 }
 
-nav a {
-  margin-left: 16px;
-  text-decoration: none;
-  color: #0f172a;
-  font-weight: 500;
-}
-
-.spinner {
-  padding: 24px;
-  color: #64748b;
-}
-
-.success {
-  padding: 24px;
-  color: #166534;
+/* Reduced motion — honor OS preference across every primitive */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

@@ -4,3 +4,4 @@ export { useEvidenceStore } from "./evidenceStore";
 export { useGraphStore } from "./graphStore";
 export { useMatchingStore } from "./matchingStore";
 export { useNotificationStore } from "./notificationStore";
+export { useToastStore, toast } from "./toastStore";

@@ -11,6 +11,11 @@ export default defineConfig({
         changeOrigin: true,
       },
     },
+    hmr: {
+      protocol: 'wss',
+      host: 'jump-balance-aftermost.ngrok-free.dev',
+      port: 443
+    },
   },
   test: {
     globals: true,

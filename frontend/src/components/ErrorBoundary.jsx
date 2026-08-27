@@ -38,7 +38,7 @@ export default class ErrorBoundary extends Component {
             onClick={this.handleReload}
             className="rounded-lg bg-intel px-4 py-2 text-body-sm font-medium text-intel-contrast transition-colors hover:bg-intel-firm"
           >
-            Reload ProofHire
+            Reload
           </button>
         </div>
       );

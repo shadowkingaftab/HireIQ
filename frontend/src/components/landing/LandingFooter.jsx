@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { brand } from "../../utils/brand";
 
 const links = [
   { href: "#how-it-works", label: "How it works" },
@@ -13,12 +14,10 @@ export default function LandingFooter() {
         <div className="flex items-center gap-2.5">
           <span
             aria-hidden="true"
-            className="flex h-7 w-7 items-center justify-center rounded-lg border border-intel/30 bg-intel-soft font-mono text-[10px] font-bold text-intel"
-          >
-            PH
+            className="flex h-7 w-7 items-center justify-center rounded-lg border border-intel/30 bg-intel-soft font-mono text-[10px] font-bold text-intel">{brand.shortMark}
           </span>
           <div>
-            <p className="text-body-sm font-semibold text-ink-hi">ProofHire</p>
+            <p className="text-body-sm font-semibold text-ink-hi">{brand.name}</p>
             <p className="text-micro text-ink-faint">Evidence-first hiring intelligence</p>
           </div>
         </div>
@@ -41,8 +40,9 @@ export default function LandingFooter() {
           </Link>
         </nav>
 
-        <p className="text-micro text-ink-faint">© {new Date().getFullYear()} ProofHire</p>
+        <p className="text-micro text-ink-faint">© {new Date().getFullYear()} {brand.name}</p>
       </div>
     </footer>
   );
 }
+

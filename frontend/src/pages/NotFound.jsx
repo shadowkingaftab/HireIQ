@@ -17,7 +17,7 @@ export default function NotFound() {
         <EmptyState
           icon={Compass}
           title="This area isn't available yet"
-          description="The page you requested doesn't exist, or is part of ProofHire that hasn't shipped. Use the command palette (⌘K) or the links below to keep moving."
+          description="The page you requested doesn't exist, or is part of the product that hasn't shipped. Use the command palette (⌘K) or the links below to keep moving."
           action={
             <Link to="/dashboard" className="rounded-lg focus-visible:outline-none">
               <Button size="sm">Back to overview</Button>

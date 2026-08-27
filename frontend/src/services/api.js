@@ -7,10 +7,21 @@ export async function request(path, options = {}) {
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
     ...options.headers,
   };
-  const res = await fetch(`${API_BASE_URL}${path}`, { ...options, headers });
+  let res;
+  try {
+    res = await fetch(`${API_BASE_URL}${path}`, { ...options, headers });
+  } catch {
+    const err = new Error("Network error — check your connection and try again.");
+    err.status = 0;
+    throw err;
+  }
   if (!res.ok) {
     const error = await res.json().catch(() => ({ message: "Request failed" }));
-    throw new Error(error.message || "Request failed");
+    // FastAPI style { detail } or generic { message }
+    const detail = error.detail ?? error.message;
+    const err = new Error(typeof detail === "string" ? detail : "Request failed");
+    err.status = res.status;
+    throw err;
   }
   if (res.status === 204) return null;
   return res.json();
@@ -33,8 +44,10 @@ export const candidateApi = {
 };
 
 export const evidenceApi = {
-  list: (candidateId) => request(`/candidates/${candidateId}/evidence`),
-  ingest: (candidateId, data) => request(`/candidates/${candidateId}/evidence`, { method: "POST", body: JSON.stringify(data) }),
+  listForCandidate: (candidateId) => request(`/evidence/candidates/${candidateId}`),
+  ingestForCandidate: (candidateId, data) =>
+    request(`/evidence/candidates/${candidateId}`, { method: "POST", body: JSON.stringify(data) }),
+  update: (id, data) => request(`/evidence/${id}`, { method: "PATCH", body: JSON.stringify(data) }),
 };
 
 export const jobApi = {
@@ -48,11 +61,23 @@ export const jobApi = {
 };
 
 export const matchingApi = {
-  rank: (jobId, candidateIds) =>
-    request(`/jobs/${jobId}/match`, {
-      method: "POST",
-      body: JSON.stringify({ candidate_ids: candidateIds }),
-    }),
+  forJob: (jobId, payload = {}) =>
+    request(`/matching/jobs/${jobId}/match`, { method: "POST", body: JSON.stringify(payload) }),
+};
+
+export const searchApi = {
+  global: (query) => request("/search", { method: "POST", body: JSON.stringify(query) }),
+};
+
+export const skillsApi = {
+  list: () => request("/skills"),
+  query: (query) => request("/skills/query", { method: "POST", body: JSON.stringify(query) }),
+  graphForOrg: (organizationId) => request(`/skill-graph/organizations/${organizationId}`),
+};
+
+export const notificationsApi = {
+  list: (userId) => request(`/notifications?user_id=${encodeURIComponent(userId)}`),
+  markRead: (id) => request(`/notifications/${id}/read`, { method: "PATCH" }),
 };
 
 export const assessmentApi = {
@@ -87,5 +112,9 @@ export const integrationApi = {
 };
 
 export const analyticsApi = {
-  summary: (organizationId) => request(`/organizations/${organizationId}/analytics/summary`),
+  summary: (organizationId) => request(`/analytics/organizations/${organizationId}/summary`),
+};
+
+export const adminApi = {
+  stats: () => request("/admin/stats"),
 };

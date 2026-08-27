@@ -13,25 +13,24 @@ import {
   Bell,
   Plug,
   Settings,
+  GitBranch,
+  Activity as ActivityIcon,
 } from "lucide-react";
 
 /**
  * Single source of truth for application navigation.
  * Consumed by the Sidebar, mobile nav drawer and CommandPalette so all three
- * always agree. `roles` gates visibility once role state exists; items are
- * visible to every authenticated user when `roles` is omitted.
- *
- * NOTE: routes for areas not yet implemented resolve to the shell's
- * structured NotFound screen — this prepares navigation honestly without
- * pretending features exist.
+ * always agree. `roles` gates visibility by authStore role.
  */
 export const candidateNav = [
   { label: "Overview", to: "/dashboard", icon: LayoutDashboard },
   { label: "Profile", to: "/profile", icon: UserRound },
+  { label: "Capabilities", to: "/capabilities", icon: GitBranch },
   { label: "Evidence", to: "/evidence", icon: ShieldCheck },
   { label: "Assessments", to: "/assessments", icon: ClipboardList },
   { label: "Matches", to: "/matches", icon: Target },
   { label: "Applications", to: "/applications", icon: Send },
+  { label: "Activity", to: "/activity", icon: ActivityIcon },
 ];
 
 export const recruiterNav = [
@@ -54,6 +53,7 @@ export const sharedNav = [
 export function primaryNavFor(role) {
   if (role === "candidate") return candidateNav;
   // Recruiter + admin + unknown-role fallback see the full product surface.
+  if (role === "admin") return [...recruiterNav.slice(0, 1), ...sharedNav];
   return recruiterNav;
 }
 
@@ -61,12 +61,17 @@ export function primaryNavFor(role) {
 export const routeLabels = {
   dashboard: "Overview",
   profile: "Profile",
+  capabilities: "Capabilities",
   evidence: "Evidence",
   assessments: "Assessments",
+  run: "Runner",
+  results: "Results",
   matches: "Matches",
   applications: "Applications",
+  activity: "Activity",
   candidates: "Candidates",
   search: "Search",
+  compare: "Compare",
   jobs: "Jobs",
   new: "New",
   analytics: "Analytics",

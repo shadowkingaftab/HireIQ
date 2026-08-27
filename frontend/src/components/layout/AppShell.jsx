@@ -7,6 +7,7 @@ import AccountMenu from "./AccountMenu";
 import Drawer from "../ui/Drawer";
 import Container from "../ui/Container";
 import { useAuthStore } from "../../store/authStore";
+import { brand } from "../../utils/brand";
 
 const COLLAPSE_KEY = "ph.sidebar.collapsed";
 
@@ -81,7 +82,7 @@ export default function AppShell() {
 
         <footer className="border-t border-line-subtle">
           <Container className="flex h-12 items-center justify-between">
-            <p className="text-micro text-ink-faint">ProofHire — verified capability, not claims.</p>
+            <p className="text-micro text-ink-faint">{brand.name} — verified capability, not claims.</p>
             {role && (
               <p className="text-micro capitalize text-ink-faint">{role} workspace</p>
             )}
@@ -90,7 +91,7 @@ export default function AppShell() {
       </div>
 
       {/* Mobile / tablet navigation drawer */}
-      <Drawer open={navOpen} onClose={() => setNavOpen(false)} position="left" width="sm" title="ProofHire">
+      <Drawer open={navOpen} onClose={() => setNavOpen(false)} position="left" width="sm" title={brand.name}>
         <div className="-mx-5 -my-4">
           <div className="h-[calc(100dvh-16rem)] overflow-y-auto px-3 pb-2 pt-3">
             <SidebarContent showBrand={false} />

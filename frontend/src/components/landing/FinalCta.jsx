@@ -1,6 +1,7 @@
 import Reveal from "./Reveal";
 import Container from "../ui/Container";
 import Button from "../ui/Button";
+import { brand } from "../../utils/brand";
 
 export default function FinalCta() {
   return (
@@ -17,7 +18,7 @@ export default function FinalCta() {
               }}
             />
             <p className="relative text-micro font-medium uppercase tracking-caps text-intel">
-              ProofHire
+              {brand.name}
             </p>
             <h2 id="final-cta-title" className="relative mt-3 text-display-lg text-ink-hi">
               Capability is more than a résumé.

@@ -3,6 +3,7 @@ import { PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import { useAuthStore } from "../../store/authStore";
 import { primaryNavFor, sharedNav } from "./navConfig";
 import Tooltip from "../ui/Tooltip";
+import { brand } from "../../utils/brand";
 
 function BrandMark({ compact = false }) {
   return (
@@ -11,11 +12,11 @@ function BrandMark({ compact = false }) {
         aria-hidden="true"
         className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-intel/30 bg-intel-soft font-mono text-[11px] font-bold tracking-tight text-intel"
       >
-        PH
+        {brand.shortMark}
       </span>
       {!compact && (
         <span className="truncate text-body-sm font-semibold tracking-tight text-ink-hi">
-          ProofHire
+          {brand.name}
         </span>
       )}
     </div>
@@ -83,7 +84,7 @@ export function SidebarContent({ collapsed = false, showBrand = true }) {
 
       {!collapsed && (
         <p className="shrink-0 px-5 pb-3 text-micro text-ink-faint">
-          Evidence-first hiring intelligence
+          {brand.tagline}
         </p>
       )}
     </div>

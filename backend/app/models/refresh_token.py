@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
+from sqlalchemy import Boolean, Column, Integer, String, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 
 from backend.app.database import Base
@@ -21,6 +21,12 @@ class RefreshToken(Base, TimestampMixin):
     expires_at = Column(
         DateTime(timezone=True),
         nullable=True,
+    )
+
+    revoked = Column(
+        Boolean,
+        default=False,
+        nullable=False,
     )
 
     user = relationship(

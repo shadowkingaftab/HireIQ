@@ -144,7 +144,8 @@
   }
 
   body {
-    @apply bg-canvas font-sans text-ink-hi antialiased;
+    @apply font-sans text-ink-hi antialiased;
+    background-color: #02040a;
     min-height: 100dvh;
     text-rendering: optimizeLegibility;
     font-feature-settings: "cv11", "ss01";
@@ -230,50 +231,49 @@
       radial-gradient(44rem 32rem at 80% 50%, hsl(var(--ph-accent) / 0.05), transparent 55%);
   }
 
-  .public-atmosphere {
+  /* -----------------------------------------------------------------------
+   * FluxEdit environment — cinematic canvas layers.
+   * Volumetric spotlight sits behind all content; animated beams and particles
+   * live in the backdrop; film grain finishes the frame at the top layer.
+   * -------------------------------------------------------------------- */
+
+  .flux-environment {
     position: relative;
     isolation: isolate;
-    background-color: #02070a;
-    background-image:
-      radial-gradient(circle 42rem at 18% 20%, rgba(14, 165, 233, 0.075), transparent 68%),
-      radial-gradient(circle 34rem at 82% 32%, rgba(14, 165, 233, 0.035), transparent 72%);
+    min-height: 100dvh;
+    background-color: #02040a;
   }
 
-  .public-atmosphere::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    opacity: 0.035;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
-    background-size: 160px 160px;
-    mix-blend-mode: soft-light;
-  }
-
-  .public-atmosphere::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
-    background-size: 32px 32px;
-    opacity: 0.12;
-    -webkit-mask-image: radial-gradient(circle at 50% 28%, black, transparent 76%);
-    mask-image: radial-gradient(circle at 50% 28%, black, transparent 76%);
-  }
-
-  .public-spotlight {
-    position: absolute;
+  .flux-volumetric {
+    position: fixed;
     inset: 0;
     z-index: 0;
     pointer-events: none;
     background: radial-gradient(
-      34rem circle at var(--pointer-x, 20%) var(--pointer-y, 20%),
-      rgb(14 165 233 / 0.08),
-      transparent 72%
+      circle at 50% 40%,
+      rgba(14, 165, 233, 0.15) 0%,
+      rgba(249, 115, 22, 0.05) 30%,
+      transparent 70%
     );
+  }
+
+  .flux-backdrop {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .flux-film-grain {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    pointer-events: none;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 200px 200px;
   }
 
   /* -----------------------------------------------------------------------
@@ -487,143 +487,73 @@
     text-shadow: 0 0 20px rgba(14, 165, 233, 0.4);
   }
 
-  .constellation-canvas {
-    position: relative;
-    display: grid;
-    place-items: center;
-    width: 100%;
-    height: 100%;
-  }
-
-  .constellation-svg {
-    display: block;
-    width: 100%;
-    height: 100%;
-    overflow: visible;
-  }
-
-  .constellation-connections line {
+  /* Holographic core — engineered rings and reactor center */
+  .holo-ring {
     fill: none;
     stroke: #0ea5e9;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .holo-ring-outer {
     stroke-width: 1;
-    stroke-dasharray: 3 7;
-    opacity: 0.3;
-    vector-effect: non-scaling-stroke;
+    stroke-dasharray: 1 11;
+    opacity: 0.35;
+    animation: ph-holo-dash 26s linear infinite;
   }
 
-  .constellation-connections .constellation-proof-path {
-    fill: none;
-    stroke: #7dd3fc;
-    stroke-width: 1.15;
-    stroke-dasharray: 4 7;
-    opacity: 0.68;
-    vector-effect: non-scaling-stroke;
+  .holo-ring-middle {
+    stroke-width: 1.5;
+    stroke-dasharray: 26 18;
+    opacity: 0.55;
+    animation: ph-holo-dash 17s linear infinite reverse;
   }
 
-  .constellation-data-pulse {
-    fill: #f8fafc;
-    filter: drop-shadow(0 0 4px rgba(14, 165, 233, 0.85));
+  .holo-ring-inner {
+    stroke-width: 2;
+    stroke-dasharray: 48 14 6 14;
+    opacity: 0.85;
+    animation: ph-holo-dash 11s linear infinite;
   }
 
-  .constellation-layer-labels {
-    font-family: "JetBrains Mono Variable", ui-monospace, monospace;
-    font-size: 9px;
-    letter-spacing: 0.16em;
-    fill: rgba(148, 163, 184, 0.68);
-  }
-
-  .constellation-evidence-node rect,
-  .constellation-skill-node rect {
-    fill: rgba(17, 24, 39, 0.42);
-    stroke: rgba(248, 250, 252, 0.12);
+  .holo-ticks line {
+    stroke: #0ea5e9;
     stroke-width: 1;
+    opacity: 0.28;
     vector-effect: non-scaling-stroke;
   }
 
-  .constellation-status-dot {
-    fill: #0ea5e9;
-    filter: drop-shadow(0 0 3px rgba(14, 165, 233, 0.65));
+  .holo-core {
+    background: radial-gradient(
+      circle at 38% 32%,
+      #bae6fd 0%,
+      #38bdf8 22%,
+      #0ea5e9 55%,
+      #0369a1 100%
+    );
+    box-shadow:
+      0 0 18px rgba(14, 165, 233, 0.9),
+      0 0 48px rgba(14, 165, 233, 0.5),
+      0 0 90px rgba(14, 165, 233, 0.25),
+      inset 0 0 14px rgba(255, 255, 255, 0.6);
+    animation: ph-holo-pulse 3.2s ease-in-out infinite;
   }
 
-  .constellation-node-title {
-    font-family: "Inter Variable", Inter, sans-serif;
-    font-size: 13px;
-    font-weight: 550;
-    fill: #f8fafc;
+  @keyframes ph-holo-dash {
+    to {
+      stroke-dashoffset: -240;
+    }
   }
 
-  .constellation-node-meta {
-    font-family: "JetBrains Mono Variable", ui-monospace, monospace;
-    font-size: 9px;
-    letter-spacing: 0.04em;
-    fill: #94a3b8;
-  }
-
-  .constellation-radar-ring {
-    fill: rgba(14, 165, 233, 0.025);
-    stroke: rgba(14, 165, 233, 0.55);
-    stroke-width: 1;
-    vector-effect: non-scaling-stroke;
-  }
-
-  .constellation-radar-outer {
-    transform-box: fill-box;
-    transform-origin: center;
-    animation: ph-radar-pulse 3.2s ease-out infinite;
-  }
-
-  .constellation-radar-center {
-    fill: #0ea5e9;
-    filter: drop-shadow(0 0 5px rgba(14, 165, 233, 0.72));
-  }
-
-  .constellation-cap-label,
-  .constellation-cap-meta,
-  .constellation-match-value,
-  .constellation-match-label {
-    font-family: "JetBrains Mono Variable", ui-monospace, monospace;
-    text-anchor: middle;
-  }
-
-  .constellation-cap-label {
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.16em;
-    fill: #bae6fd;
-  }
-
-  .constellation-cap-meta {
-    font-size: 8px;
-    letter-spacing: 0.1em;
-    fill: #94a3b8;
-  }
-
-  .constellation-match-node rect {
-    fill: rgba(249, 115, 22, 0.055);
-    stroke: #f97316;
-    stroke-width: 1;
-    vector-effect: non-scaling-stroke;
-  }
-
-  .constellation-match-value {
-    font-size: 24px;
-    font-weight: 700;
-    fill: #f97316;
-  }
-
-  .constellation-match-label {
-    font-size: 9px;
-    letter-spacing: 0.18em;
-    fill: #f97316;
-  }
-
-  .constellation-mobile {
-    display: none;
-  }
-
-  @keyframes ph-radar-pulse {
-    0%, 100% { opacity: 0.62; transform: scale(0.98); }
-    50% { opacity: 1; transform: scale(1.04); }
+  @keyframes ph-holo-pulse {
+    0%,
+    100% {
+      transform: translate(-50%, -50%) scale(0.92);
+      opacity: 0.86;
+    }
+    50% {
+      transform: translate(-50%, -50%) scale(1.08);
+      opacity: 1;
+    }
   }
 
   .score-accent {
@@ -672,8 +602,7 @@
 
   .ph-float,
   .ph-edge-flow,
-  .ph-data-pulse,
-  .constellation-radar-outer {
+  .ph-data-pulse {
     animation: none;
   }
 }
@@ -681,126 +610,5 @@
 @media (max-width: 640px) {
   .hero-stage {
     margin-inline: -0.75rem;
-  }
-
-  .hero-graph {
-    border-radius: 1rem;
-  }
-
-  .constellation-svg {
-    display: none;
-  }
-
-  .constellation-mobile {
-    display: flex;
-    width: 100%;
-    height: 100%;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 3.25rem 1rem 2.35rem;
-  }
-
-  .constellation-mobile-evidence {
-    display: grid;
-    gap: 0.35rem;
-  }
-
-  .constellation-mobile-evidence span,
-  .constellation-mobile-skills span {
-    display: flex;
-    min-height: 1.85rem;
-    align-items: center;
-    gap: 0.55rem;
-    border: 1px solid rgba(248, 250, 252, 0.1);
-    border-radius: 0.45rem;
-    background: rgba(17, 24, 39, 0.42);
-    padding: 0.35rem 0.6rem;
-    color: #f8fafc;
-    font-size: 0.7rem;
-  }
-
-  .constellation-mobile-evidence span::before,
-  .constellation-mobile-skills span::before {
-    width: 0.35rem;
-    height: 0.35rem;
-    flex: 0 0 auto;
-    border-radius: 999px;
-    background: #0ea5e9;
-    box-shadow: 0 0 7px rgba(14, 165, 233, 0.55);
-    content: "";
-  }
-
-  .constellation-mobile-evidence small,
-  .constellation-mobile-outcome small {
-    color: #94a3b8;
-    font-family: "JetBrains Mono Variable", ui-monospace, monospace;
-    font-size: 0.56rem;
-    margin-left: auto;
-  }
-
-  .constellation-mobile-connector {
-    height: 0.7rem;
-    color: #38bdf8;
-    font-size: 0.8rem;
-    line-height: 0.7rem;
-    text-align: center;
-    opacity: 0.75;
-  }
-
-  .constellation-mobile-skills {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.35rem;
-  }
-
-  .constellation-mobile-skills span {
-    min-width: 0;
-    font-size: 0.65rem;
-  }
-
-  .constellation-mobile-outcome {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    align-items: center;
-    gap: 0.65rem;
-  }
-
-  .constellation-mobile-cap,
-  .constellation-mobile-match {
-    display: flex;
-    min-height: 2.6rem;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    border: 1px solid rgba(14, 165, 233, 0.42);
-    border-radius: 0.45rem;
-    color: #bae6fd;
-    font-family: "JetBrains Mono Variable", ui-monospace, monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.08em;
-  }
-
-  .constellation-mobile-cap {
-    flex-direction: column;
-    gap: 0.1rem;
-  }
-
-  .constellation-mobile-cap small {
-    color: #94a3b8;
-    font-size: 0.48rem;
-  }
-
-  .constellation-mobile-match {
-    min-width: 4rem;
-    border-color: #f97316;
-    color: #f97316;
-    font-size: 1rem;
-    font-weight: 700;
-  }
-
-  .constellation-mobile-match small {
-    margin-left: 0;
-    color: inherit;
-    font-size: 0.48rem;
   }
 }

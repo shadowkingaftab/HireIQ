@@ -1,37 +1,49 @@
 import { useEffect, useRef } from "react";
 import { Outlet } from "react-router-dom";
+import { BackgroundBeams } from "../components/ui/background-beams";
+import { Particles } from "../components/ui/particles";
 import LandingNav from "../components/landing/LandingNav";
 import LandingFooter from "../components/landing/LandingFooter";
+import usePrefersReducedMotion from "../hooks/usePrefersReducedMotion";
 
 /**
- * Public experience shell — fixed glass navigation over an atmospheric
- * canvas, content via children or nested routes, footer.
+ * Public experience shell — cinematic FluxEdit canvas: volumetric spotlight,
+ * animated beams, floating particles, and film grain behind the content.
  */
 export default function PublicLayout({ children }) {
-  const shellRef = useRef(null);
+  const glowRef = useRef(null);
+  const reducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
-    const shell = shellRef.current;
-    if (!shell || window.matchMedia("(pointer: coarse)").matches) return undefined;
-
-    const updateSpotlight = (event) => {
-      const bounds = shell.getBoundingClientRect();
-      shell.style.setProperty("--pointer-x", `${event.clientX - bounds.left}px`);
-      shell.style.setProperty("--pointer-y", `${event.clientY - bounds.top}px`);
+    const glow = glowRef.current;
+    if (!glow || reducedMotion) return undefined;
+    const onPointerMove = (event) => {
+      const x = (event.clientX / window.innerWidth - 0.5) * 2;
+      const y = (event.clientY / window.innerHeight - 0.5) * 2;
+      glow.style.translate = `${x * 14}px ${y * 10}px`;
     };
-
-    window.addEventListener("pointermove", updateSpotlight, { passive: true });
-    return () => window.removeEventListener("pointermove", updateSpotlight);
-  }, []);
+    window.addEventListener("pointermove", onPointerMove, { passive: true });
+    return () => window.removeEventListener("pointermove", onPointerMove);
+  }, [reducedMotion]);
 
   return (
-    <div ref={shellRef} className="public-atmosphere min-h-dvh bg-canvas text-stellar">
-      <div className="public-spotlight" aria-hidden="true" />
+    <div className="flux-environment text-stellar">
+      <div ref={glowRef} className="flux-volumetric transition-[translate] duration-500 ease-out" aria-hidden="true" />
+      <div className="flux-backdrop" aria-hidden="true">
+        <BackgroundBeams />
+        <Particles
+          className="absolute inset-0 opacity-40"
+          quantity={50}
+          staticity={50}
+          ease={50}
+        />
+      </div>
       <LandingNav />
       <main className="relative z-[1]">{children ?? <Outlet />}</main>
       <div className="relative z-[1]">
         <LandingFooter />
       </div>
+      <div className="flux-film-grain" aria-hidden="true" />
     </div>
   );
 }

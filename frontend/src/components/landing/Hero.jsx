@@ -1,16 +1,59 @@
-import { Suspense, lazy } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Reveal from "./Reveal";
-import ProofGraphVisual from "./ProofGraphVisual";
+import HolographicCore from "./HolographicCore";
 import Container from "../ui/Container";
 import Button from "../ui/Button";
 import Badge from "../ui/Badge";
+import { HeroHighlight, Highlight } from "../ui/hero-highlight";
 import usePrefersReducedMotion from "../../hooks/usePrefersReducedMotion";
 
-const EvidenceConstellation = lazy(() => import("./EvidenceConstellation"));
-
 const HEADLINE_PRIMARY = ["Don't", "just", "claim", "what", "you", "can", "do."];
-const HEADLINE_ACCENT = ["Prove", "it."];
+const SCRAMBLE_CHARS = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789#%*+";
+
+function ScrambledText({ text, reducedMotion }) {
+  const [display, setDisplay] = useState(reducedMotion ? text : "#########");
+
+  useEffect(() => {
+    if (reducedMotion) {
+      setDisplay(text);
+      return undefined;
+    }
+
+    let frame = 0;
+    const framesToResolve = 24;
+    const timer = window.setInterval(() => {
+      frame += 1;
+      const resolved = Math.floor((frame / framesToResolve) * text.length);
+      setDisplay(
+        text
+          .split("")
+          .map((character, index) => {
+            if (index < resolved) return character;
+            return SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)];
+          })
+          .join("")
+      );
+      if (frame >= framesToResolve) {
+        window.clearInterval(timer);
+        setDisplay(text);
+      }
+    }, 38);
+
+    return () => window.clearInterval(timer);
+  }, [reducedMotion, text]);
+
+  return <span aria-hidden="true">{display}</span>;
+}
+
+function moveMagneticButton(event, reducedMotion) {
+  if (reducedMotion) return;
+  const button = event.currentTarget;
+  const bounds = button.getBoundingClientRect();
+  const x = event.clientX - bounds.left - bounds.width / 2;
+  const y = event.clientY - bounds.top - bounds.height / 2;
+  button.style.translate = `${x * 0.16}px ${y * 0.2}px`;
+}
 
 function HeadlineWords({ reducedMotion }) {
   return (
@@ -30,17 +73,16 @@ function HeadlineWords({ reducedMotion }) {
         ))}
       </span>
       <span aria-hidden="true" className="mt-1 block">
-        {HEADLINE_ACCENT.map((word, index) => (
-          <motion.span
-            key={word}
-            className="hero-word hero-title-accent mr-[0.22em] last:mr-0"
-            initial={reducedMotion ? false : { opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: 0.3 + index * 0.05 }}
-          >
-            {word}
-          </motion.span>
-        ))}
+        <motion.span
+          className="hero-word inline-block"
+          initial={reducedMotion ? false : { opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: 0.3 }}
+        >
+          <Highlight className="hero-title-accent rounded-none bg-gradient-to-r from-electric/25 via-electric/10 to-transparent px-0 pb-0 dark:from-electric/25 dark:via-electric/10 dark:to-transparent">
+            <ScrambledText text="Prove it." reducedMotion={reducedMotion} />
+          </Highlight>
+        </motion.span>
       </span>
     </>
   );
@@ -56,8 +98,8 @@ export default function Hero() {
     >
       <div className="constellation-mesh" aria-hidden="true" />
 
-      <Container className="relative z-[1] pt-28 sm:pt-32 lg:pt-36">
-        <div className="mx-auto flex max-w-5xl flex-col items-center text-center">
+      <Container className="relative z-[1] pt-40">
+        <div className="flex w-full flex-col items-start text-left">
           <Reveal>
             <Badge
               tone="info"
@@ -81,44 +123,63 @@ export default function Hero() {
               }}
               aria-hidden="true"
             />
-            <h1
-              id="hero-title"
-              className="hero-title text-[3.15rem] text-stellar sm:text-[5.25rem] lg:text-[7rem]"
+            <HeroHighlight
+              containerClassName="h-auto w-full items-start justify-start bg-transparent dark:bg-transparent"
+              className="w-full"
             >
-              <HeadlineWords reducedMotion={reducedMotion} />
-            </h1>
+              <h1
+                id="hero-title"
+                className="hero-title text-left text-6xl text-stellar md:text-8xl"
+              >
+                <HeadlineWords reducedMotion={reducedMotion} />
+              </h1>
+            </HeroHighlight>
           </div>
 
-          <Reveal delay={160}>
-            <p className="mx-auto mt-7 max-w-2xl text-body-lg leading-relaxed text-nebula">
-              ProofHire turns verified work — repositories, assessments, real contributions —
-              into explainable capability signals. Recruiters see demonstrated skill, and every
-              score traces back to its evidence.
-            </p>
-          </Reveal>
+          <div className="mt-12 grid w-full grid-cols-1 gap-6 md:grid-cols-3">
+            <Reveal delay={160} className="h-full md:col-span-1">
+              <div className="h-full rounded-2xl border border-white/10 border-t-white/20 bg-white/5 p-6 backdrop-blur-md">
+                <p className="text-body-lg leading-relaxed text-nebula">
+                  ProofHire turns verified work — repositories, assessments, real contributions —
+                  into explainable capability signals. Recruiters see demonstrated skill, and every
+                  score traces back to its evidence.
+                </p>
+              </div>
+            </Reveal>
 
-          <Reveal delay={240}>
-            <div className="mt-9 flex w-full flex-col justify-center gap-3 sm:w-auto sm:flex-row">
-              <Button
-                size="lg"
-                to="/signup"
-                className="hero-cta w-full rounded-full border-0 px-7 font-semibold sm:w-auto"
-              >
-                Build your proof
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                href="#how-it-works"
-                className="hero-secondary w-full rounded-full px-7 sm:w-auto"
-              >
-                Explore how it works
-              </Button>
-            </div>
-          </Reveal>
+            <div className="hidden md:block" aria-hidden="true" />
+
+            <Reveal delay={240} className="h-full md:col-span-1">
+              <div className="flex h-full flex-col justify-center gap-3 rounded-2xl border border-white/10 border-t-white/20 bg-white/5 p-6 backdrop-blur-md">
+                <div
+                  onPointerMove={(event) => moveMagneticButton(event, reducedMotion)}
+                  onPointerLeave={(event) => {
+                    event.currentTarget.style.translate = "0 0";
+                  }}
+                  className="transition-[translate] duration-200 ease-out"
+                >
+                  <Button
+                    size="lg"
+                    to="/signup"
+                    className="hero-cta w-full rounded-full border-0 px-7 font-semibold"
+                  >
+                    Build your proof
+                  </Button>
+                </div>
+                <Button
+                  size="lg"
+                  variant="outline"
+                  href="#how-it-works"
+                  className="hero-secondary w-full rounded-full px-7"
+                >
+                  Explore how it works
+                </Button>
+              </div>
+            </Reveal>
+          </div>
 
           <Reveal delay={320}>
-            <p className="mt-7 flex flex-wrap items-center justify-center gap-2 font-mono text-micro uppercase tracking-caps text-nebula/80">
+            <p className="mt-8 flex flex-wrap items-center justify-start gap-2 font-mono text-micro uppercase tracking-caps text-nebula/80">
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-electric-soft" aria-hidden="true" />
               Candidate-controlled evidence · Explainable scores · No black-box ranking
             </p>
@@ -127,32 +188,7 @@ export default function Hero() {
 
         <Reveal delay={200} className="hero-stage relative mx-auto mt-10 max-w-6xl sm:mt-12">
           <div className="hero-stage-orbit" aria-hidden="true" />
-
-          <div className="relative overflow-hidden rounded-[1.75rem] border border-white/[0.07] bg-[rgba(2,7,10,0.38)] shadow-[0_0_48px_rgba(14,165,233,0.035)] backdrop-blur-[2px]">
-            <div className="pointer-events-none absolute inset-x-0 top-0 z-10 flex items-center justify-between px-5 py-4">
-              <span className="constellation-layer-label flex items-center gap-2">
-                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-electric-soft" aria-hidden="true" />
-                EVIDENCE CONSTELLATION
-              </span>
-              <span className="constellation-layer-label hidden sm:inline">DEMO DATA · TRACEABLE</span>
-            </div>
-
-            <div className="h-[350px] w-full sm:h-[470px] lg:h-[560px]">
-              <Suspense fallback={<ProofGraphVisual />}>
-                <EvidenceConstellation />
-              </Suspense>
-            </div>
-
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-x-0 bottom-0 z-10 hidden items-center justify-center px-5 py-4 sm:flex"
-            >
-              <span className="constellation-layer-label text-center">
-                REPOSITORY → VERIFIED SKILL → CAPABILITY → MATCH
-              </span>
-            </div>
-          </div>
-
+          <HolographicCore />
           <p className="mt-4 text-center font-mono text-micro tracking-wide text-nebula/60">
             Every signal traces back to its evidence.
           </p>

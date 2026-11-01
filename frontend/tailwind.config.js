@@ -15,6 +15,19 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Evidence Constellation palette
+        abyss: "#030712",
+        electric: {
+          DEFAULT: "#0EA5E9",
+          soft: "#38BDF8",
+          bright: "#7DD3FC",
+          deep: "#0369A1",
+        },
+        cantaloupe: "#F97316",
+        stellar: "#F8FAFC",
+        nebula: "#94A3B8",
+        glass: "rgba(17, 24, 39, 0.6)",
+
         // Canvas + layered surfaces
         canvas: "hsl(var(--ph-canvas) / <alpha-value>)",
         surface: {
@@ -122,6 +135,18 @@ export default {
         "raised": "var(--ph-shadow-raised)",
         "overlay": "var(--ph-shadow-overlay)",
         "focus": "var(--ph-shadow-focus)",
+        "glow-blue": "0 0 30px rgba(14, 165, 233, 0.6)",
+        "glow-blue-soft": "0 0 20px rgba(14, 165, 233, 0.35)",
+        "glow-orange": "0 0 20px rgba(249, 115, 22, 0.2)",
+      },
+      backgroundImage: {
+        "constellation-mesh":
+          "radial-gradient(circle at 20% 50%, rgba(14, 165, 233, 0.15) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(14, 165, 233, 0.08) 0%, transparent 48%)",
+        "dot-grid":
+          "radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px)",
+      },
+      backgroundSize: {
+        "dot-grid": "32px 32px",
       },
       // Keyframes live in src/styles/animations.css (ph-* names)
       animation: {
@@ -130,6 +155,10 @@ export default {
         "scale-in": "ph-scale-in 200ms cubic-bezier(0.22, 1, 0.36, 1) both",
         "slide-in-right": "ph-slide-in-right 260ms cubic-bezier(0.16, 1, 0.3, 1) both",
         "slide-in-left": "ph-slide-in-left 260ms cubic-bezier(0.16, 1, 0.3, 1) both",
+        "orbit-slow": "ph-orbit 26s linear infinite",
+        "pulse-soft": "ph-pulse-soft 3.2s ease-in-out infinite",
+        "node-glow": "ph-node-glow 4s ease-in-out infinite",
+        "float-slow": "ph-float 6s ease-in-out infinite alternate",
       },
       zIndex: {
         raised: "10",

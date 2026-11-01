@@ -25,7 +25,7 @@ export default function PublicLayout({ children }) {
   }, []);
 
   return (
-    <div ref={shellRef} className="public-atmosphere min-h-dvh bg-canvas text-ink-hi">
+    <div ref={shellRef} className="public-atmosphere min-h-dvh bg-canvas text-stellar">
       <div className="public-spotlight" aria-hidden="true" />
       <LandingNav />
       <main className="relative z-[1]">{children ?? <Outlet />}</main>

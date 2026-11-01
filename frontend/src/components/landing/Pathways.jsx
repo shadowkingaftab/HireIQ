@@ -24,15 +24,24 @@ export default function Pathways() {
   return (
     <section id="pathways" className="scroll-mt-24" aria-label="Choose your pathway">
       <Container>
-        <div className="grid grid-cols-1 gap-px overflow-hidden rounded-card border border-line-subtle bg-line-subtle lg:grid-cols-2">
+        <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
           {pathways.map(({ eyebrow, statement, copy, cta, to }, i) => (
-            <Reveal key={eyebrow} delay={i * 100} className="landing-feature-card">
-              <div className="flex h-full flex-col items-start px-7 py-10 sm:px-10">
-                <p className="text-micro font-medium uppercase tracking-caps text-intel">{eyebrow}</p>
-                <h3 className="mt-3 max-w-sm text-display text-ink-hi">{statement}</h3>
-                <p className="mt-4 max-w-md text-body-sm leading-relaxed text-ink-muted">{copy}</p>
-                <div className="mt-8 pt-2">
-                  <Button variant="outline" to={to} trailingIcon={ArrowUpRight}>
+            <Reveal key={eyebrow} delay={i * 100}>
+              <div className="landing-feature-card flex h-full flex-col items-start rounded-2xl px-7 py-10 sm:px-10">
+                <p className="font-mono text-micro uppercase tracking-caps text-electric-soft">
+                  {eyebrow}
+                </p>
+                <h3 className="mt-3 max-w-sm font-display text-[2.35rem] leading-[1.06] tracking-tight text-stellar">
+                  {statement}
+                </h3>
+                <p className="mt-4 max-w-md text-body-sm leading-relaxed text-nebula">{copy}</p>
+                <div className="mt-auto pt-8">
+                  <Button
+                    variant="outline"
+                    to={to}
+                    trailingIcon={ArrowUpRight}
+                    className="hero-secondary rounded-full"
+                  >
                     {cta}
                   </Button>
                 </div>

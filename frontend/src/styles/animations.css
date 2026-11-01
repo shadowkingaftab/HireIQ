@@ -56,6 +56,31 @@
   to { offset-distance: 100%; opacity: 0; }
 }
 
+@keyframes ph-orbit {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes ph-pulse-soft {
+  0%, 100% { opacity: 0.45; transform: scale(0.98); }
+  50% { opacity: 1; transform: scale(1.02); }
+}
+
+@keyframes ph-pulse-orange {
+  0%, 100% { opacity: 0.35; transform: scale(1); }
+  50% { opacity: 0.9; transform: scale(1.06); }
+}
+
+@keyframes ph-node-glow {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+@keyframes ph-scan {
+  from { background-position: 0 -110%; }
+  to { background-position: 0 210%; }
+}
+
 /* Composite: skeleton shimmer sweep for loading placeholders */
 .ph-skeleton {
   background-image: linear-gradient(

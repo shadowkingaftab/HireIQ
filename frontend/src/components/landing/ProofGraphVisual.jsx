@@ -65,7 +65,7 @@ export default function ProofGraphVisual() {
       role="figure"
       aria-label="Demonstration of how ProofHire links evidence such as repositories and assessments to verified skills, then to a candidate capability and a match score."
     >
-      <div className="panel-glass relative overflow-hidden rounded-card border-line-subtle shadow-raised">
+      <div className="hero-graph relative overflow-hidden">
         {/* faint grid backdrop */}
         <svg
           aria-hidden="true"

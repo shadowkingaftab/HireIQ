@@ -16,6 +16,7 @@ import "./styles/globals.css";
 
 import App from "./App";
 import ErrorBoundary from "./components/ErrorBoundary";
+import SmoothScroll from "./components/SmoothScroll";
 import ToastHost from "./components/ui/ToastHost";
 import { queryClient } from "./lib/queryClient";
 
@@ -24,7 +25,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
-          <App />
+          <SmoothScroll>
+            <App />
+          </SmoothScroll>
           <ToastHost />
         </BrowserRouter>
       </QueryClientProvider>

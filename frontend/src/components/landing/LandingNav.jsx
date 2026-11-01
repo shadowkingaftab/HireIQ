@@ -10,14 +10,20 @@ const anchors = [
 
 export default function LandingNav() {
   return (
-    <header className="panel-glass fixed inset-x-0 top-0 z-sticky border-b">
+    <header className="fixed inset-x-0 top-0 z-sticky border-b border-electric/10 bg-[#030712]/70 backdrop-blur-xl">
       <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link to="/" className="flex items-center gap-2.5 rounded-md focus-visible:outline-none" aria-label={`${brand.name} home`}>
+        <Link
+          to="/"
+          className="flex items-center gap-2.5 rounded-md focus-visible:outline-none"
+          aria-label={`${brand.name} home`}
+        >
           <span
             aria-hidden="true"
-            className="flex h-8 w-8 items-center justify-center rounded-lg border border-intel/30 bg-intel-soft font-mono text-[11px] font-bold tracking-tight text-intel">{brand.shortMark}
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-electric/40 bg-electric/10 font-mono text-[11px] font-bold tracking-tight text-electric-soft shadow-[0_0_18px_rgba(14,165,233,0.22)]"
+          >
+            {brand.shortMark}
           </span>
-          <span className="text-body-sm font-semibold tracking-tight text-ink-hi">{brand.name}</span>
+          <span className="text-body-sm font-semibold tracking-tight text-stellar">{brand.name}</span>
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex" aria-label="Page sections">
@@ -25,18 +31,31 @@ export default function LandingNav() {
             <a
               key={href}
               href={href}
-              className="rounded-md px-3 py-2 text-body-sm text-ink-muted transition-colors hover:bg-surface-2/70 hover:text-ink-hi focus-visible:outline-none"
+              className="group relative rounded-md px-3 py-2 text-body-sm text-nebula transition-colors hover:text-stellar focus-visible:outline-none"
             >
               {label}
+              <span
+                aria-hidden="true"
+                className="absolute inset-x-3 -bottom-px h-px scale-x-0 bg-gradient-to-r from-transparent via-electric to-transparent transition-transform duration-300 group-hover:scale-x-100"
+              />
             </a>
           ))}
         </nav>
 
         <div className="flex items-center gap-2.5">
-          <Button variant="ghost" size="sm" to="/login" className="hidden sm:inline-flex">
+          <Button
+            variant="ghost"
+            size="sm"
+            to="/login"
+            className="hidden rounded-full text-nebula hover:text-stellar sm:inline-flex"
+          >
             Log in
           </Button>
-          <Button size="sm" to="/signup">
+          <Button
+            size="sm"
+            to="/signup"
+            className="hero-cta rounded-full border-0 px-4 font-semibold"
+          >
             Build your proof
           </Button>
         </div>
@@ -44,4 +63,3 @@ export default function LandingNav() {
     </header>
   );
 }
-

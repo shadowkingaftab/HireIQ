@@ -4,6 +4,7 @@ const variants = {
   default: "",
   elevated: "shadow-raised border-line-subtle/80",
   glass: "panel-glass shadow-card",
+  constellation: "constellation-card rounded-2xl",
   interactive:
     "cursor-pointer transition-[border-color,box-shadow,transform] duration-200 ease-out hover:border-line-strong hover:shadow-raised hover:-translate-y-0.5",
 };
@@ -16,12 +17,15 @@ const Card = forwardRef(function Card(
   { variant = "default", as: Tag = "div", className = "", children, ...props },
   ref
 ) {
+  const base =
+    variant === "constellation"
+      ? ""
+      : "rounded-card border border-line-subtle bg-surface-1 shadow-card";
+
   return (
     <Tag
       ref={ref}
-      className={`rounded-card border border-line-subtle bg-surface-1 shadow-card ${
-        variants[variant] || ""
-      } ${className}`}
+      className={`${base} ${variants[variant] || ""} ${className}`}
       {...props}
     >
       {children}

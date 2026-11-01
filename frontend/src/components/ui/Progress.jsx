@@ -41,6 +41,7 @@ export function Progress({ value = 0, tone = "intel", label, className = "", ...
 
 const ringTones = {
   intel: "--ph-intel",
+  accent: "--ph-accent",
   verified: "--ph-verified",
   caution: "--ph-caution",
   danger: "--ph-danger",
@@ -87,7 +88,7 @@ export function ScoreRing({ value = 0, size = 72, tone = "intel", label, classNa
         />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="numeric font-mono font-semibold leading-none text-ink-hi" style={{ fontSize: size / 4 }}>
+        <span         className={`numeric font-mono font-semibold leading-none ${tone === "accent" ? "score-accent" : "text-ink-hi"}`} style={{ fontSize: size / 4 }}>
           {pct}
         </span>
         {label && (

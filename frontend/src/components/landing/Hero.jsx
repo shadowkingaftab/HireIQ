@@ -11,15 +11,15 @@ export default function Hero() {
         <div className="grid grid-cols-1 items-center gap-12 pb-16 lg:grid-cols-12 lg:gap-10 lg:pb-24">
           <div className="lg:col-span-5">
             <Reveal>
-              <Badge tone="info" dot className="mb-6">
+              <Badge tone="info" dot className="hero-proof-badge mb-6">
                 Evidence-first hiring intelligence
               </Badge>
             </Reveal>
 
             <Reveal delay={80}>
-              <h1 id="hero-title" className="text-display-lg sm:text-display-xl text-ink-hi">
+              <h1 id="hero-title" className="hero-title text-display-lg sm:text-display-xl text-ink-hi">
                 Don&apos;t just claim what you can do.
-                <span className="mt-1 block bg-gradient-to-r from-intel to-signal bg-clip-text text-transparent">
+                <span className="hero-title-accent mt-1 block">
                   Prove it.
                 </span>
               </h1>
@@ -35,10 +35,10 @@ export default function Hero() {
 
             <Reveal delay={240}>
               <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-                <Button size="lg" to="/signup" className="w-full sm:w-auto">
+                <Button size="lg" to="/signup" className="hero-cta w-full sm:w-auto">
                   Build your proof
                 </Button>
-                <Button size="lg" variant="outline" href="#how-it-works" className="w-full sm:w-auto">
+                <Button size="lg" variant="outline" href="#how-it-works" className="hero-secondary w-full sm:w-auto">
                   Explore how it works
                 </Button>
               </div>

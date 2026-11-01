@@ -26,7 +26,7 @@ export default function Pathways() {
       <Container>
         <div className="grid grid-cols-1 gap-px overflow-hidden rounded-card border border-line-subtle bg-line-subtle lg:grid-cols-2">
           {pathways.map(({ eyebrow, statement, copy, cta, to }, i) => (
-            <Reveal key={eyebrow} delay={i * 100} className="bg-surface-1">
+            <Reveal key={eyebrow} delay={i * 100} className="landing-feature-card">
               <div className="flex h-full flex-col items-start px-7 py-10 sm:px-10">
                 <p className="text-micro font-medium uppercase tracking-caps text-intel">{eyebrow}</p>
                 <h3 className="mt-3 max-w-sm text-display text-ink-hi">{statement}</h3>

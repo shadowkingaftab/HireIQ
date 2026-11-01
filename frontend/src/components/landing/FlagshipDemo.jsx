@@ -143,7 +143,7 @@ export default function FlagshipDemo() {
             <Card variant="interactive" className="edge-highlight h-full">
               <CardContent className="flex h-full flex-col">
                 <div className="flex items-center gap-5">
-                  <ScoreRing value={94} size={88} label="Match" />
+                  <ScoreRing value={94} size={88} label="Match" tone="accent" />
                   <div>
                     <p className="text-section-sm text-ink-hi">Senior Backend Engineer</p>
                     <p className="mt-1 text-meta font-sans text-ink-muted">Demonstration role requirement</p>

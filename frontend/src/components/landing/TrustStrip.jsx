@@ -16,10 +16,10 @@ export default function TrustStrip() {
   return (
     <section aria-label="What ProofHire stands for">
       <Container>
-        <ul className="grid grid-cols-1 gap-x-8 gap-y-6 border-y border-line-subtle py-8 sm:grid-cols-2 lg:grid-cols-4">
+        <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {principles.map(({ icon: Icon, title, copy }) => (
-            <li key={title} className="flex items-start gap-3.5">
-              <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-line-subtle bg-surface-1 text-intel">
+            <li key={title} className="landing-feature-card group flex items-start gap-3.5 rounded-card p-4">
+              <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-line-subtle bg-surface-1 text-ink-muted transition-colors group-hover:text-intel">
                 <Icon size={16} aria-hidden="true" />
               </span>
               <div>

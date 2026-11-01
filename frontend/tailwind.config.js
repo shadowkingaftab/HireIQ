@@ -48,6 +48,7 @@ export default {
           DEFAULT: "hsl(var(--ph-signal) / <alpha-value>)",
           soft: "hsl(var(--ph-signal-soft) / <alpha-value>)",
         },
+        accent: "hsl(var(--ph-accent) / <alpha-value>)",
         // Verification signals
         verified: {
           DEFAULT: "hsl(var(--ph-verified) / <alpha-value>)",
@@ -64,6 +65,7 @@ export default {
         },
       },
       fontFamily: {
+        display: ["Instrument Serif", "Georgia", "serif"],
         sans: [
           "Inter Variable",
           "Inter",

@@ -41,12 +41,13 @@ export default function HowItWorks() {
         <ol className="mt-10 grid grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
           {steps.map(({ number, title, copy }, i) => (
             <Reveal key={number} delay={i * 90} as="li" className="list-none">
-              <div className="relative border-l border-line-subtle pl-5">
+              <div className="landing-feature-card h-full rounded-card px-5 py-5">
                 <span
                   aria-hidden="true"
-                  className="absolute -left-px top-0 h-10 w-px bg-intel/60"
-                />
-                <span className="numeric font-mono text-meta font-semibold text-intel">{number}</span>
+                  className="numeric font-mono text-meta font-semibold text-intel"
+                >
+                  {number}
+                </span>
                 <h3 className="mt-2 text-section-sm text-ink-hi">{title}</h3>
                 <p className="mt-1.5 text-body-sm leading-relaxed text-ink-muted">{copy}</p>
               </div>

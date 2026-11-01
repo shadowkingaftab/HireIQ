@@ -44,6 +44,18 @@
   to { background-position: -200% 0; }
 }
 
+@keyframes ph-pulse {
+  0%, 100% { opacity: 0.65; box-shadow: 0 0 0 0 hsl(var(--ph-intel) / 0.28); }
+  50% { opacity: 1; box-shadow: 0 0 0 5px hsl(var(--ph-intel) / 0); }
+}
+
+@keyframes ph-data-travel {
+  from { offset-distance: 0%; opacity: 0; }
+  8% { opacity: 1; }
+  92% { opacity: 1; }
+  to { offset-distance: 100%; opacity: 0; }
+}
+
 /* Composite: skeleton shimmer sweep for loading placeholders */
 .ph-skeleton {
   background-image: linear-gradient(
@@ -64,4 +76,16 @@
 .ph-edge-flow {
   stroke-dasharray: 6 8;
   animation: ph-dash-flow 1.4s linear infinite;
+}
+
+.ph-data-pulse {
+  offset-anchor: center;
+  offset-rotate: 0deg;
+  animation: ph-data-travel 6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ph-data-pulse {
+    display: none;
+  }
 }

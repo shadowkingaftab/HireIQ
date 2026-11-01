@@ -10,7 +10,7 @@ const anchors = [
 
 export default function LandingNav() {
   return (
-    <header className="fixed inset-x-0 top-0 z-sticky border-b border-electric/10 bg-[#030712]/70 backdrop-blur-xl">
+    <header className="fixed inset-x-0 top-0 z-[100] border-b border-electric/10 bg-[#02070A]/80 backdrop-blur-xl">
       <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link
           to="/"

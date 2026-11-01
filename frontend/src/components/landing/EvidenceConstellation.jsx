@@ -1,436 +1,164 @@
-import { Component, Suspense, useMemo, useRef, useState } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import {
-  Environment,
-  Float,
-  Html,
-  Lightformer,
-  Line,
-  RoundedBox,
-} from "@react-three/drei";
-import { Bloom, EffectComposer, Noise } from "@react-three/postprocessing";
-import * as THREE from "three";
+import { motion } from "framer-motion";
 import usePrefersReducedMotion from "../../hooks/usePrefersReducedMotion";
-import ProofGraphVisual from "./ProofGraphVisual";
 
-const NODES = {
-  repo: {
-    id: "repo",
-    label: "Repository",
-    meta: "payments-core",
-    position: [-3.15, 1.1, 0],
-    width: 1.8,
-    kind: "evidence",
-  },
-  assessment: {
-    id: "assessment",
-    label: "Assessment",
-    meta: "Algorithms · 91",
-    position: [-3.15, 0, 0],
-    width: 1.8,
-    kind: "evidence",
-  },
-  activity: {
-    id: "activity",
-    label: "Contributions",
-    meta: "24 months active",
-    position: [-3.15, -1.1, 0],
-    width: 1.8,
-    kind: "evidence",
-  },
-  python: {
-    id: "python",
-    label: "Python",
-    position: [-1.15, 1.62, 0],
-    width: 1.32,
-    kind: "skill",
-  },
-  fastapi: {
-    id: "fastapi",
-    label: "FastAPI",
-    position: [-1.15, 0.54, 0],
-    width: 1.32,
-    kind: "skill",
-  },
-  postgres: {
-    id: "postgres",
-    label: "PostgreSQL",
-    position: [-1.15, -0.54, 0],
-    width: 1.32,
-    kind: "skill",
-  },
-  docker: {
-    id: "docker",
-    label: "Docker",
-    position: [-1.15, -1.62, 0],
-    width: 1.32,
-    kind: "skill",
-  },
-  core: {
-    id: "core",
-    label: "CAP",
-    position: [1.05, 0, 0],
-    kind: "core",
-  },
-  match: {
-    id: "match",
-    label: "MATCH",
-    position: [2.9, 0, 0],
-    kind: "match",
-  },
-};
-
-const EDGES = [
-  ["repo", "python", true],
-  ["repo", "fastapi", true],
-  ["repo", "docker", false],
-  ["assessment", "python", true],
-  ["assessment", "postgres", true],
-  ["activity", "python", false],
-  ["activity", "fastapi", true],
-  ["activity", "postgres", true],
-  ["activity", "docker", true],
-  ["python", "core", true],
-  ["fastapi", "core", true],
-  ["postgres", "core", true],
-  ["docker", "core", true],
-  ["core", "match", true],
+const EVIDENCE = [
+  { y: 82, label: "Repository", meta: "payments-core" },
+  { y: 202, label: "Assessment", meta: "Algorithms · 91" },
+  { y: 322, label: "Contributions", meta: "24 months active" },
 ];
 
-const LAYER_LABELS = [
-  { text: "EVIDENCE", position: [-3.15, 2.24, 0] },
-  { text: "VERIFIED SKILLS", position: [-1.15, 2.62, 0] },
-  { text: "CAPABILITY", position: [1.05, 1.18, 0] },
-  { text: "MATCH", position: [2.9, 1.32, 0] },
+const SKILLS = [
+  { y: 74, label: "Python" },
+  { y: 154, label: "FastAPI" },
+  { y: 234, label: "PostgreSQL" },
+  { y: 314, label: "Docker" },
 ];
 
-const clampScale = (width) => {
-  if (width < 480) return 0.54;
-  if (width < 720) return 0.68;
-  if (width < 1024) return 0.84;
-  return 0.98;
-};
+const CONNECTIONS = [
+  [232, 111, 326, 98],
+  [232, 111, 326, 178],
+  [232, 111, 326, 338],
+  [232, 231, 326, 98],
+  [232, 231, 326, 258],
+  [232, 351, 326, 178],
+  [232, 351, 326, 258],
+  [232, 351, 326, 338],
+  [474, 98, 602, 225],
+  [474, 178, 602, 225],
+  [474, 258, 602, 225],
+  [474, 338, 602, 225],
+];
 
-function Connection({ from, to, highlighted }) {
-  const lineRef = useRef(null);
+const PROOF_PATH =
+  "M232 231 C276 231 277 98 326 98 H474 C540 98 544 225 602 225 H818";
 
-  useFrame((_, delta) => {
-    const material = lineRef.current?.material;
-    if (material) {
-      material.dashOffset -= delta * (highlighted ? 0.72 : 0.28);
-    }
-  });
-
+function DesktopConstellation({ reducedMotion }) {
   return (
-    <Line
-      ref={lineRef}
-      points={[from, to]}
-      color={highlighted ? "#38bdf8" : "#0ea5e9"}
-      lineWidth={highlighted ? 1.35 : 0.65}
-      transparent
-      opacity={highlighted ? 0.78 : 0.22}
-      dashed
-      dashSize={0.1}
-      gapSize={0.16}
-      toneMapped={false}
-    />
-  );
-}
+    <motion.svg
+      layout
+      className="constellation-svg"
+      viewBox="0 0 980 440"
+      role="img"
+      aria-labelledby="constellation-title constellation-description"
+      initial={false}
+      animate={{ y: reducedMotion ? 0 : [0, -3, 0] }}
+      transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+    >
+      <title id="constellation-title">Evidence constellation</title>
+      <desc id="constellation-description">
+        Repository, assessment and contribution evidence connect to verified
+        skills, a backend capability and a 94 percent match.
+      </desc>
 
-function DataPulse() {
-  const pulseRef = useRef(null);
-  const curve = useMemo(
-    () =>
-      new THREE.LineCurve3(
-        new THREE.Vector3(-3.15, 1.1, 0.42),
-        new THREE.Vector3(1.05, 0, 0.42)
-      ),
-    []
-  );
-
-  useFrame(({ clock }) => {
-    if (!pulseRef.current) return;
-    const t = (clock.elapsedTime % 4.6) / 4.6;
-    const point = curve.getPoint(t);
-    pulseRef.current.position.copy(point);
-    const scale = 0.7 + Math.sin(t * Math.PI) * 0.9;
-    pulseRef.current.scale.setScalar(scale);
-  });
-
-  return (
-    <mesh ref={pulseRef}>
-      <sphereGeometry args={[0.05, 16, 16]} />
-      <meshBasicMaterial color="#bae6fd" toneMapped={false} />
-    </mesh>
-  );
-}
-
-function NodePill({ node }) {
-  const color = node.kind === "skill" ? "#38bdf8" : "#0ea5e9";
-
-  return (
-    <group position={node.position}>
-      <RoundedBox args={[node.width, 0.46, 0.18]} radius={0.2} smoothness={4}>
-        <meshPhysicalMaterial
-          color={color}
-          transmission={0.92}
-          thickness={0.45}
-          roughness={0.1}
-          metalness={0.04}
-          ior={1.45}
-          clearcoat={1}
-          clearcoatRoughness={0.15}
-          transparent
-          opacity={0.72}
-        />
-      </RoundedBox>
-
-      <mesh position={[0, 0, 0.095]}>
-        <planeGeometry args={[node.width * 0.9, 0.34]} />
-        <meshBasicMaterial color={color} transparent opacity={0.07} toneMapped={false} />
-      </mesh>
-
-      <Html
-        center
-        position={[0, 0, 0.22]}
-        zIndexRange={[20, 0]}
-        className="constellation-node"
-        style={{ pointerEvents: "none" }}
-      >
-        <div className="constellation-node-inner" aria-hidden="true">
-          <span className="constellation-node-label">{node.label}</span>
-          {node.meta ? <span className="constellation-node-meta">{node.meta}</span> : null}
-        </div>
-      </Html>
-    </group>
-  );
-}
-
-function CapabilityCore() {
-  const orbRef = useRef(null);
-  const haloRef = useRef(null);
-
-  useFrame(({ clock }) => {
-    const time = clock.elapsedTime;
-    if (orbRef.current) {
-      orbRef.current.scale.setScalar(1 + Math.sin(time * 1.8) * 0.06);
-    }
-    if (haloRef.current) {
-      haloRef.current.rotation.z = time * 0.28;
-      haloRef.current.rotation.x = Math.PI / 2.4;
-    }
-  });
-
-  return (
-    <group position={NODES.core.position}>
-      <mesh ref={orbRef}>
-        <sphereGeometry args={[0.33, 48, 48]} />
-        <meshBasicMaterial color="#0ea5e9" toneMapped={false} />
-      </mesh>
-
-      <mesh scale={1.8}>
-        <sphereGeometry args={[0.33, 32, 32]} />
-        <meshBasicMaterial
-          color="#0ea5e9"
-          transparent
-          opacity={0.16}
-          depthWrite={false}
-          toneMapped={false}
-        />
-      </mesh>
-
-      <mesh ref={haloRef}>
-        <torusGeometry args={[0.58, 0.012, 8, 96]} />
-        <meshBasicMaterial color="#7dd3fc" transparent opacity={0.62} toneMapped={false} />
-      </mesh>
-
-      <pointLight color="#0ea5e9" intensity={4} distance={5} />
-
-      <Html
-        center
-        position={[0, -0.63, 0]}
-        zIndexRange={[20, 0]}
-        className="constellation-node"
-        style={{ pointerEvents: "none" }}
-      >
-        <span
-          className="constellation-node-label"
-          aria-hidden="true"
-          style={{ fontSize: "11px", color: "#7dd3fc", letterSpacing: "0.18em" }}
-        >
-          CAP
-        </span>
-      </Html>
-    </group>
-  );
-}
-
-function MatchNode() {
-  return (
-    <group position={NODES.match.position}>
-      <mesh>
-        <torusGeometry args={[0.34, 0.01, 8, 80]} />
-        <meshBasicMaterial color="#f97316" transparent opacity={0.5} toneMapped={false} />
-      </mesh>
-      <mesh>
-        <circleGeometry args={[0.3, 48]} />
-        <meshBasicMaterial color="#f97316" transparent opacity={0.09} toneMapped={false} />
-      </mesh>
-
-      <Html
-        center
-        position={[0, 0.68, 0]}
-        zIndexRange={[30, 0]}
-        style={{ pointerEvents: "none" }}
-      >
-        <div className="match-score-float" aria-hidden="true">
-          <span className="match-score-value">94</span>
-          <span className="match-score-label">MATCH</span>
-        </div>
-      </Html>
-    </group>
-  );
-}
-
-function LayerLabels() {
-  return (
-    <>
-      {LAYER_LABELS.map(({ text, position }) => (
-        <Html
-          key={text}
-          center
-          position={position}
-          zIndexRange={[12, 0]}
-          style={{ pointerEvents: "none" }}
-        >
-          <span className="constellation-layer-label" aria-hidden="true">
-            {text}
-          </span>
-        </Html>
-      ))}
-    </>
-  );
-}
-
-function GraphScene() {
-  const { size } = useThree();
-  const rigRef = useRef(null);
-  const scale = clampScale(size.width);
-
-  useFrame(({ pointer, clock }) => {
-    if (!rigRef.current) return;
-    const targetY = pointer.x * 0.16;
-    const targetX = -pointer.y * 0.1;
-    rigRef.current.rotation.y += (targetY - rigRef.current.rotation.y) * 0.045;
-    rigRef.current.rotation.x += (targetX - rigRef.current.rotation.x) * 0.045;
-    rigRef.current.position.y = Math.sin(clock.elapsedTime * 0.55) * 0.06;
-  });
-
-  return (
-    <>
-      <ambientLight intensity={0.55} />
-      <directionalLight position={[4, 6, 6]} intensity={1.8} color="#38bdf8" />
-      <directionalLight position={[5, -3, 4]} intensity={0.7} color="#f97316" />
-
-      <Environment resolution={128} frames={1}>
-        <Lightformer intensity={3} position={[0, 4, 3]} scale={[9, 2, 1]} color="#38bdf8" />
-        <Lightformer intensity={1.4} position={[-4, -2, 2]} scale={[6, 2, 1]} color="#0ea5e9" />
-        <Lightformer intensity={0.8} position={[4, 0, -2]} scale={[5, 2, 1]} color="#f97316" />
-      </Environment>
-
-      <group ref={rigRef} scale={scale}>
-        <Float speed={1.15} rotationIntensity={0.1} floatIntensity={0.28}>
-          {EDGES.map(([fromId, toId, highlighted]) => (
-            <Connection
-              key={`${fromId}-${toId}`}
-              from={NODES[fromId].position}
-              to={NODES[toId].position}
-              highlighted={highlighted}
+      <g className="constellation-connections" aria-hidden="true">
+        {CONNECTIONS.map(([x1, y1, x2, y2], index) => (
+          <line key={index} x1={x1} y1={y1} x2={x2} y2={y2} />
+        ))}
+        <line x1="698" y1="225" x2="818" y2="225" />
+        <path className="constellation-proof-path" d={PROOF_PATH} />
+        {!reducedMotion && (
+          <circle className="constellation-data-pulse" r="3">
+            <animateMotion
+              dur="5.6s"
+              repeatCount="indefinite"
+              path={PROOF_PATH}
             />
-          ))}
+          </circle>
+        )}
+      </g>
 
-          {[NODES.repo, NODES.assessment, NODES.activity, NODES.python, NODES.fastapi, NODES.postgres, NODES.docker].map(
-            (node) => (
-              <NodePill key={node.id} node={node} />
-            )
-          )}
+      <g className="constellation-layer-labels" aria-hidden="true">
+        <text x="28" y="38">EVIDENCE</text>
+        <text x="326" y="38">VERIFIED SKILLS</text>
+        <text x="602" y="148">CAPABILITY</text>
+        <text x="818" y="170">MATCH</text>
+      </g>
 
-          <CapabilityCore />
-          <MatchNode />
-          <DataPulse />
-          <LayerLabels />
-        </Float>
-      </group>
+      <g className="constellation-nodes">
+        {EVIDENCE.map(({ y, label, meta }) => (
+          <g className="constellation-evidence-node" key={label}>
+            <rect x="28" y={y} width="204" height="58" rx="7" />
+            <circle className="constellation-status-dot" cx="47" cy={y + 22} r="3" />
+            <text className="constellation-node-title" x="59" y={y + 25}>
+              {label}
+            </text>
+            <text className="constellation-node-meta" x="59" y={y + 43}>
+              {meta}
+            </text>
+          </g>
+        ))}
 
-      <EffectComposer multisampling={0}>
-        <Bloom
-          intensity={0.8}
-          luminanceThreshold={0.2}
-          luminanceSmoothing={0.35}
-          mipmapBlur
-        />
-        <Noise opacity={0.03} />
-      </EffectComposer>
-    </>
+        {SKILLS.map(({ y, label }) => (
+          <g className="constellation-skill-node" key={label}>
+            <rect x="326" y={y} width="148" height="48" rx="7" />
+            <circle className="constellation-status-dot" cx="345" cy={y + 24} r="3" />
+            <text className="constellation-node-title" x="358" y={y + 28}>
+              {label}
+            </text>
+          </g>
+        ))}
+
+        <g className="constellation-capability">
+          <circle className="constellation-radar-ring constellation-radar-outer" cx="650" cy="225" r="46" />
+          <circle className="constellation-radar-ring" cx="650" cy="225" r="34" />
+          <circle className="constellation-radar-center" cx="650" cy="225" r="4" />
+          <text className="constellation-cap-label" x="650" y="229">CAP</text>
+          <text className="constellation-cap-meta" x="650" y="294">BACKEND CAPABILITY</text>
+        </g>
+
+        <g className="constellation-match-node">
+          <rect x="818" y="190" width="126" height="70" rx="8" />
+          <text className="constellation-match-value" x="881" y="226">94</text>
+          <text className="constellation-match-label" x="881" y="244">MATCH</text>
+        </g>
+      </g>
+    </motion.svg>
   );
 }
 
-class CanvasErrorBoundary extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { failed: false };
-  }
-
-  static getDerivedStateFromError() {
-    return { failed: true };
-  }
-
-  render() {
-    if (this.state.failed) {
-      return this.props.fallback;
-    }
-    return this.props.children;
-  }
-}
-
-function hasWebGL() {
-  if (typeof document === "undefined") return false;
-  try {
-    const canvas = document.createElement("canvas");
-    return Boolean(
-      window.WebGLRenderingContext &&
-        (canvas.getContext("webgl") || canvas.getContext("experimental-webgl"))
-    );
-  } catch {
-    return false;
-  }
+function MobileConstellation() {
+  return (
+    <div
+      className="constellation-mobile"
+      role="img"
+      aria-label="Repositories, assessments and contributions support verified skills, which inform a backend capability and 94 match score."
+    >
+      <div className="constellation-mobile-evidence">
+        <span>Repository <small>payments-core</small></span>
+        <span>Assessment <small>Algorithms · 91</small></span>
+        <span>Contributions <small>24 months active</small></span>
+      </div>
+      <div className="constellation-mobile-connector" aria-hidden="true">↓</div>
+      <div className="constellation-mobile-skills">
+        <span>Python</span>
+        <span>FastAPI</span>
+        <span>PostgreSQL</span>
+        <span>Docker</span>
+      </div>
+      <div className="constellation-mobile-connector" aria-hidden="true">↓</div>
+      <div className="constellation-mobile-outcome">
+        <span className="constellation-mobile-cap">CAP <small>BACKEND CAPABILITY</small></span>
+        <span className="constellation-mobile-match">94 <small>MATCH</small></span>
+      </div>
+    </div>
+  );
 }
 
 export default function EvidenceConstellation() {
   const reducedMotion = usePrefersReducedMotion();
-  const [webglAvailable] = useState(hasWebGL);
-
-  if (reducedMotion || !webglAvailable) {
-    return <ProofGraphVisual />;
-  }
 
   return (
-    <div
+    <motion.div
+      layout
       className="constellation-canvas"
-      role="img"
-      aria-label="An interactive three-dimensional constellation linking evidence such as repositories, assessments and contributions to verified skills, then to a capability core and a final match score of 94."
+      role="group"
+      aria-label="Demonstration of evidence-to-capability matching"
+      initial={{ opacity: 0, y: 18 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ type: "spring", stiffness: 150, damping: 24 }}
     >
-      <CanvasErrorBoundary fallback={<ProofGraphVisual />}>
-        <Canvas
-          dpr={[1, 1.8]}
-          camera={{ position: [0, 0, 8.6], fov: 42 }}
-          gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }}
-        >
-          <Suspense fallback={null}>
-            <GraphScene />
-          </Suspense>
-        </Canvas>
-      </CanvasErrorBoundary>
-    </div>
+      <DesktopConstellation reducedMotion={reducedMotion} />
+      <MobileConstellation />
+    </motion.div>
   );
 }

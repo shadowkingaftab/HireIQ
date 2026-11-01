@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { summarizeEvidence } from "../src/utils/evidenceUtils";
+import { summarizeEvidence } from "../../src/utils/evidenceUtils";
 
 describe("evidenceUtils", () => {
   it("summarizes evidence by type", () => {

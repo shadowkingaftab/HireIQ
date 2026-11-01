@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { buildGraphData, filterGraphData } from "../src/utils/graphUtils";
+import { buildGraphData, filterGraphData } from "../../src/utils/graphUtils";
 
 describe("graphUtils", () => {
   it("builds graph payload from nodes and edges", () => {

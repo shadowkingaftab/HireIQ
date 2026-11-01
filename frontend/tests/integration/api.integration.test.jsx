@@ -8,6 +8,6 @@ const renderWithRouter = (ui) => render(<BrowserRouter>{ui}</BrowserRouter>);
 describe("Login page", () => {
   it("renders login form", () => {
     renderWithRouter(<Login />);
-    expect(screen.getByText("Login")).toBeDefined();
+    expect(screen.getByRole("button", { name: "Sign in" })).toBeDefined();
   });
 });

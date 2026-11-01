@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { formatScore, clamp } from "../src/utils/scoreUtils";
+import { formatScore, clamp } from "../../src/utils/scoreUtils";
 
 describe("scoreUtils", () => {
   it("formats score as percentage", () => {

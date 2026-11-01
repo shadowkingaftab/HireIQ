@@ -2,10 +2,10 @@
   "version": 2,
   "builds": [
     {
-      "src": "proofhire/frontend/package.json",
+      "src": "frontend/package.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "proofhire/frontend/dist"
+        "distDir": "frontend/dist"
       }
     }
   ],
@@ -16,7 +16,7 @@
     },
     {
       "src": "/(.*)",
-      "dest": "proofhire/frontend/dist/$1"
+      "dest": "frontend/dist/$1"
     }
   ]
 }

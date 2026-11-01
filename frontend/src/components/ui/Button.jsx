@@ -1,4 +1,4 @@
-import { forwardRef } from "react";
+import { cloneElement, forwardRef, isValidElement } from "react";
 import { Link } from "react-router-dom";
 
 const variants = {
@@ -27,6 +27,14 @@ function Spinner() {
       aria-hidden="true"
     />
   );
+}
+
+function renderIcon(Icon, size) {
+  if (!Icon) return null;
+  if (isValidElement(Icon)) {
+    return cloneElement(Icon, { size, "aria-hidden": true });
+  }
+  return <Icon size={size} aria-hidden="true" />;
 }
 
 /**
@@ -59,9 +67,9 @@ const Button = forwardRef(function Button(
   if (to && !disabled && !loading) {
     return (
       <Link ref={ref} to={to} className={classes} {...props}>
-        {LeadingIcon && <LeadingIcon size={size === "sm" ? 14 : 16} aria-hidden="true" />}
+        {renderIcon(LeadingIcon, size === "sm" ? 14 : 16)}
         {children}
-        {TrailingIcon && <TrailingIcon size={size === "sm" ? 14 : 16} aria-hidden="true" />}
+        {renderIcon(TrailingIcon, size === "sm" ? 14 : 16)}
       </Link>
     );
   }
@@ -69,9 +77,9 @@ const Button = forwardRef(function Button(
   if (href && !disabled && !loading) {
     return (
       <a ref={ref} href={href} className={classes} {...props}>
-        {LeadingIcon && <LeadingIcon size={size === "sm" ? 14 : 16} aria-hidden="true" />}
+        {renderIcon(LeadingIcon, size === "sm" ? 14 : 16)}
         {children}
-        {TrailingIcon && <TrailingIcon size={size === "sm" ? 14 : 16} aria-hidden="true" />}
+        {renderIcon(TrailingIcon, size === "sm" ? 14 : 16)}
       </a>
     );
   }
@@ -89,12 +97,10 @@ const Button = forwardRef(function Button(
       {loading ? (
         <Spinner />
       ) : (
-        LeadingIcon && <LeadingIcon size={size === "sm" ? 14 : 16} aria-hidden="true" />
+        renderIcon(LeadingIcon, size === "sm" ? 14 : 16)
       )}
       {children}
-      {!loading && TrailingIcon && (
-        <TrailingIcon size={size === "sm" ? 14 : 16} aria-hidden="true" />
-      )}
+      {!loading && renderIcon(TrailingIcon, size === "sm" ? 14 : 16)}
     </button>
   );
 });

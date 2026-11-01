@@ -5,16 +5,12 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 3000,
+    allowedHosts: ["jump-balance-aftermost.ngrok-free.dev"],
     proxy: {
       "/api": {
         target: "http://localhost:8000",
         changeOrigin: true,
       },
-    },
-    hmr: {
-      protocol: 'wss',
-      host: 'jump-balance-aftermost.ngrok-free.dev',
-      port: 443
     },
   },
   test: {

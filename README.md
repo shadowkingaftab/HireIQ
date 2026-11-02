@@ -18,13 +18,21 @@ Evidence-first hiring intelligence platform. It helps candidates demonstrate cap
 # Backend
 cd proofhire/backend
 pip install -r requirements.txt
-uvicorn proofhire.backend.app.main:app --reload
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
 # Frontend
 cd proofhire/frontend
 npm install
-npm run dev
+npm run dev -- --host 0.0.0.0
 ```
+
+If you want to expose the app through ngrok, start the frontend first, then run:
+
+```bash
+ngrok http 3000
+```
+
+The Vite dev server listens on 0.0.0.0 and accepts ngrok hostnames, so the tunnel can reach the app without the "ERR_NGROK_8012" refusal error.
 
 ## Docs
 

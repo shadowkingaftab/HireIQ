@@ -30,7 +30,10 @@ class Settings(BaseSettings):
     def assemble_db_connection(cls, v: Optional[str], values: dict) -> str:
         if isinstance(v, str):
             return v
-        return f"postgresql://{values.get('POSTGRES_USER')}:{values.get('POSTGRES_PASSWORD')}@{values.get('POSTGRES_SERVER')}/{values.get('POSTGRES_DB')}"
+        return (
+            f"postgresql+psycopg://{values.get('POSTGRES_USER')}:{values.get('POSTGRES_PASSWORD')}"
+            f"@{values.get('POSTGRES_SERVER')}/{values.get('POSTGRES_DB')}"
+        )
 
     @validator("REDIS_URL", pre=True)
     def assemble_redis_connection(cls, v: Optional[str], values: dict) -> str:

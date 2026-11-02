@@ -10,8 +10,15 @@ export default defineConfig({
     },
   },
   server: {
+    host: "0.0.0.0",
     port: 3000,
-    allowedHosts: ["jump-balance-aftermost.ngrok-free.dev"],
+    allowedHosts: [
+      "localhost",
+      "127.0.0.1",
+      ".ngrok-free.dev",
+      ".ngrok.io",
+      ".ngrok.app",
+    ],
     proxy: {
       "/api": {
         target: "http://localhost:8000",

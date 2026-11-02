@@ -96,11 +96,11 @@ export default function Hero() {
       aria-labelledby="hero-title"
       className="relative isolate z-0 overflow-x-clip scroll-mt-24"
     >
-      <div className="constellation-mesh" aria-hidden="true" />
+      <div className="hero-floor-grid" aria-hidden="true" />
 
-      <Container className="relative z-[1] pt-40">
-        <div className="flex w-full flex-col items-start text-left">
-          <Reveal>
+      <Container className="relative z-[1] pt-32">
+        <div className="flex w-full flex-col items-center text-center">
+          <Reveal className="flex flex-col items-center">
             <Badge
               tone="info"
               dot
@@ -111,46 +111,40 @@ export default function Hero() {
             </Badge>
           </Reveal>
 
-          <div className="relative">
-            <motion.div
-              className="hero-headline-aura pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[30rem] w-[54rem] max-w-[92vw] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[90px]"
-              initial={reducedMotion ? false : { opacity: 0, scale: 0.92 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 1.2, ease: "easeOut" }}
-              style={{
-                background:
-                  "radial-gradient(ellipse, rgba(14,165,233,0.1) 0%, rgba(14,165,233,0.035) 38%, transparent 70%)",
-              }}
-              aria-hidden="true"
-            />
+          <div className="relative w-full">
             <HeroHighlight
-              containerClassName="h-auto w-full items-start justify-start bg-transparent dark:bg-transparent"
+              containerClassName="h-auto w-full items-center justify-center bg-transparent dark:bg-transparent"
               className="w-full"
             >
               <h1
                 id="hero-title"
-                className="hero-title text-left text-6xl text-stellar md:text-8xl"
+                className="hero-title mx-auto max-w-5xl text-center text-5xl text-stellar sm:text-6xl md:text-8xl"
               >
                 <HeadlineWords reducedMotion={reducedMotion} />
               </h1>
             </HeroHighlight>
           </div>
 
-          <div className="mt-12 grid w-full grid-cols-1 gap-6 md:grid-cols-3">
-            <Reveal delay={160} className="h-full md:col-span-1">
-              <div className="h-full rounded-2xl border border-white/10 border-t-white/20 bg-white/5 p-6 backdrop-blur-md">
-                <p className="text-body-lg leading-relaxed text-nebula">
+          <p className="mt-7 max-w-2xl text-center text-body-lg leading-relaxed text-nebula">
+            Turn demonstrated skills into trusted hiring decisions.
+          </p>
+
+          <div className="mt-10 grid w-full max-w-6xl grid-cols-1 items-stretch gap-4 md:grid-cols-2 md:gap-8">
+            <Reveal delay={160} className="h-full">
+              <div className="hero-glass-panel h-full rounded-2xl p-6 text-left sm:p-7">
+                <p className="text-body-lg leading-relaxed text-slate-100">
                   ProofHire turns verified work — repositories, assessments, real contributions —
-                  into explainable capability signals. Recruiters see demonstrated skill, and every
-                  score traces back to its evidence.
+                  into explainable capability signals. Every score traces back to its evidence.
                 </p>
+                <div className="mt-6 flex items-center justify-between gap-4 border-t border-white/10 pt-4">
+                  <span className="font-mono text-micro uppercase tracking-caps text-nebula">Evidence sources</span>
+                  <span className="font-mono text-sm font-semibold text-electric-soft">3 signal types</span>
+                </div>
               </div>
             </Reveal>
 
-            <div className="hidden md:block" aria-hidden="true" />
-
-            <Reveal delay={240} className="h-full md:col-span-1">
-              <div className="flex h-full flex-col justify-center gap-3 rounded-2xl border border-white/10 border-t-white/20 bg-white/5 p-6 backdrop-blur-md">
+            <Reveal delay={240} className="h-full">
+              <div className="hero-glass-panel flex h-full flex-col justify-center gap-3 rounded-2xl p-6 sm:p-7">
                 <div
                   onPointerMove={(event) => moveMagneticButton(event, reducedMotion)}
                   onPointerLeave={(event) => {
@@ -179,14 +173,14 @@ export default function Hero() {
           </div>
 
           <Reveal delay={320}>
-            <p className="mt-8 flex flex-wrap items-center justify-start gap-2 font-mono text-micro uppercase tracking-caps text-nebula/80">
+            <p className="mt-8 flex flex-wrap items-center justify-center gap-2 font-mono text-micro uppercase tracking-caps text-nebula/80">
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-electric-soft" aria-hidden="true" />
               Candidate-controlled evidence · Explainable scores · No black-box ranking
             </p>
           </Reveal>
         </div>
 
-        <Reveal delay={200} className="hero-stage relative mx-auto mt-10 max-w-6xl sm:mt-12">
+        <Reveal delay={200} className="hero-stage relative mx-auto mt-12 max-w-6xl sm:mt-16">
           <div className="hero-stage-orbit" aria-hidden="true" />
           <HolographicCore />
           <p className="mt-4 text-center font-mono text-micro tracking-wide text-nebula/60">

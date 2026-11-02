@@ -1,193 +1,131 @@
-import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import Reveal from "./Reveal";
-import HolographicCore from "./HolographicCore";
-import Container from "../ui/Container";
 import Button from "../ui/Button";
-import Badge from "../ui/Badge";
-import { HeroHighlight, Highlight } from "../ui/hero-highlight";
-import usePrefersReducedMotion from "../../hooks/usePrefersReducedMotion";
 
-const HEADLINE_PRIMARY = ["Don't", "just", "claim", "what", "you", "can", "do."];
-const SCRAMBLE_CHARS = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789#%*+";
+const panelClass =
+  "rounded-t-xl border border-white/10 bg-[#02070A]/80 p-3 backdrop-blur-xl sm:p-4";
 
-function ScrambledText({ text, reducedMotion }) {
-  const [display, setDisplay] = useState(reducedMotion ? text : "#########");
-
-  useEffect(() => {
-    if (reducedMotion) {
-      setDisplay(text);
-      return undefined;
-    }
-
-    let frame = 0;
-    const framesToResolve = 24;
-    const timer = window.setInterval(() => {
-      frame += 1;
-      const resolved = Math.floor((frame / framesToResolve) * text.length);
-      setDisplay(
-        text
-          .split("")
-          .map((character, index) => {
-            if (index < resolved) return character;
-            return SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)];
-          })
-          .join("")
-      );
-      if (frame >= framesToResolve) {
-        window.clearInterval(timer);
-        setDisplay(text);
-      }
-    }, 38);
-
-    return () => window.clearInterval(timer);
-  }, [reducedMotion, text]);
-
-  return <span aria-hidden="true">{display}</span>;
-}
-
-function moveMagneticButton(event, reducedMotion) {
-  if (reducedMotion) return;
-  const button = event.currentTarget;
-  const bounds = button.getBoundingClientRect();
-  const x = event.clientX - bounds.left - bounds.width / 2;
-  const y = event.clientY - bounds.top - bounds.height / 2;
-  button.style.translate = `${x * 0.16}px ${y * 0.2}px`;
-}
-
-function HeadlineWords({ reducedMotion }) {
+function Stat({ value, label, align }) {
   return (
-    <>
-      <span className="sr-only">Don&apos;t just claim what you can do. Prove it.</span>
-      <span aria-hidden="true" className="block">
-        {HEADLINE_PRIMARY.map((word, index) => (
-          <motion.span
-            key={word}
-            className="hero-word mr-[0.22em] last:mr-0"
-            initial={reducedMotion ? false : { opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: index * 0.035 }}
-          >
-            {word}
-          </motion.span>
-        ))}
-      </span>
-      <span aria-hidden="true" className="mt-1 block">
-        <motion.span
-          className="hero-word inline-block"
-          initial={reducedMotion ? false : { opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: 0.3 }}
-        >
-          <Highlight className="hero-title-accent rounded-none bg-gradient-to-r from-electric/25 via-electric/10 to-transparent px-0 pb-0 dark:from-electric/25 dark:via-electric/10 dark:to-transparent">
-            <ScrambledText text="Prove it." reducedMotion={reducedMotion} />
-          </Highlight>
-        </motion.span>
-      </span>
-    </>
+    <div className={`relative z-10 ${align === "right" ? "text-right" : "text-left"}`}>
+      <p className="font-['Instrument_Serif'] text-3xl leading-none text-white sm:text-4xl">{value}</p>
+      <p className="mt-2 font-mono text-[9px] uppercase tracking-[0.2em] text-gray-400 sm:text-[10px]">
+        {label}
+      </p>
+    </div>
   );
 }
 
 export default function Hero() {
-  const reducedMotion = usePrefersReducedMotion();
-
   return (
     <section
       aria-labelledby="hero-title"
-      className="relative isolate z-0 overflow-x-clip scroll-mt-24"
+      className="relative isolate min-h-[100svh] overflow-hidden bg-[#02070A] pt-32 text-white"
     >
-      <div className="hero-floor-grid" aria-hidden="true" />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute bottom-0 left-0 z-[-1] h-[60vh] w-full"
+        style={{
+          background:
+            "radial-gradient(ellipse at 50% 100%, rgba(252, 115, 77, 0.8) 0%, rgba(2, 151, 222, 0.4) 30%, transparent 70%)",
+          filter: "blur(80px)",
+        }}
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-0 h-[48vh]"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(255,255,255,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.07) 1px, transparent 1px)",
+          backgroundSize: "40px 40px",
+          WebkitMaskImage:
+            "radial-gradient(ellipse at 50% 100%, black 0%, transparent 72%)",
+          maskImage: "radial-gradient(ellipse at 50% 100%, black 0%, transparent 72%)",
+          transform: "perspective(500px) rotateX(58deg) scale(1.6)",
+          transformOrigin: "center bottom",
+        }}
+      />
 
-      <Container className="relative z-[1] pt-32">
-        <div className="flex w-full flex-col items-center text-center">
-          <Reveal className="flex flex-col items-center">
-            <Badge
-              tone="info"
-              dot
-              mono
-              className="hero-proof-badge mb-7"
-            >
-              Evidence-first hiring intelligence
-            </Badge>
-          </Reveal>
-
-          <div className="relative w-full">
-            <HeroHighlight
-              containerClassName="h-auto w-full items-center justify-center bg-transparent dark:bg-transparent"
-              className="w-full"
-            >
-              <h1
-                id="hero-title"
-                className="hero-title mx-auto max-w-5xl text-center text-5xl text-stellar sm:text-6xl md:text-8xl"
-              >
-                <HeadlineWords reducedMotion={reducedMotion} />
-              </h1>
-            </HeroHighlight>
-          </div>
-
-          <p className="mt-7 max-w-2xl text-center text-body-lg leading-relaxed text-nebula">
-            Turn demonstrated skills into trusted hiring decisions.
+      <div className="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 px-4 text-center sm:px-6 lg:px-8">
+        <div className="mx-auto w-full max-w-5xl">
+          <h1
+            id="hero-title"
+            className="font-['Instrument_Serif'] text-5xl leading-[0.98] tracking-tight text-white [text-shadow:0_0_28px_rgba(255,255,255,0.18)] sm:text-6xl md:text-7xl"
+          >
+            <span className="block">Don&apos;t just claim,</span>
+            <span className="mt-1 block italic" style={{ color: "#0297DE" }}>
+              Prove it.
+            </span>
+          </h1>
+          <p className="mx-auto mt-6 max-w-md text-sm leading-relaxed text-gray-400 sm:text-base">
+            ProofHire turns verified work into explainable capability signals. Recruiters see
+            demonstrated skill, and every score traces back to its evidence.
           </p>
 
-          <div className="mt-10 grid w-full max-w-6xl grid-cols-1 items-stretch gap-4 md:grid-cols-2 md:gap-8">
-            <Reveal delay={160} className="h-full">
-              <div className="hero-glass-panel h-full rounded-2xl p-6 text-left sm:p-7">
-                <p className="text-body-lg leading-relaxed text-slate-100">
-                  ProofHire turns verified work — repositories, assessments, real contributions —
-                  into explainable capability signals. Every score traces back to its evidence.
-                </p>
-                <div className="mt-6 flex items-center justify-between gap-4 border-t border-white/10 pt-4">
-                  <span className="font-mono text-micro uppercase tracking-caps text-nebula">Evidence sources</span>
-                  <span className="font-mono text-sm font-semibold text-electric-soft">3 signal types</span>
-                </div>
-              </div>
-            </Reveal>
-
-            <Reveal delay={240} className="h-full">
-              <div className="hero-glass-panel flex h-full flex-col justify-center gap-3 rounded-2xl p-6 sm:p-7">
-                <div
-                  onPointerMove={(event) => moveMagneticButton(event, reducedMotion)}
-                  onPointerLeave={(event) => {
-                    event.currentTarget.style.translate = "0 0";
-                  }}
-                  className="transition-[translate] duration-200 ease-out"
-                >
-                  <Button
-                    size="lg"
-                    to="/signup"
-                    className="hero-cta w-full rounded-full border-0 px-7 font-semibold"
-                  >
-                    Build your proof
-                  </Button>
-                </div>
-                <Button
-                  size="lg"
-                  variant="outline"
-                  href="#how-it-works"
-                  className="hero-secondary w-full rounded-full px-7"
-                >
-                  Explore how it works
-                </Button>
-              </div>
-            </Reveal>
+          <div className="mx-auto mt-12 grid max-w-3xl grid-cols-[1fr_0.65fr_1fr] items-center gap-3 sm:gap-8">
+            <Stat value="100%" label="Evidence Backed" align="right" />
+            <div className="h-px w-full border-t border-white/20 shadow-[0_0_10px_rgba(2,151,222,0.6)]" />
+            <Stat value="94" label="Match Score" align="left" />
           </div>
+        </div>
+      </div>
 
-          <Reveal delay={320}>
-            <p className="mt-8 flex flex-wrap items-center justify-center gap-2 font-mono text-micro uppercase tracking-caps text-nebula/80">
-              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-electric-soft" aria-hidden="true" />
-              Candidate-controlled evidence · Explainable scores · No black-box ranking
-            </p>
-          </Reveal>
+      <div className="absolute inset-x-0 bottom-0 z-10 mx-auto grid w-full max-w-6xl grid-cols-3 items-end gap-2 px-3 sm:gap-4 sm:px-6 lg:px-8">
+        <div className={`${panelClass} min-h-36`}>
+          <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-gray-400 sm:text-xs">
+            Repository
+          </p>
+          <div className="mt-3 rounded-lg border border-white/10 bg-black/40 p-2.5 sm:mt-4 sm:p-4">
+            <div className="flex items-center gap-2">
+              <span className="h-2 w-2 rounded-full bg-[#0297DE] shadow-[0_0_12px_#0297DE]" />
+              <span className="h-1.5 w-2/3 rounded-full bg-white/35" />
+            </div>
+            <div className="mt-2 space-y-1.5 sm:mt-3 sm:space-y-2">
+              <span className="block h-1 w-full rounded-full bg-white/10" />
+              <span className="block h-1 w-4/5 rounded-full bg-white/10" />
+              <span className="block h-1 w-3/5 rounded-full bg-white/10" />
+            </div>
+          </div>
         </div>
 
-        <Reveal delay={200} className="hero-stage relative mx-auto mt-12 max-w-6xl sm:mt-16">
-          <div className="hero-stage-orbit" aria-hidden="true" />
-          <HolographicCore />
-          <p className="mt-4 text-center font-mono text-micro tracking-wide text-nebula/60">
-            Every signal traces back to its evidence.
+        <div className={`${panelClass} relative z-20 min-h-44 border-[#FC734D]/30 text-center shadow-[0_-10px_50px_rgba(252,115,77,0.18)]`}>
+          <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-gray-300 sm:text-xs">
+            Proof Core
           </p>
-        </Reveal>
-      </Container>
+          <div className="mx-auto my-3 flex h-14 w-14 items-center justify-center rounded-full border border-[#0297DE]/50 bg-[#0297DE]/10 shadow-[0_0_28px_rgba(2,151,222,0.35)] sm:my-4 sm:h-20 sm:w-20">
+            <span className="h-5 w-5 animate-pulse rounded-full bg-[#0297DE] shadow-[0_0_28px_#0297DE] sm:h-7 sm:w-7" />
+          </div>
+          <div className="flex flex-col gap-2 sm:flex-row sm:justify-center">
+            <Button
+              size="sm"
+              to="/signup"
+              className="hero-cta rounded-full border-0 px-3 text-[10px] font-semibold sm:px-4 sm:text-xs"
+            >
+              Build your proof
+            </Button>
+            <Button
+              size="sm"
+              variant="outline"
+              href="#how-it-works"
+              className="hero-secondary rounded-full px-3 text-[10px] sm:px-4 sm:text-xs"
+            >
+              Explore
+            </Button>
+          </div>
+        </div>
+
+        <div className={`${panelClass} min-h-36`}>
+          <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-gray-400 sm:text-xs">
+            Capability Signal
+          </p>
+          <div className="mt-4 space-y-2.5 sm:mt-5 sm:space-y-3">
+            <div className="flex items-center gap-2">
+              <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#FC734D]" />
+              <span className="h-1.5 w-4/5 rounded-full bg-white/30" />
+            </div>
+            <span className="block h-1.5 w-2/3 rounded-full bg-white/15" />
+            <span className="block h-1.5 w-5/6 rounded-full bg-white/10" />
+          </div>
+        </div>
+      </div>
     </section>
   );
 }

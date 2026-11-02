@@ -1,25 +1,6 @@
 import Button from "../ui/Button";
 
 /* -------------------------------------------------------
-   FLAME RAY CONFIGURATION
-   11 thin rays, brightest in the middle, tapering outward
-------------------------------------------------------- */
-
-const flameRays = [
-  { width: 2, opacity: 0.2, scale: 0.55, delay: "0s" },
-  { width: 2, opacity: 0.3, scale: 0.65, delay: "0.6s" },
-  { width: 2, opacity: 0.4, scale: 0.75, delay: "1.2s" },
-  { width: 2, opacity: 0.55, scale: 0.85, delay: "0.3s" },
-  { width: 3, opacity: 0.7, scale: 0.92, delay: "0.9s" },
-  { width: 3, opacity: 0.95, scale: 1, delay: "1.5s" },
-  { width: 3, opacity: 0.7, scale: 0.92, delay: "0.4s" },
-  { width: 2, opacity: 0.55, scale: 0.85, delay: "1.0s" },
-  { width: 2, opacity: 0.4, scale: 0.75, delay: "0.7s" },
-  { width: 2, opacity: 0.3, scale: 0.65, delay: "1.3s" },
-  { width: 2, opacity: 0.2, scale: 0.55, delay: "0.2s" },
-];
-
-/* -------------------------------------------------------
    PANEL CONFIGURATION
 ------------------------------------------------------- */
 
@@ -27,32 +8,24 @@ const panelClass =
   "relative flex flex-col justify-between overflow-hidden rounded-t-2xl border border-white/10 border-b-0 border-t-white/20 bg-[#06111B]/80 p-6 backdrop-blur-xl shadow-2xl";
 
 /* -------------------------------------------------------
-   KEYFRAMES (scoped to this component)
-   Animations only change opacity on wrapper layers, so
-   the per-ray opacity and centering set inline are kept.
+   KEYFRAMES (opacity only, so inline transforms are kept)
 ------------------------------------------------------- */
 
 function HeroKeyframes() {
   return (
     <style>{`
       @keyframes ph-breathe {
-        0%, 100% { opacity: 0.8; }
-        50% { opacity: 1; }
-      }
-      @keyframes ph-flicker {
         0%, 100% { opacity: 0.85; }
         50% { opacity: 1; }
       }
-      @keyframes ph-sweep {
-        0% { transform: translateX(-100%); opacity: 0; }
+      @keyframes ph-flicker {
+        0%, 100% { opacity: 0.75; }
         50% { opacity: 1; }
-        100% { transform: translateX(300%); opacity: 0; }
       }
-      .ph-breathe { animation: ph-breathe 4s ease-in-out infinite; }
-      .ph-flicker { animation: ph-flicker 3s ease-in-out infinite; }
-      .ph-sweep { animation: ph-sweep 5s ease-in-out infinite; }
+      .ph-breathe { animation: ph-breathe 5s ease-in-out infinite; }
+      .ph-flicker { animation: ph-flicker 3.5s ease-in-out infinite; }
       @media (prefers-reduced-motion: reduce) {
-        .ph-breathe, .ph-flicker, .ph-sweep { animation: none; }
+        .ph-breathe, .ph-flicker { animation: none; }
       }
     `}</style>
   );
@@ -63,94 +36,83 @@ function HeroKeyframes() {
 ------------------------------------------------------- */
 
 function FlameEnvironment() {
-  const rayMask = {
-    maskImage: "linear-gradient(to top, black 0%, black 30%, transparent 85%)",
-    WebkitMaskImage:
-      "linear-gradient(to top, black 0%, black 30%, transparent 85%)",
-  };
+  // Fades the line texture out toward the top and sides
+  const lineMask =
+    "radial-gradient(ellipse 75% 85% at 50% 100%, black 15%, rgba(0,0,0,0.6) 45%, transparent 80%)";
 
   return (
     <div
       aria-hidden="true"
       className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
     >
-      {/* NAVY SKY: deep blue at the top, fading to black */}
+      {/* 1. NAVY SKY: smooth deep blue to black */}
       <div
         className="absolute inset-0"
         style={{
           background:
-            "linear-gradient(to bottom, #0C2A56 0%, #071836 35%, #02070A 70%)",
+            "linear-gradient(to bottom, #0C2A56 0%, #0A2048 25%, #061330 50%, #02070A 85%)",
         }}
       />
 
-      {/* BLUE HAZE across the stage */}
+      {/* 2. WIDE ELECTRIC BLUE GLOW */}
       <div
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse 80% 60% at 50% 100%, rgba(2,151,222,0.35) 0%, rgba(2,151,222,0.12) 50%, transparent 80%)",
+            "radial-gradient(ellipse 95% 75% at 50% 100%, rgba(2,151,222,0.6) 0%, rgba(2,151,222,0.28) 40%, rgba(2,151,222,0.08) 65%, transparent 82%)",
           mixBlendMode: "screen",
         }}
       />
 
-      {/* FLAME BODY: orange glow rising from the bottom center */}
+      {/* 3. ORANGE ARCH: wide, spreads past the side panels */}
       <div
-        className="ph-breathe absolute bottom-0 left-1/2 h-[75%] w-[110vw] max-w-[1500px]"
+        className="ph-breathe absolute bottom-0 left-1/2 h-[80%] w-[130%] max-w-[1800px]"
         style={{
           transform: "translateX(-50%)",
           background:
-            "radial-gradient(ellipse 50% 100% at 50% 100%, #FFF1E6 0%, #FFB08A 8%, #FC734D 22%, rgba(252,115,77,0.55) 42%, rgba(252,115,77,0.18) 62%, transparent 80%)",
+            "radial-gradient(ellipse 50% 100% at 50% 100%, #FFB59A 0%, #FC734D 18%, rgba(252,115,77,0.7) 38%, rgba(252,115,77,0.25) 60%, transparent 80%)",
           mixBlendMode: "screen",
         }}
       />
 
-      {/* HOT CORE: pale peach center at the base of the flame */}
+      {/* 4. HOT CORE: pale peach at the base */}
       <div
-        className="ph-flicker absolute bottom-0 left-1/2 h-[30%] w-[45vw] max-w-[640px]"
+        className="ph-flicker absolute bottom-0 left-1/2 h-[35%] w-[55%] max-w-[800px]"
         style={{
           transform: "translateX(-50%)",
           background:
-            "radial-gradient(ellipse 50% 100% at 50% 100%, rgba(255,245,238,1) 0%, rgba(255,200,170,0.7) 35%, transparent 75%)",
+            "radial-gradient(ellipse 50% 100% at 50% 100%, rgba(255,243,235,1) 0%, rgba(255,205,180,0.75) 30%, transparent 75%)",
           mixBlendMode: "screen",
         }}
       />
 
-      {/* HORIZON LINE with a light sweep */}
+      {/* 5. VERTICAL LINE TEXTURE: blue, full width */}
       <div
-        className="absolute bottom-0 left-1/2 h-[2px] w-[min(1000px,95%)] overflow-hidden"
+        className="absolute inset-x-0 bottom-0 h-[85%]"
         style={{
-          transform: "translateX(-50%)",
-          background:
-            "linear-gradient(90deg, transparent 0%, #FC734D 25%, #FFE3D3 50%, #0297DE 75%, transparent 100%)",
-          boxShadow:
-            "0 0 16px 3px rgba(252,115,77,0.55), 0 0 30px 6px rgba(2,151,222,0.35)",
+          backgroundImage:
+            "repeating-linear-gradient(90deg, rgba(66,201,255,0.55) 0px, rgba(66,201,255,0.55) 1px, transparent 1px, transparent 9px)",
+          maskImage: lineMask,
+          WebkitMaskImage: lineMask,
+          mixBlendMode: "screen",
+          opacity: 0.55,
         }}
-      >
-        <span className="ph-sweep absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-transparent via-white to-transparent" />
-      </div>
+      />
 
-      {/* VERTICAL LIGHT RAYS: the wrapper flickers, each ray keeps its own opacity */}
+      {/* 6. VERTICAL LINE TEXTURE: warm, concentrated near the flame */}
       <div
-        className="ph-flicker absolute bottom-0 left-1/2 flex h-[80%] w-[min(340px,90%)] items-end justify-center gap-[14px]"
-        style={{ transform: "translateX(-50%)", ...rayMask }}
-      >
-        {flameRays.map((ray, index) => (
-          <div
-            key={index}
-            className="h-full shrink-0"
-            style={{
-              width: `${ray.width}px`,
-              opacity: ray.opacity,
-              transform: `scaleY(${ray.scale})`,
-              transformOrigin: "bottom center",
-              background:
-                "linear-gradient(to top, #FFD2BD 0%, #FC734D 20%, #0297DE 60%, transparent 100%)",
-              boxShadow: "0 0 8px rgba(2,151,222,0.5)",
-              mixBlendMode: "screen",
-            }}
-          />
-        ))}
-      </div>
+        className="ph-flicker absolute inset-x-0 bottom-0 h-[55%]"
+        style={{
+          backgroundImage:
+            "repeating-linear-gradient(90deg, rgba(255,190,160,0.6) 0px, rgba(255,190,160,0.6) 1px, transparent 1px, transparent 9px)",
+          maskImage:
+            "radial-gradient(ellipse 45% 90% at 50% 100%, black 10%, transparent 75%)",
+          WebkitMaskImage:
+            "radial-gradient(ellipse 45% 90% at 50% 100%, black 10%, transparent 75%)",
+          mixBlendMode: "screen",
+          opacity: 0.5,
+        }}
+      />
     </div>
   );
 }

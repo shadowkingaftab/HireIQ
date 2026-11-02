@@ -15,11 +15,11 @@ function HeroKeyframes() {
   return (
     <style>{`
       @keyframes ph-breathe {
-        0%, 100% { opacity: 0.85; }
+        0%, 100% { opacity: 0.88; }
         50% { opacity: 1; }
       }
       @keyframes ph-flicker {
-        0%, 100% { opacity: 0.75; }
+        0%, 100% { opacity: 0.8; }
         50% { opacity: 1; }
       }
       .ph-breathe { animation: ph-breathe 5s ease-in-out infinite; }
@@ -33,84 +33,117 @@ function HeroKeyframes() {
 
 /* -------------------------------------------------------
    BACKGROUND ENVIRONMENT
+   Layers: navy sky > blue/orange haze > split peak >
+   white seam > hot base > vertical ridge texture
 ------------------------------------------------------- */
 
 function FlameEnvironment() {
-  // Fades the line texture out toward the top and sides
-  const lineMask =
-    "radial-gradient(ellipse 75% 85% at 50% 100%, black 15%, rgba(0,0,0,0.6) 45%, transparent 80%)";
+  const ridgeMask =
+    "radial-gradient(ellipse 85% 95% at 50% 100%, black 20%, rgba(0,0,0,0.6) 50%, transparent 88%)";
+  const wideLineMask =
+    "radial-gradient(ellipse 110% 110% at 50% 100%, black 0%, rgba(0,0,0,0.5) 55%, transparent 92%)";
 
   return (
     <div
       aria-hidden="true"
       className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
     >
-      {/* 1. NAVY SKY: smooth deep blue to black */}
+      {/* 1. NAVY SKY */}
       <div
         className="absolute inset-0"
         style={{
           background:
-            "linear-gradient(to bottom, #0C2A56 0%, #0A2048 25%, #061330 50%, #02070A 85%)",
+            "linear-gradient(to bottom, #0B2B5E 0%, #0A2250 30%, #061634 55%, #030B18 80%, #02070A 100%)",
         }}
       />
 
-      {/* 2. WIDE ELECTRIC BLUE GLOW */}
+      {/* 2. BLUE HAZE, weighted to the left */}
       <div
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse 95% 75% at 50% 100%, rgba(2,151,222,0.6) 0%, rgba(2,151,222,0.28) 40%, rgba(2,151,222,0.08) 65%, transparent 82%)",
+            "radial-gradient(ellipse 60% 70% at 36% 100%, rgba(2,151,222,0.8) 0%, rgba(2,151,222,0.32) 45%, transparent 80%)",
           mixBlendMode: "screen",
         }}
       />
 
-      {/* 3. ORANGE ARCH: wide, spreads past the side panels */}
+      {/* 3. ORANGE HAZE, weighted to the right */}
       <div
-        className="ph-breathe absolute bottom-0 left-1/2 h-[80%] w-[130%] max-w-[1800px]"
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 55% 65% at 64% 100%, rgba(252,115,77,0.95) 0%, rgba(252,115,77,0.4) 40%, transparent 78%)",
+          mixBlendMode: "screen",
+        }}
+      />
+
+      {/* 4. THE PEAK: blue left slope, orange right slope, white seam in the middle */}
+      <div
+        className="ph-breathe absolute bottom-0 left-1/2 h-[68%] w-[min(1100px,110%)]"
+        style={{
+          transform: "translateX(-50%)",
+          filter: "blur(14px)",
+          mixBlendMode: "screen",
+        }}
+      >
+        <div
+          className="h-full w-full"
+          style={{
+            clipPath: "polygon(50% 0%, 100% 100%, 0% 100%)",
+            background:
+              "linear-gradient(90deg, #0297DE 0%, #2FB4F5 30%, #BFE6FF 46%, #FFFFFF 50%, #FFD6BE 54%, #FC734D 72%, #FF5A2A 100%)",
+            maskImage:
+              "linear-gradient(to top, black 0%, black 35%, rgba(0,0,0,0.5) 70%, rgba(0,0,0,0.12) 100%)",
+            WebkitMaskImage:
+              "linear-gradient(to top, black 0%, black 35%, rgba(0,0,0,0.5) 70%, rgba(0,0,0,0.12) 100%)",
+          }}
+        />
+      </div>
+
+      {/* 5. WHITE SEAM: the bright line separating blue from orange */}
+      <div
+        className="ph-flicker absolute bottom-0 left-1/2 h-[62%] w-[14%] min-w-[120px]"
         style={{
           transform: "translateX(-50%)",
           background:
-            "radial-gradient(ellipse 50% 100% at 50% 100%, #FFB59A 0%, #FC734D 18%, rgba(252,115,77,0.7) 38%, rgba(252,115,77,0.25) 60%, transparent 80%)",
+            "radial-gradient(ellipse 50% 100% at 50% 100%, rgba(255,255,255,0.95) 0%, rgba(235,245,255,0.55) 35%, transparent 75%)",
+          filter: "blur(10px)",
           mixBlendMode: "screen",
         }}
       />
 
-      {/* 4. HOT CORE: pale peach at the base */}
+      {/* 6. HOT BASE: peach glow at the bottom center */}
       <div
-        className="ph-flicker absolute bottom-0 left-1/2 h-[35%] w-[55%] max-w-[800px]"
+        className="absolute bottom-0 left-1/2 h-[28%] w-[50%] max-w-[760px]"
         style={{
           transform: "translateX(-50%)",
           background:
-            "radial-gradient(ellipse 50% 100% at 50% 100%, rgba(255,243,235,1) 0%, rgba(255,205,180,0.75) 30%, transparent 75%)",
+            "radial-gradient(ellipse 50% 100% at 50% 100%, rgba(255,235,220,0.95) 0%, rgba(255,170,135,0.6) 35%, transparent 75%)",
+          filter: "blur(12px)",
           mixBlendMode: "screen",
         }}
       />
 
-      {/* 5. VERTICAL LINE TEXTURE: blue, full width */}
+      {/* 7. RIDGE TEXTURE: dark vertical lines cut into the glow */}
       <div
-        className="absolute inset-x-0 bottom-0 h-[85%]"
+        className="absolute inset-x-0 bottom-0 h-[90%]"
         style={{
           backgroundImage:
-            "repeating-linear-gradient(90deg, rgba(66,201,255,0.55) 0px, rgba(66,201,255,0.55) 1px, transparent 1px, transparent 9px)",
-          maskImage: lineMask,
-          WebkitMaskImage: lineMask,
-          mixBlendMode: "screen",
-          opacity: 0.55,
+            "repeating-linear-gradient(90deg, rgba(2,7,10,0.5) 0px, rgba(2,7,10,0.5) 1px, transparent 1px, transparent 5px)",
+          maskImage: ridgeMask,
+          WebkitMaskImage: ridgeMask,
         }}
       />
 
-      {/* 6. VERTICAL LINE TEXTURE: warm, concentrated near the flame */}
+      {/* 8. BLUE LINES: fine vertical lines continuing up toward the headline */}
       <div
-        className="ph-flicker absolute inset-x-0 bottom-0 h-[55%]"
+        className="absolute inset-x-0 bottom-0 h-full"
         style={{
           backgroundImage:
-            "repeating-linear-gradient(90deg, rgba(255,190,160,0.6) 0px, rgba(255,190,160,0.6) 1px, transparent 1px, transparent 9px)",
-          maskImage:
-            "radial-gradient(ellipse 45% 90% at 50% 100%, black 10%, transparent 75%)",
-          WebkitMaskImage:
-            "radial-gradient(ellipse 45% 90% at 50% 100%, black 10%, transparent 75%)",
+            "repeating-linear-gradient(90deg, rgba(90,190,255,0.3) 0px, rgba(90,190,255,0.3) 1px, transparent 1px, transparent 10px)",
+          maskImage: wideLineMask,
+          WebkitMaskImage: wideLineMask,
           mixBlendMode: "screen",
-          opacity: 0.5,
         }}
       />
     </div>

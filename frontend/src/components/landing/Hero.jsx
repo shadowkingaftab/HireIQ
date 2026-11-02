@@ -5,15 +5,15 @@ import Button from "../ui/Button";
 ------------------------------------------------------- */
 
 const flameRays = [
-  { width: 2, opacity: 0.16, scale: 0.58, delay: "0s" },
-  { width: 2, opacity: 0.2, scale: 0.72, delay: "0.6s" },
-  { width: 3, opacity: 0.28, scale: 0.88, delay: "1.2s" },
-  { width: 4, opacity: 0.38, scale: 0.96, delay: "0.3s" },
-  { width: 5, opacity: 0.55, scale: 1, delay: "0.9s" },
-  { width: 4, opacity: 0.38, scale: 0.96, delay: "1.5s" },
-  { width: 3, opacity: 0.28, scale: 0.88, delay: "0.4s" },
-  { width: 2, opacity: 0.2, scale: 0.72, delay: "1.0s" },
-  { width: 2, opacity: 0.16, scale: 0.58, delay: "0.7s" },
+  { width: 2, opacity: 0.4, scale: 0.58, delay: "0s" },
+  { width: 2, opacity: 0.45, scale: 0.72, delay: "0.6s" },
+  { width: 3, opacity: 0.5, scale: 0.88, delay: "1.2s" },
+  { width: 4, opacity: 0.6, scale: 0.96, delay: "0.3s" },
+  { width: 5, opacity: 0.75, scale: 1, delay: "0.9s" },
+  { width: 4, opacity: 0.6, scale: 0.96, delay: "1.5s" },
+  { width: 3, opacity: 0.5, scale: 0.88, delay: "0.4s" },
+  { width: 2, opacity: 0.45, scale: 0.72, delay: "1.0s" },
+  { width: 2, opacity: 0.4, scale: 0.58, delay: "0.7s" },
 ];
 
 /* -------------------------------------------------------
@@ -25,35 +25,32 @@ const panelClass =
 
 /* -------------------------------------------------------
    KEYFRAMES (scoped to this component)
+   Animations only change brightness, so the positioning
+   and per-element opacity set inline are never overridden.
 ------------------------------------------------------- */
 
 function HeroKeyframes() {
   return (
     <style>{`
-      @keyframes ph-flicker {
-        0%, 100% { opacity: 0.85; filter: brightness(1); }
-        50% { opacity: 1; filter: brightness(1.25); }
+      @keyframes ph-glow {
+        0%, 100% { filter: brightness(1); }
+        50% { filter: brightness(1.12); }
       }
-      @keyframes ph-breathe {
-        0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.7; }
-        50% { transform: translateX(-50%) scale(1.06); opacity: 0.95; }
+      @keyframes ph-flicker {
+        0%, 100% { filter: brightness(1); }
+        50% { filter: brightness(1.3); }
       }
       @keyframes ph-sweep {
         0% { transform: translateX(-60%); opacity: 0; }
         50% { opacity: 1; }
         100% { transform: translateX(60%); opacity: 0; }
       }
-      @keyframes ph-grid-drift {
-        from { background-position: 0 0, 0 0; }
-        to { background-position: 0 40px, 40px 0; }
-      }
-      .ph-core { animation: ph-breathe 5s ease-in-out infinite; }
+      .ph-glow { animation: ph-glow 5s ease-in-out infinite; }
       .ph-flame { animation: ph-flicker 3.2s ease-in-out infinite; }
       .ph-ray { animation: ph-flicker 4s ease-in-out infinite; }
       .ph-sweep { animation: ph-sweep 6s ease-in-out infinite; }
-      .ph-grid { animation: ph-grid-drift 12s linear infinite; }
       @media (prefers-reduced-motion: reduce) {
-        .ph-core, .ph-flame, .ph-ray, .ph-sweep, .ph-grid { animation: none; }
+        .ph-glow, .ph-flame, .ph-ray, .ph-sweep { animation: none; }
       }
     `}</style>
   );
@@ -64,64 +61,64 @@ function HeroKeyframes() {
 ------------------------------------------------------- */
 
 function FlameEnvironment() {
+  const rayMask = {
+    maskImage: "linear-gradient(to top, black 0%, black 35%, transparent 90%)",
+    WebkitMaskImage:
+      "linear-gradient(to top, black 0%, black 35%, transparent 90%)",
+  };
+
   return (
     <div
       aria-hidden="true"
       className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
     >
-      {/* WIDE BLUE ATMOSPHERE */}
-
+      {/* NAVY SKY: deep blue fading into black */}
       <div
-        className="absolute bottom-0 left-1/2 h-[85vh] w-full max-w-[1400px] -translate-x-1/2"
+        className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse at 50% 100%, #0297DE 0%, rgba(2,151,222,0.25) 35%, transparent 70%)",
-          opacity: 0.45,
-          mixBlendMode: "screen",
-          filter: "blur(40px)",
+            "linear-gradient(to bottom, #0B2A5A 0%, #061632 35%, #02070A 75%)",
+          opacity: 0.85,
         }}
       />
 
-      {/* ORANGE CORE, SOFT BLOOM */}
-
+      {/* ELECTRIC BLUE HALO across the stage */}
       <div
-        className="ph-core absolute bottom-0 left-1/2 h-[420px] w-[640px] max-w-full"
+        className="absolute inset-x-0 bottom-0 h-full"
         style={{
           background:
-            "radial-gradient(ellipse at 50% 100%, #FC734D 0%, #FF4D00 28%, transparent 68%)",
-          mixBlendMode: "screen",
-          filter: "blur(18px)",
-        }}
-      />
-
-      {/* HOT WHITE-PEACH CENTER */}
-
-      <div
-        className="ph-flame absolute bottom-0 left-1/2 h-[200px] w-[360px] max-w-full -translate-x-1/2 rounded-[50%]"
-        style={{
-          background:
-            "radial-gradient(ellipse at 50% 100%, rgba(255,235,220,0.9) 0%, rgba(255,213,190,0.5) 30%, transparent 70%)",
-          mixBlendMode: "screen",
-          filter: "blur(10px)",
-        }}
-      />
-
-      {/* SECONDARY ORANGE ILLUMINATION */}
-
-      <div
-        className="absolute bottom-0 left-1/2 h-[300px] w-[900px] max-w-full -translate-x-1/2"
-        style={{
-          background:
-            "radial-gradient(ellipse at 50% 100%, rgba(255,213,190,0.55) 0%, rgba(252,115,77,0.2) 28%, transparent 70%)",
+            "radial-gradient(ellipse 75% 65% at 50% 100%, rgba(2,151,222,0.55) 0%, rgba(2,151,222,0.2) 45%, transparent 75%)",
           mixBlendMode: "screen",
         }}
       />
 
-      {/* HORIZON LINE */}
-
+      {/* LARGE ORANGE GLOW rising from bottom center */}
       <div
-        className="absolute bottom-0 left-1/2 h-px w-[min(900px,90%)] -translate-x-1/2 overflow-hidden"
+        className="ph-glow absolute bottom-[-12%] left-1/2 h-[95%] w-[140vw] max-w-[1600px]"
         style={{
+          transform: "translateX(-50%)",
+          background:
+            "radial-gradient(ellipse 50% 50% at 50% 100%, #FC734D 0%, rgba(252,115,77,0.65) 28%, rgba(252,115,77,0.22) 55%, transparent 78%)",
+          mixBlendMode: "screen",
+        }}
+      />
+
+      {/* HOT CENTER: pale peach core at the base of the light */}
+      <div
+        className="ph-flame absolute bottom-0 left-1/2 h-[40%] w-[50vw] max-w-[720px]"
+        style={{
+          transform: "translateX(-50%)",
+          background:
+            "radial-gradient(ellipse 50% 60% at 50% 100%, rgba(255,240,228,0.95) 0%, rgba(255,190,160,0.55) 30%, transparent 72%)",
+          mixBlendMode: "screen",
+        }}
+      />
+
+      {/* HORIZON LINE with a light sweep */}
+      <div
+        className="absolute bottom-0 left-1/2 h-px w-[min(900px,90%)] overflow-hidden"
+        style={{
+          transform: "translateX(-50%)",
           background:
             "linear-gradient(90deg, transparent, rgba(252,115,77,0.9), rgba(2,151,222,0.9), transparent)",
           boxShadow: "0 0 18px 2px rgba(252,115,77,0.45)",
@@ -131,53 +128,27 @@ function FlameEnvironment() {
       </div>
 
       {/* VERTICAL LIGHT RAYS */}
-
       <div
-        className="absolute bottom-0 left-1/2 flex h-[60vh] w-[800px] max-w-full -translate-x-1/2 justify-center gap-4 overflow-hidden"
-        style={{
-          maskImage:
-            "linear-gradient(to top, black 0%, black 55%, transparent 100%)",
-          WebkitMaskImage:
-            "linear-gradient(to top, black 0%, black 55%, transparent 100%)",
-        }}
+        className="absolute bottom-0 left-1/2 flex h-[80%] w-[min(900px,100%)] justify-center gap-5 overflow-hidden"
+        style={{ transform: "translateX(-50%)", ...rayMask }}
       >
         {flameRays.map((ray, index) => (
           <div
             key={index}
             className="ph-ray h-full shrink-0"
             style={{
-              width: `${ray.width}px`,
+              width: `${ray.width + 1}px`,
               opacity: ray.opacity,
               transform: `scaleY(${ray.scale})`,
               transformOrigin: "bottom center",
               background:
-                "linear-gradient(to top, #FC734D 0%, #0297DE 30%, transparent 100%)",
+                "linear-gradient(to top, #FC734D 0%, #0297DE 40%, transparent 100%)",
               mixBlendMode: "screen",
-              filter: "blur(0.5px)",
               animationDelay: ray.delay,
             }}
           />
         ))}
       </div>
-
-      {/* 3D PERSPECTIVE FLOOR GRID */}
-
-      <div
-        className="ph-grid absolute bottom-0 left-0 right-0 h-[40vh] opacity-20"
-        style={{
-          backgroundImage: `
-            linear-gradient(rgba(255,255,255,0.2) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.2) 1px, transparent 1px)
-          `,
-          backgroundSize: "40px 40px",
-          transform: "perspective(600px) rotateX(75deg)",
-          transformOrigin: "center bottom",
-          maskImage:
-            "linear-gradient(to bottom, transparent 0%, black 100%)",
-          WebkitMaskImage:
-            "linear-gradient(to bottom, transparent 0%, black 100%)",
-        }}
-      />
     </div>
   );
 }

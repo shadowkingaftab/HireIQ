@@ -1,6 +1,5 @@
 import { BadgeCheck, GitBranch, Orbit, Target } from "lucide-react";
 import Reveal from "./Reveal";
-import Container from "../ui/Container";
 import { BentoGrid, BentoGridItem } from "../ui/bento-grid";
 
 const steps = [
@@ -25,18 +24,30 @@ const steps = [
                 key={title}
                 className="flex items-center gap-3 rounded-lg border border-white/[0.07] bg-white/[0.035] px-3 py-2.5"
               >
-                <span className="font-mono text-[10px] text-electric-soft/60">0{index + 1}</span>
-                <span className="min-w-0 flex-1">
-                  <span className="block truncate text-xs font-medium text-stellar">{title}</span>
-                  <span className="mt-0.5 block truncate font-mono text-[9px] text-nebula/70">{detail}</span>
+                <span className="font-mono text-[10px] text-electric-soft/60">
+                  0{index + 1}
                 </span>
-                <BadgeCheck size={14} className="shrink-0 text-electric-soft" aria-hidden="true" />
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate text-xs font-medium text-stellar">
+                    {title}
+                  </span>
+                  <span className="mt-0.5 block truncate font-mono text-[9px] text-nebula/70">
+                    {detail}
+                  </span>
+                </span>
+                <BadgeCheck
+                  size={14}
+                  className="shrink-0 text-electric-soft"
+                  aria-hidden="true"
+                />
               </div>
             ))}
           </div>
           <div className="hidden w-20 flex-col items-center justify-center gap-2 rounded-lg border border-electric/10 bg-electric/[0.04] sm:flex">
             <span className="h-10 w-10 rounded-full border border-electric/20 bg-[radial-gradient(circle,rgba(14,165,233,0.34),rgba(14,165,233,0.02)_70%)] shadow-[0_0_28px_rgba(14,165,233,0.14)]" />
-            <span className="font-mono text-[8px] uppercase tracking-[0.16em] text-electric-soft/70">verified</span>
+            <span className="font-mono text-[8px] uppercase tracking-[0.16em] text-electric-soft/70">
+              verified
+            </span>
           </div>
         </div>
       </div>
@@ -59,7 +70,10 @@ const steps = [
         </div>
         <div className="relative flex max-w-[65%] flex-wrap justify-end gap-2">
           {["Python", "API design", "Systems", "Ownership"].map((skill) => (
-            <span key={skill} className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 font-mono text-[9px] text-nebula">
+            <span
+              key={skill}
+              className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 font-mono text-[9px] text-nebula"
+            >
               {skill}
             </span>
           ))}
@@ -78,8 +92,12 @@ const steps = [
       <div className="relative flex h-full min-h-24 items-center justify-center overflow-hidden rounded-xl border border-white/[0.07] bg-[#07111a]/80">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_110%,rgba(14,165,233,0.16),transparent_65%)]" />
         <div className="relative flex items-baseline gap-2">
-          <span className="font-mono text-4xl font-semibold tracking-tight text-stellar">94</span>
-          <span className="font-mono text-[9px] uppercase tracking-[0.18em] text-electric-soft">match</span>
+          <span className="font-mono text-4xl font-semibold tracking-tight text-stellar">
+            94
+          </span>
+          <span className="font-mono text-[9px] uppercase tracking-[0.18em] text-electric-soft">
+            match
+          </span>
         </div>
       </div>
     ),
@@ -99,7 +117,9 @@ const steps = [
           "Decision trace ready",
         ].map((item, index) => (
           <div key={item} className="flex items-center gap-2.5">
-            <span className="flex h-4 w-4 items-center justify-center rounded-full border border-electric/25 bg-electric/10 font-mono text-[8px] text-electric-soft">{index + 1}</span>
+            <span className="flex h-4 w-4 items-center justify-center rounded-full border border-electric/25 bg-electric/10 font-mono text-[8px] text-electric-soft">
+              {index + 1}
+            </span>
             <span className="text-[10px] text-nebula">{item}</span>
             <span className="ml-auto h-px flex-1 bg-gradient-to-r from-electric/25 to-transparent" />
           </div>
@@ -111,34 +131,54 @@ const steps = [
 
 export default function HowItWorks() {
   return (
-    <section id="how-it-works" className="scroll-mt-24" aria-labelledby="how-it-works-title">
-      <Container>
-        <Reveal>
-          <p className="font-mono text-micro uppercase tracking-caps text-electric-soft">How it works</p>
-          <h2
-            id="how-it-works-title"
-            className="mt-3 max-w-xl font-display text-[2.5rem] leading-[1.05] tracking-tight text-stellar sm:text-[3.25rem]"
-          >
-            From evidence to hire, in four steps.
-          </h2>
-        </Reveal>
+    <section
+      id="how-it-works"
+      className="relative z-10 mx-auto max-w-7xl scroll-mt-24 px-4 py-20"
+      aria-labelledby="how-it-works-title"
+    >
+      <Reveal>
+        <p className="font-mono text-micro uppercase tracking-caps text-electric-soft">
+          How it works
+        </p>
+        <h2
+          id="how-it-works-title"
+          className="mt-3 max-w-2xl font-serif text-5xl leading-[1.05] tracking-tight text-stellar sm:text-6xl"
+        >
+          From evidence to hire, in four steps.
+        </h2>
+      </Reveal>
 
-        <ol className="mt-10 list-none p-0">
-          <BentoGrid className="md:auto-rows-[15rem]">
-            {steps.map(({ number, icon: Icon, title, description, className, visual }, index) => (
-              <Reveal key={number} delay={index * 80} as="li" className={`list-none ${className}`}>
+      <ol className="mt-10 list-none p-0">
+        <BentoGrid className="md:auto-rows-[15rem]">
+          {steps.map(
+            (
+              { number, icon: Icon, title, description, className, visual },
+              index,
+            ) => (
+              <Reveal
+                key={number}
+                delay={index * 80}
+                as="li"
+                className={`list-none ${className}`}
+              >
                 <BentoGridItem
                   className="h-full"
                   title={title}
                   description={description}
-                  icon={<Icon size={17} className="text-electric-soft" aria-hidden="true" />}
+                  icon={
+                    <Icon
+                      size={17}
+                      className="text-electric-soft"
+                      aria-hidden="true"
+                    />
+                  }
                   header={visual}
                 />
               </Reveal>
-            ))}
-          </BentoGrid>
-        </ol>
-      </Container>
+            ),
+          )}
+        </BentoGrid>
+      </ol>
     </section>
   );
 }

@@ -8,24 +8,24 @@ const panelClass =
   "relative flex flex-col justify-between overflow-hidden rounded-t-2xl border border-white/10 border-b-0 border-t-white/20 bg-[#06111B]/80 p-6 backdrop-blur-xl shadow-2xl";
 
 /* -------------------------------------------------------
-   KEYFRAMES (opacity only, so inline transforms are kept)
+   KEYFRAMES (opacity only)
 ------------------------------------------------------- */
 
 function HeroKeyframes() {
   return (
     <style>{`
       @keyframes ph-breathe {
-        0%, 100% { opacity: 0.88; }
+        0%, 100% { opacity: 0.92; }
         50% { opacity: 1; }
       }
-      @keyframes ph-flicker {
-        0%, 100% { opacity: 0.8; }
-        50% { opacity: 1; }
+      @keyframes ph-shimmer {
+        0%, 100% { opacity: 0.55; }
+        50% { opacity: 0.9; }
       }
-      .ph-breathe { animation: ph-breathe 5s ease-in-out infinite; }
-      .ph-flicker { animation: ph-flicker 3.5s ease-in-out infinite; }
+      .ph-breathe { animation: ph-breathe 6s ease-in-out infinite; }
+      .ph-shimmer { animation: ph-shimmer 4s ease-in-out infinite; }
       @media (prefers-reduced-motion: reduce) {
-        .ph-breathe, .ph-flicker { animation: none; }
+        .ph-breathe, .ph-shimmer { animation: none; }
       }
     `}</style>
   );
@@ -33,15 +33,29 @@ function HeroKeyframes() {
 
 /* -------------------------------------------------------
    BACKGROUND ENVIRONMENT
-   Layers: navy sky > blue/orange haze > split peak >
-   white seam > hot base > vertical ridge texture
+   Ribbed-glass glow: soft blue/orange light, cut into
+   fine vertical strips by a repeating mask.
 ------------------------------------------------------- */
 
+const ribMask =
+  "repeating-linear-gradient(90deg, #000 0px, #000 2px, rgba(0,0,0,0.22) 2px, rgba(0,0,0,0.22) 4px)";
+
+const glowBackground = [
+  // pale hot core, center
+  "radial-gradient(ellipse 13% 58% at 50% 100%, rgba(255,244,238,0.98) 0%, rgba(255,205,185,0.6) 40%, transparent 100%)",
+  // orange, right of center
+  "radial-gradient(ellipse 34% 66% at 63% 100%, rgba(255,128,92,0.98) 0%, rgba(252,115,77,0.62) 36%, rgba(252,115,77,0.2) 68%, transparent 100%)",
+  // electric blue, left of center
+  "radial-gradient(ellipse 34% 66% at 37% 100%, rgba(46,184,255,0.98) 0%, rgba(2,151,222,0.62) 36%, rgba(2,151,222,0.2) 68%, transparent 100%)",
+  // wide soft base so the glow spreads under the side panels
+  "radial-gradient(ellipse 78% 42% at 50% 100%, rgba(2,151,222,0.5) 0%, rgba(2,151,222,0.18) 55%, transparent 100%)",
+].join(", ");
+
 function FlameEnvironment() {
-  const ridgeMask =
-    "radial-gradient(ellipse 85% 95% at 50% 100%, black 20%, rgba(0,0,0,0.6) 50%, transparent 88%)";
-  const wideLineMask =
-    "radial-gradient(ellipse 110% 110% at 50% 100%, black 0%, rgba(0,0,0,0.5) 55%, transparent 92%)";
+  const skyLineMask =
+    "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.5) 40%, #000 100%)";
+  const sparkleMask =
+    "radial-gradient(ellipse 70% 80% at 50% 100%, #000 0%, rgba(0,0,0,0.6) 45%, transparent 100%)";
 
   return (
     <div
@@ -53,97 +67,49 @@ function FlameEnvironment() {
         className="absolute inset-0"
         style={{
           background:
-            "linear-gradient(to bottom, #0B2B5E 0%, #0A2250 30%, #061634 55%, #030B18 80%, #02070A 100%)",
+            "linear-gradient(to bottom, #0B2B5E 0%, #0A2352 30%, #071A3E 55%, #040E20 80%, #02070A 100%)",
         }}
       />
 
-      {/* 2. BLUE HAZE, weighted to the left */}
+      {/* 2. FAINT BLUE LINES in the sky, stronger toward the bottom */}
       <div
         className="absolute inset-0"
         style={{
-          background:
-            "radial-gradient(ellipse 60% 70% at 36% 100%, rgba(2,151,222,0.8) 0%, rgba(2,151,222,0.32) 45%, transparent 80%)",
-          mixBlendMode: "screen",
+          backgroundImage:
+            "repeating-linear-gradient(90deg, rgba(80,160,255,0.16) 0px, rgba(80,160,255,0.16) 1px, transparent 1px, transparent 4px)",
+          maskImage: skyLineMask,
+          WebkitMaskImage: skyLineMask,
         }}
       />
 
-      {/* 3. ORANGE HAZE, weighted to the right */}
+      {/* 3. THE GLOW, cut into vertical strips by the rib mask */}
       <div
-        className="absolute inset-0"
+        className="ph-breathe absolute inset-0"
         style={{
-          background:
-            "radial-gradient(ellipse 55% 65% at 64% 100%, rgba(252,115,77,0.95) 0%, rgba(252,115,77,0.4) 40%, transparent 78%)",
-          mixBlendMode: "screen",
+          background: glowBackground,
+          maskImage: ribMask,
+          WebkitMaskImage: ribMask,
         }}
       />
 
-      {/* 4. THE PEAK: blue left slope, orange right slope, white seam in the middle */}
+      {/* 4. SPARKLE: thin bright strips inside the glow */}
       <div
-        className="ph-breathe absolute bottom-0 left-1/2 h-[68%] w-[min(1100px,110%)]"
-        style={{
-          transform: "translateX(-50%)",
-          filter: "blur(14px)",
-          mixBlendMode: "screen",
-        }}
-      >
-        <div
-          className="h-full w-full"
-          style={{
-            clipPath: "polygon(50% 0%, 100% 100%, 0% 100%)",
-            background:
-              "linear-gradient(90deg, #0297DE 0%, #2FB4F5 30%, #BFE6FF 46%, #FFFFFF 50%, #FFD6BE 54%, #FC734D 72%, #FF5A2A 100%)",
-            maskImage:
-              "linear-gradient(to top, black 0%, black 35%, rgba(0,0,0,0.5) 70%, rgba(0,0,0,0.12) 100%)",
-            WebkitMaskImage:
-              "linear-gradient(to top, black 0%, black 35%, rgba(0,0,0,0.5) 70%, rgba(0,0,0,0.12) 100%)",
-          }}
-        />
-      </div>
-
-      {/* 5. WHITE SEAM: the bright line separating blue from orange */}
-      <div
-        className="ph-flicker absolute bottom-0 left-1/2 h-[62%] w-[14%] min-w-[120px]"
-        style={{
-          transform: "translateX(-50%)",
-          background:
-            "radial-gradient(ellipse 50% 100% at 50% 100%, rgba(255,255,255,0.95) 0%, rgba(235,245,255,0.55) 35%, transparent 75%)",
-          filter: "blur(10px)",
-          mixBlendMode: "screen",
-        }}
-      />
-
-      {/* 6. HOT BASE: peach glow at the bottom center */}
-      <div
-        className="absolute bottom-0 left-1/2 h-[28%] w-[50%] max-w-[760px]"
-        style={{
-          transform: "translateX(-50%)",
-          background:
-            "radial-gradient(ellipse 50% 100% at 50% 100%, rgba(255,235,220,0.95) 0%, rgba(255,170,135,0.6) 35%, transparent 75%)",
-          filter: "blur(12px)",
-          mixBlendMode: "screen",
-        }}
-      />
-
-      {/* 7. RIDGE TEXTURE: dark vertical lines cut into the glow */}
-      <div
-        className="absolute inset-x-0 bottom-0 h-[90%]"
+        className="ph-shimmer absolute inset-0"
         style={{
           backgroundImage:
-            "repeating-linear-gradient(90deg, rgba(2,7,10,0.5) 0px, rgba(2,7,10,0.5) 1px, transparent 1px, transparent 5px)",
-          maskImage: ridgeMask,
-          WebkitMaskImage: ridgeMask,
+            "repeating-linear-gradient(90deg, rgba(255,255,255,0.35) 0px, rgba(255,255,255,0.35) 1px, transparent 1px, transparent 8px)",
+          maskImage: sparkleMask,
+          WebkitMaskImage: sparkleMask,
+          mixBlendMode: "overlay",
         }}
       />
 
-      {/* 8. BLUE LINES: fine vertical lines continuing up toward the headline */}
+      {/* 5. BOTTOM FADE so the glow settles into the section edge */}
       <div
-        className="absolute inset-x-0 bottom-0 h-full"
+        className="absolute inset-x-0 bottom-0 h-24"
         style={{
-          backgroundImage:
-            "repeating-linear-gradient(90deg, rgba(90,190,255,0.3) 0px, rgba(90,190,255,0.3) 1px, transparent 1px, transparent 10px)",
-          maskImage: wideLineMask,
-          WebkitMaskImage: wideLineMask,
-          mixBlendMode: "screen",
+          background:
+            "linear-gradient(to top, rgba(2,7,10,0.35), transparent)",
         }}
       />
     </div>

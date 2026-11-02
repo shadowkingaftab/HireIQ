@@ -2,18 +2,21 @@ import Button from "../ui/Button";
 
 /* -------------------------------------------------------
    FLAME RAY CONFIGURATION
+   11 thin rays, brightest in the middle, tapering outward
 ------------------------------------------------------- */
 
 const flameRays = [
-  { width: 2, opacity: 0.4, scale: 0.58, delay: "0s" },
-  { width: 2, opacity: 0.45, scale: 0.72, delay: "0.6s" },
-  { width: 3, opacity: 0.5, scale: 0.88, delay: "1.2s" },
-  { width: 4, opacity: 0.6, scale: 0.96, delay: "0.3s" },
-  { width: 5, opacity: 0.75, scale: 1, delay: "0.9s" },
-  { width: 4, opacity: 0.6, scale: 0.96, delay: "1.5s" },
-  { width: 3, opacity: 0.5, scale: 0.88, delay: "0.4s" },
-  { width: 2, opacity: 0.45, scale: 0.72, delay: "1.0s" },
-  { width: 2, opacity: 0.4, scale: 0.58, delay: "0.7s" },
+  { width: 2, opacity: 0.2, scale: 0.55, delay: "0s" },
+  { width: 2, opacity: 0.3, scale: 0.65, delay: "0.6s" },
+  { width: 2, opacity: 0.4, scale: 0.75, delay: "1.2s" },
+  { width: 2, opacity: 0.55, scale: 0.85, delay: "0.3s" },
+  { width: 3, opacity: 0.7, scale: 0.92, delay: "0.9s" },
+  { width: 3, opacity: 0.95, scale: 1, delay: "1.5s" },
+  { width: 3, opacity: 0.7, scale: 0.92, delay: "0.4s" },
+  { width: 2, opacity: 0.55, scale: 0.85, delay: "1.0s" },
+  { width: 2, opacity: 0.4, scale: 0.75, delay: "0.7s" },
+  { width: 2, opacity: 0.3, scale: 0.65, delay: "1.3s" },
+  { width: 2, opacity: 0.2, scale: 0.55, delay: "0.2s" },
 ];
 
 /* -------------------------------------------------------
@@ -25,32 +28,31 @@ const panelClass =
 
 /* -------------------------------------------------------
    KEYFRAMES (scoped to this component)
-   Animations only change brightness, so the positioning
-   and per-element opacity set inline are never overridden.
+   Animations only change opacity on wrapper layers, so
+   the per-ray opacity and centering set inline are kept.
 ------------------------------------------------------- */
 
 function HeroKeyframes() {
   return (
     <style>{`
-      @keyframes ph-glow {
-        0%, 100% { filter: brightness(1); }
-        50% { filter: brightness(1.12); }
+      @keyframes ph-breathe {
+        0%, 100% { opacity: 0.8; }
+        50% { opacity: 1; }
       }
       @keyframes ph-flicker {
-        0%, 100% { filter: brightness(1); }
-        50% { filter: brightness(1.3); }
+        0%, 100% { opacity: 0.85; }
+        50% { opacity: 1; }
       }
       @keyframes ph-sweep {
-        0% { transform: translateX(-60%); opacity: 0; }
+        0% { transform: translateX(-100%); opacity: 0; }
         50% { opacity: 1; }
-        100% { transform: translateX(60%); opacity: 0; }
+        100% { transform: translateX(300%); opacity: 0; }
       }
-      .ph-glow { animation: ph-glow 5s ease-in-out infinite; }
-      .ph-flame { animation: ph-flicker 3.2s ease-in-out infinite; }
-      .ph-ray { animation: ph-flicker 4s ease-in-out infinite; }
-      .ph-sweep { animation: ph-sweep 6s ease-in-out infinite; }
+      .ph-breathe { animation: ph-breathe 4s ease-in-out infinite; }
+      .ph-flicker { animation: ph-flicker 3s ease-in-out infinite; }
+      .ph-sweep { animation: ph-sweep 5s ease-in-out infinite; }
       @media (prefers-reduced-motion: reduce) {
-        .ph-glow, .ph-flame, .ph-ray, .ph-sweep { animation: none; }
+        .ph-breathe, .ph-flicker, .ph-sweep { animation: none; }
       }
     `}</style>
   );
@@ -62,9 +64,9 @@ function HeroKeyframes() {
 
 function FlameEnvironment() {
   const rayMask = {
-    maskImage: "linear-gradient(to top, black 0%, black 35%, transparent 90%)",
+    maskImage: "linear-gradient(to top, black 0%, black 30%, transparent 85%)",
     WebkitMaskImage:
-      "linear-gradient(to top, black 0%, black 35%, transparent 90%)",
+      "linear-gradient(to top, black 0%, black 30%, transparent 85%)",
   };
 
   return (
@@ -72,79 +74,79 @@ function FlameEnvironment() {
       aria-hidden="true"
       className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
     >
-      {/* NAVY SKY: deep blue fading into black */}
+      {/* NAVY SKY: deep blue at the top, fading to black */}
       <div
         className="absolute inset-0"
         style={{
           background:
-            "linear-gradient(to bottom, #0B2A5A 0%, #061632 35%, #02070A 75%)",
-          opacity: 0.85,
+            "linear-gradient(to bottom, #0C2A56 0%, #071836 35%, #02070A 70%)",
         }}
       />
 
-      {/* ELECTRIC BLUE HALO across the stage */}
+      {/* BLUE HAZE across the stage */}
       <div
-        className="absolute inset-x-0 bottom-0 h-full"
+        className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse 75% 65% at 50% 100%, rgba(2,151,222,0.55) 0%, rgba(2,151,222,0.2) 45%, transparent 75%)",
+            "radial-gradient(ellipse 80% 60% at 50% 100%, rgba(2,151,222,0.35) 0%, rgba(2,151,222,0.12) 50%, transparent 80%)",
           mixBlendMode: "screen",
         }}
       />
 
-      {/* LARGE ORANGE GLOW rising from bottom center */}
+      {/* FLAME BODY: orange glow rising from the bottom center */}
       <div
-        className="ph-glow absolute bottom-[-12%] left-1/2 h-[95%] w-[140vw] max-w-[1600px]"
+        className="ph-breathe absolute bottom-0 left-1/2 h-[75%] w-[110vw] max-w-[1500px]"
         style={{
           transform: "translateX(-50%)",
           background:
-            "radial-gradient(ellipse 50% 50% at 50% 100%, #FC734D 0%, rgba(252,115,77,0.65) 28%, rgba(252,115,77,0.22) 55%, transparent 78%)",
+            "radial-gradient(ellipse 50% 100% at 50% 100%, #FFF1E6 0%, #FFB08A 8%, #FC734D 22%, rgba(252,115,77,0.55) 42%, rgba(252,115,77,0.18) 62%, transparent 80%)",
           mixBlendMode: "screen",
         }}
       />
 
-      {/* HOT CENTER: pale peach core at the base of the light */}
+      {/* HOT CORE: pale peach center at the base of the flame */}
       <div
-        className="ph-flame absolute bottom-0 left-1/2 h-[40%] w-[50vw] max-w-[720px]"
+        className="ph-flicker absolute bottom-0 left-1/2 h-[30%] w-[45vw] max-w-[640px]"
         style={{
           transform: "translateX(-50%)",
           background:
-            "radial-gradient(ellipse 50% 60% at 50% 100%, rgba(255,240,228,0.95) 0%, rgba(255,190,160,0.55) 30%, transparent 72%)",
+            "radial-gradient(ellipse 50% 100% at 50% 100%, rgba(255,245,238,1) 0%, rgba(255,200,170,0.7) 35%, transparent 75%)",
           mixBlendMode: "screen",
         }}
       />
 
       {/* HORIZON LINE with a light sweep */}
       <div
-        className="absolute bottom-0 left-1/2 h-px w-[min(900px,90%)] overflow-hidden"
+        className="absolute bottom-0 left-1/2 h-[2px] w-[min(1000px,95%)] overflow-hidden"
         style={{
           transform: "translateX(-50%)",
           background:
-            "linear-gradient(90deg, transparent, rgba(252,115,77,0.9), rgba(2,151,222,0.9), transparent)",
-          boxShadow: "0 0 18px 2px rgba(252,115,77,0.45)",
+            "linear-gradient(90deg, transparent 0%, #FC734D 25%, #FFE3D3 50%, #0297DE 75%, transparent 100%)",
+          boxShadow:
+            "0 0 16px 3px rgba(252,115,77,0.55), 0 0 30px 6px rgba(2,151,222,0.35)",
         }}
       >
         <span className="ph-sweep absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-transparent via-white to-transparent" />
       </div>
 
-      {/* VERTICAL LIGHT RAYS */}
+      {/* VERTICAL LIGHT RAYS: the wrapper flickers, each ray keeps its own opacity */}
       <div
-        className="absolute bottom-0 left-1/2 flex h-[80%] w-[min(900px,100%)] justify-center gap-5 overflow-hidden"
+        className="ph-flicker absolute bottom-0 left-1/2 flex h-[80%] w-[min(340px,90%)] items-end justify-center gap-[14px]"
         style={{ transform: "translateX(-50%)", ...rayMask }}
       >
         {flameRays.map((ray, index) => (
           <div
             key={index}
-            className="ph-ray h-full shrink-0"
+            className="h-full shrink-0"
             style={{
-              width: `${ray.width + 1}px`,
+              width: `${ray.width}px`,
               opacity: ray.opacity,
               transform: `scaleY(${ray.scale})`,
               transformOrigin: "bottom center",
               background:
-                "linear-gradient(to top, #FC734D 0%, #0297DE 40%, transparent 100%)",
+                "linear-gradient(to top, #FFD2BD 0%, #FC734D 20%, #0297DE 60%, transparent 100%)",
+              boxShadow: "0 0 8px rgba(2,151,222,0.5)",
               mixBlendMode: "screen",
-              animationDelay: ray.delay,
             }}
           />
         ))}

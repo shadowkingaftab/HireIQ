@@ -5,15 +5,15 @@ import Button from "../ui/Button";
 ------------------------------------------------------- */
 
 const flameRays = [
-  { width: 2, opacity: 0.16, scale: 0.58 },
-  { width: 2, opacity: 0.20, scale: 0.72 },
-  { width: 3, opacity: 0.28, scale: 0.88 },
-  { width: 4, opacity: 0.38, scale: 0.96 },
-  { width: 5, opacity: 0.55, scale: 1 },
-  { width: 4, opacity: 0.38, scale: 0.96 },
-  { width: 3, opacity: 0.28, scale: 0.88 },
-  { width: 2, opacity: 0.20, scale: 0.72 },
-  { width: 2, opacity: 0.16, scale: 0.58 },
+  { width: 2, opacity: 0.16, scale: 0.58, delay: "0s" },
+  { width: 2, opacity: 0.2, scale: 0.72, delay: "0.6s" },
+  { width: 3, opacity: 0.28, scale: 0.88, delay: "1.2s" },
+  { width: 4, opacity: 0.38, scale: 0.96, delay: "0.3s" },
+  { width: 5, opacity: 0.55, scale: 1, delay: "0.9s" },
+  { width: 4, opacity: 0.38, scale: 0.96, delay: "1.5s" },
+  { width: 3, opacity: 0.28, scale: 0.88, delay: "0.4s" },
+  { width: 2, opacity: 0.2, scale: 0.72, delay: "1.0s" },
+  { width: 2, opacity: 0.16, scale: 0.58, delay: "0.7s" },
 ];
 
 /* -------------------------------------------------------
@@ -22,6 +22,42 @@ const flameRays = [
 
 const panelClass =
   "relative flex flex-col justify-between overflow-hidden rounded-t-2xl border border-white/10 border-b-0 border-t-white/20 bg-[#06111B]/80 p-6 backdrop-blur-xl shadow-2xl";
+
+/* -------------------------------------------------------
+   KEYFRAMES (scoped to this component)
+------------------------------------------------------- */
+
+function HeroKeyframes() {
+  return (
+    <style>{`
+      @keyframes ph-flicker {
+        0%, 100% { opacity: 0.85; filter: brightness(1); }
+        50% { opacity: 1; filter: brightness(1.25); }
+      }
+      @keyframes ph-breathe {
+        0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.7; }
+        50% { transform: translateX(-50%) scale(1.06); opacity: 0.95; }
+      }
+      @keyframes ph-sweep {
+        0% { transform: translateX(-60%); opacity: 0; }
+        50% { opacity: 1; }
+        100% { transform: translateX(60%); opacity: 0; }
+      }
+      @keyframes ph-grid-drift {
+        from { background-position: 0 0, 0 0; }
+        to { background-position: 0 40px, 40px 0; }
+      }
+      .ph-core { animation: ph-breathe 5s ease-in-out infinite; }
+      .ph-flame { animation: ph-flicker 3.2s ease-in-out infinite; }
+      .ph-ray { animation: ph-flicker 4s ease-in-out infinite; }
+      .ph-sweep { animation: ph-sweep 6s ease-in-out infinite; }
+      .ph-grid { animation: ph-grid-drift 12s linear infinite; }
+      @media (prefers-reduced-motion: reduce) {
+        .ph-core, .ph-flame, .ph-ray, .ph-sweep, .ph-grid { animation: none; }
+      }
+    `}</style>
+  );
+}
 
 /* -------------------------------------------------------
    BACKGROUND ENVIRONMENT
@@ -33,40 +69,66 @@ function FlameEnvironment() {
       aria-hidden="true"
       className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
     >
-      {/* BASE BLUE ATMOSPHERE */}
+      {/* WIDE BLUE ATMOSPHERE */}
 
       <div
-        className="absolute bottom-0 left-1/2 h-[80vh] w-full max-w-[1400px] -translate-x-1/2"
+        className="absolute bottom-0 left-1/2 h-[85vh] w-full max-w-[1400px] -translate-x-1/2"
         style={{
           background:
-            "radial-gradient(ellipse at 50% 100%, #0297DE 0%, rgba(2,151,222,0.2) 40%, transparent 70%)",
-          opacity: 0.4,
+            "radial-gradient(ellipse at 50% 100%, #0297DE 0%, rgba(2,151,222,0.25) 35%, transparent 70%)",
+          opacity: 0.45,
           mixBlendMode: "screen",
+          filter: "blur(40px)",
         }}
       />
 
-      {/* ORANGE FLAME CORE */}
+      {/* ORANGE CORE, SOFT BLOOM */}
 
       <div
-        className="absolute bottom-0 left-1/2 h-[400px] w-[600px] max-w-full -translate-x-1/2"
+        className="ph-core absolute bottom-0 left-1/2 h-[420px] w-[640px] max-w-full"
         style={{
           background:
-            "radial-gradient(ellipse at 50% 100%, #FC734D 0%, #FF4D00 30%, transparent 70%)",
-          opacity: 0.7,
+            "radial-gradient(ellipse at 50% 100%, #FC734D 0%, #FF4D00 28%, transparent 68%)",
           mixBlendMode: "screen",
+          filter: "blur(18px)",
+        }}
+      />
+
+      {/* HOT WHITE-PEACH CENTER */}
+
+      <div
+        className="ph-flame absolute bottom-0 left-1/2 h-[200px] w-[360px] max-w-full -translate-x-1/2 rounded-[50%]"
+        style={{
+          background:
+            "radial-gradient(ellipse at 50% 100%, rgba(255,235,220,0.9) 0%, rgba(255,213,190,0.5) 30%, transparent 70%)",
+          mixBlendMode: "screen",
+          filter: "blur(10px)",
         }}
       />
 
       {/* SECONDARY ORANGE ILLUMINATION */}
 
       <div
-        className="absolute bottom-0 left-1/2 h-[280px] w-[800px] max-w-full -translate-x-1/2"
+        className="absolute bottom-0 left-1/2 h-[300px] w-[900px] max-w-full -translate-x-1/2"
         style={{
           background:
-            "radial-gradient(ellipse at 50% 100%, rgba(255,213,190,0.65) 0%, rgba(252,115,77,0.22) 25%, transparent 70%)",
+            "radial-gradient(ellipse at 50% 100%, rgba(255,213,190,0.55) 0%, rgba(252,115,77,0.2) 28%, transparent 70%)",
           mixBlendMode: "screen",
         }}
       />
+
+      {/* HORIZON LINE */}
+
+      <div
+        className="absolute bottom-0 left-1/2 h-px w-[min(900px,90%)] -translate-x-1/2 overflow-hidden"
+        style={{
+          background:
+            "linear-gradient(90deg, transparent, rgba(252,115,77,0.9), rgba(2,151,222,0.9), transparent)",
+          boxShadow: "0 0 18px 2px rgba(252,115,77,0.45)",
+        }}
+      >
+        <span className="ph-sweep absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-transparent via-white to-transparent" />
+      </div>
 
       {/* VERTICAL LIGHT RAYS */}
 
@@ -82,7 +144,7 @@ function FlameEnvironment() {
         {flameRays.map((ray, index) => (
           <div
             key={index}
-            className="h-full shrink-0"
+            className="ph-ray h-full shrink-0"
             style={{
               width: `${ray.width}px`,
               opacity: ray.opacity,
@@ -91,6 +153,8 @@ function FlameEnvironment() {
               background:
                 "linear-gradient(to top, #FC734D 0%, #0297DE 30%, transparent 100%)",
               mixBlendMode: "screen",
+              filter: "blur(0.5px)",
+              animationDelay: ray.delay,
             }}
           />
         ))}
@@ -99,7 +163,7 @@ function FlameEnvironment() {
       {/* 3D PERSPECTIVE FLOOR GRID */}
 
       <div
-        className="absolute bottom-0 left-0 right-0 h-[40vh] opacity-20"
+        className="ph-grid absolute bottom-0 left-0 right-0 h-[40vh] opacity-20"
         style={{
           backgroundImage: `
             linear-gradient(rgba(255,255,255,0.2) 1px, transparent 1px),
@@ -294,6 +358,8 @@ export default function Hero() {
       aria-labelledby="hero-title"
       className="relative flex min-h-screen flex-col items-center overflow-hidden bg-[#02070A] text-white"
     >
+      <HeroKeyframes />
+
       {/* BACKGROUND */}
 
       <FlameEnvironment />

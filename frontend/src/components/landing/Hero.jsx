@@ -36,13 +36,13 @@ uniform vec2  uRes;   // drawing-buffer size, px
 uniform float uTime;  // seconds
 uniform float uRib;   // rib width, device px
 
-const vec3 SKY_TOP = vec3(0.035, 0.135, 0.440);
-const vec3 SKY_MID = vec3(0.020, 0.075, 0.260);
-const vec3 SKY_LOW = vec3(0.008, 0.028, 0.110);
-const vec3 BLUE    = vec3(0.020, 0.580, 1.000);  // #0297DE family
-const vec3 ORANGE  = vec3(1.000, 0.360, 0.220);  // #FC734D family
-const vec3 CORAL   = vec3(0.950, 0.250, 0.400);
-const vec3 HOT     = vec3(1.000, 0.900, 0.800);
+const vec3 SKY_TOP = vec3(0.040, 0.170, 0.600);
+const vec3 SKY_MID = vec3(0.030, 0.110, 0.400);
+const vec3 SKY_LOW = vec3(0.015, 0.050, 0.200);
+const vec3 BLUE    = vec3(0.120, 0.660, 1.000);  // #0297DE family
+const vec3 ORANGE  = vec3(1.000, 0.420, 0.170);  // #FC734D family
+const vec3 CORAL   = vec3(0.960, 0.260, 0.380);
+const vec3 HOT     = vec3(1.000, 0.930, 0.860);
 
 float hash21(vec2 p) {
   p = fract(p * vec2(123.34, 456.21));
@@ -75,28 +75,34 @@ float fbm(vec2 p) {
 // Gaussian across x, power falloff up the y axis. y = 0 is the bottom edge.
 float lobe(float x, float y, float cx, float w, float h) {
   float dx = (x - cx) / w;
-  return exp(-dx * dx) * pow(clamp(1.0 - y / h, 0.0, 1.0), 1.7);
+  return exp(-dx * dx) * pow(clamp(1.0 - y / h, 0.0, 1.0), 1.25);
 }
 
+// Each lobe is blended OVER the sky (mix), not added to it, so the hues
+// stay saturated instead of washing out to pink.
 vec3 scene(float x, float y, float hv, float streak) {
   vec3 col = mix(SKY_LOW, SKY_MID, smoothstep(0.0, 0.5, y));
   col = mix(col, SKY_TOP, smoothstep(0.4, 1.0, y));
 
-  float blue    = lobe(x, y, 0.405, 0.15, 0.58 * hv);
-  float orange  = lobe(x, y, 0.595, 0.15, 0.52 * hv);
-  float core    = lobe(x, y, 0.500, 0.045, 0.36 * hv);
-  float spread  = lobe(x, y, 0.500, 0.52, 0.30);
-  float coralL  = lobe(x, y, 0.080, 0.20, 0.26 * hv);
-  float orangeR = lobe(x, y, 0.930, 0.20, 0.24 * hv);
+  float blue    = lobe(x, y, 0.400, 0.21, 0.78 * hv);
+  float orange  = lobe(x, y, 0.600, 0.21, 0.70 * hv);
+  float core    = lobe(x, y, 0.500, 0.06, 0.55 * hv);
+  float spread  = lobe(x, y, 0.500, 0.52, 0.52);
+  float coralL  = lobe(x, y, 0.080, 0.20, 0.30 * hv);
+  float orangeR = lobe(x, y, 0.930, 0.20, 0.30 * hv);
 
   float hx = (x - 0.5) / 0.25;
   float haze = exp(-hx * hx) * (1.0 - smoothstep(0.25, 0.80, y));
 
-  col += vec3(0.20, 0.40, 0.85) * haze * 0.10;
-  col += BLUE   * (blue * 1.25 + spread * 0.32) * streak;
-  col += ORANGE * (orange * 1.35 + orangeR * 0.55) * streak;
-  col += CORAL  * coralL * 0.55;
-  col += HOT    * core * 0.90;
+  float wB = clamp(blue * 1.35 + spread * 0.75, 0.0, 1.0) * streak;
+  float wO = clamp(orange * 1.45 + orangeR * 0.70, 0.0, 1.0) * streak;
+  float wC = clamp(coralL * 0.70, 0.0, 1.0);
+
+  col = mix(col, vec3(0.22, 0.45, 0.95), haze * 0.30);
+  col = mix(col, BLUE, wB);
+  col = mix(col, CORAL, wC);
+  col = mix(col, ORANGE, wO);
+  col += HOT * (core + 0.55 * wB * wO);   // white seam where blue meets orange
   return col;
 }
 
@@ -114,28 +120,27 @@ void main() {
   // per-rib flicker: neighbours move together, each rib also jitters a little
   float slow = fbm(vec2(idx * 0.07, uTime * 0.12));
   float fast = vnoise(vec2(idx * 0.8, uTime * 0.9));
-  float hv = 0.78 + 0.50 * slow + 0.07 * fast;
+  float hv = 0.88 + 0.34 * slow + 0.07 * fast;
 
-  float streak = 0.82 + 0.36 * vnoise(vec2(idx * 0.5, y * 3.0 - uTime * 0.35));
+  float streak = 0.90 + 0.20 * vnoise(vec2(idx * 0.5, y * 3.0 - uTime * 0.35));
   streak *= 0.97 + 0.03 * sin(uTime * 0.9);
 
   // cylindrical lens: mirrored re-sample of the scene, split per channel
-  float span = 6.0 * ribUv;
-  float disp = 0.28;
+  float span = 5.0 * ribUv;
+  float disp = 0.22;
   vec3 col;
   col.r = scene(cx - c * span * (1.0 + disp), y, hv, streak).r;
   col.g = scene(cx - c * span,                y, hv, streak).g;
   col.b = scene(cx - c * span * (1.0 - disp), y, hv, streak).b;
 
   // rib shading and edge glint
-  float shade = 0.80 + 0.20 * cos(c * 1.5708);
+  float shade = 0.90 + 0.10 * cos(c * 1.5708);
   float glint = smoothstep(0.78, 1.0, abs(c));
-  col *= shade * (0.93 + 0.14 * hash21(vec2(idx, 3.7)));
-  col += glint * 0.025 * (0.4 + col);
+  col *= shade * (0.97 + 0.06 * hash21(vec2(idx, 3.7)));
+  col += glint * 0.015 * (0.4 + col);
 
-  // soft highlight roll-off, then grain to hide gradient banding
-  col = 1.0 - exp(-col * 1.35);
-  col += (hash21(frag) - 0.5) * 0.03;
+  // grain hides gradient banding
+  col += (hash21(frag) - 0.5) * 0.016;
 
   gl_FragColor = vec4(col, 1.0);
 }

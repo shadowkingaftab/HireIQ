@@ -8,24 +8,32 @@ const panelClass =
   "relative flex flex-col justify-between overflow-hidden rounded-t-2xl border border-white/10 border-b-0 border-t-white/20 bg-[#06111B]/80 p-6 backdrop-blur-xl shadow-2xl";
 
 /* -------------------------------------------------------
-   KEYFRAMES (opacity only)
+   KEYFRAMES (torch flicker + breathing)
 ------------------------------------------------------- */
 
 function HeroKeyframes() {
   return (
     <style>{`
-      @keyframes ph-breathe {
-        0%, 100% { opacity: 0.92; }
-        50% { opacity: 1; }
+      @keyframes ph-flame-a {
+        0%, 100% { opacity: 0.9;  transform: scaleY(1)    scaleX(1); }
+        25%      { opacity: 1;    transform: scaleY(1.04) scaleX(0.98); }
+        50%      { opacity: 0.85; transform: scaleY(0.97) scaleX(1.02); }
+        75%      { opacity: 0.98; transform: scaleY(1.02) scaleX(0.99); }
       }
-      @keyframes ph-shimmer {
-        0%, 100% { opacity: 0.55; }
-        50% { opacity: 0.9; }
+      @keyframes ph-flame-b {
+        0%, 100% { opacity: 0.85; transform: scaleY(1)    scaleX(1); }
+        30%      { opacity: 1;    transform: scaleY(1.05) scaleX(1.02); }
+        60%      { opacity: 0.8;  transform: scaleY(0.96) scaleX(0.98); }
       }
-      .ph-breathe { animation: ph-breathe 6s ease-in-out infinite; }
-      .ph-shimmer { animation: ph-shimmer 4s ease-in-out infinite; }
+      @keyframes ph-sparkle {
+        0%, 100% { opacity: 0.4; }
+        50%      { opacity: 0.85; }
+      }
+      .ph-flame-a { animation: ph-flame-a 5s ease-in-out infinite; transform-origin: 50% 100%; }
+      .ph-flame-b { animation: ph-flame-b 3.6s ease-in-out infinite; transform-origin: 50% 100%; }
+      .ph-sparkle { animation: ph-sparkle 4s ease-in-out infinite; }
       @media (prefers-reduced-motion: reduce) {
-        .ph-breathe, .ph-shimmer { animation: none; }
+        .ph-flame-a, .ph-flame-b, .ph-sparkle { animation: none; }
       }
     `}</style>
   );
@@ -33,83 +41,102 @@ function HeroKeyframes() {
 
 /* -------------------------------------------------------
    BACKGROUND ENVIRONMENT
-   Ribbed-glass glow: soft blue/orange light, cut into
-   fine vertical strips by a repeating mask.
+   Gas-torch glow: a hot white core, blue and orange flame
+   lobes rising from the base, cut into fine vertical ribs.
 ------------------------------------------------------- */
 
 const ribMask =
-  "repeating-linear-gradient(90deg, #000 0px, #000 2px, rgba(0,0,0,0.22) 2px, rgba(0,0,0,0.22) 4px)";
+  "repeating-linear-gradient(90deg, #000 0px, #000 2px, rgba(0,0,0,0.18) 2px, rgba(0,0,0,0.18) 4px)";
 
-const glowBackground = [
-  // pale hot core, center
-  "radial-gradient(ellipse 13% 58% at 50% 100%, rgba(255,244,238,0.98) 0%, rgba(255,205,185,0.6) 40%, transparent 100%)",
-  // orange, right of center
-  "radial-gradient(ellipse 34% 66% at 63% 100%, rgba(255,128,92,0.98) 0%, rgba(252,115,77,0.62) 36%, rgba(252,115,77,0.2) 68%, transparent 100%)",
-  // electric blue, left of center
-  "radial-gradient(ellipse 34% 66% at 37% 100%, rgba(46,184,255,0.98) 0%, rgba(2,151,222,0.62) 36%, rgba(2,151,222,0.2) 68%, transparent 100%)",
-  // wide soft base so the glow spreads under the side panels
-  "radial-gradient(ellipse 78% 42% at 50% 100%, rgba(2,151,222,0.5) 0%, rgba(2,151,222,0.18) 55%, transparent 100%)",
-].join(", ");
+const sparkleMask =
+  "radial-gradient(ellipse 60% 85% at 50% 100%, #000 0%, rgba(0,0,0,0.55) 50%, transparent 100%)";
+
+const skyLineMask =
+  "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.45) 45%, #000 100%)";
+
+// Tall, narrow lobes anchored at the bottom edge read as flame.
+const coreGlow =
+  "radial-gradient(ellipse 12% 62% at 50% 100%, rgba(255,250,245,1) 0%, rgba(255,214,190,0.7) 38%, transparent 100%)";
+
+const orangeFlame =
+  "radial-gradient(ellipse 22% 70% at 60% 100%, rgba(255,140,96,0.98) 0%, rgba(252,115,77,0.6) 40%, rgba(252,115,77,0.18) 70%, transparent 100%)";
+
+const blueFlame =
+  "radial-gradient(ellipse 22% 70% at 40% 100%, rgba(70,200,255,0.98) 0%, rgba(2,151,222,0.6) 40%, rgba(2,151,222,0.18) 70%, transparent 100%)";
+
+// Wide soft base so the light spreads under the panels.
+const baseSpread =
+  "radial-gradient(ellipse 80% 44% at 50% 100%, rgba(2,151,222,0.45) 0%, rgba(2,151,222,0.14) 55%, transparent 100%)";
+
+// Faint haze rising above the flame.
+const haze =
+  "radial-gradient(ellipse 45% 38% at 50% 78%, rgba(120,170,255,0.18) 0%, transparent 100%)";
 
 function FlameEnvironment() {
-  const skyLineMask =
-    "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.5) 40%, #000 100%)";
-  const sparkleMask =
-    "radial-gradient(ellipse 70% 80% at 50% 100%, #000 0%, rgba(0,0,0,0.6) 45%, transparent 100%)";
-
   return (
     <div
       aria-hidden="true"
       className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
     >
-      {/* 1. NAVY SKY */}
+      {/* 1. NAVY SKY, lighter toward the horizon */}
       <div
         className="absolute inset-0"
         style={{
           background:
-            "linear-gradient(to bottom, #0B2B5E 0%, #0A2352 30%, #071A3E 55%, #040E20 80%, #02070A 100%)",
+            "linear-gradient(to bottom, #0C2F6B 0%, #0A2A5C 28%, #071C42 55%, #041027 80%, #02070A 100%)",
         }}
       />
 
-      {/* 2. FAINT BLUE LINES in the sky, stronger toward the bottom */}
+      {/* 2. FAINT BLUE VERTICAL LINES in the sky */}
       <div
         className="absolute inset-0"
         style={{
           backgroundImage:
-            "repeating-linear-gradient(90deg, rgba(80,160,255,0.16) 0px, rgba(80,160,255,0.16) 1px, transparent 1px, transparent 4px)",
+            "repeating-linear-gradient(90deg, rgba(80,160,255,0.14) 0px, rgba(80,160,255,0.14) 1px, transparent 1px, transparent 4px)",
           maskImage: skyLineMask,
           WebkitMaskImage: skyLineMask,
         }}
       />
 
-      {/* 3. THE GLOW, cut into vertical strips by the rib mask */}
+      {/* 3. HAZE above the flame */}
+      <div className="absolute inset-0" style={{ background: haze }} />
+
+      {/* 4. THE FLAME, ribbed, with two flickering layers */}
       <div
-        className="ph-breathe absolute inset-0"
+        className="ph-flame-a absolute inset-0"
         style={{
-          background: glowBackground,
+          background: `${orangeFlame}, ${blueFlame}`,
+          maskImage: ribMask,
+          WebkitMaskImage: ribMask,
+        }}
+      />
+      <div
+        className="ph-flame-b absolute inset-0"
+        style={{
+          background: `${coreGlow}, ${baseSpread}`,
           maskImage: ribMask,
           WebkitMaskImage: ribMask,
         }}
       />
 
-      {/* 4. SPARKLE: thin bright strips inside the glow */}
+      {/* 5. SPARKLE: thin bright strips inside the flame */}
       <div
-        className="ph-shimmer absolute inset-0"
+        className="ph-sparkle absolute inset-0"
         style={{
           backgroundImage:
-            "repeating-linear-gradient(90deg, rgba(255,255,255,0.35) 0px, rgba(255,255,255,0.35) 1px, transparent 1px, transparent 8px)",
+            "repeating-linear-gradient(90deg, rgba(255,255,255,0.32) 0px, rgba(255,255,255,0.32) 1px, transparent 1px, transparent 8px)",
           maskImage: sparkleMask,
           WebkitMaskImage: sparkleMask,
           mixBlendMode: "overlay",
         }}
       />
 
-      {/* 5. BOTTOM FADE so the glow settles into the section edge */}
+      {/* 6. BOTTOM FADE so the glow settles into the section edge */}
       <div
         className="absolute inset-x-0 bottom-0 h-24"
         style={{
           background:
-            "linear-gradient(to top, rgba(2,7,10,0.35), transparent)",
+            "linear-gradient(to top, rgba(2,7,10,0.4), transparent)",
         }}
       />
     </div>
@@ -149,7 +176,6 @@ function HeroStats() {
   return (
     <div className="relative z-10 mx-auto mt-12 grid w-full max-w-2xl grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3 px-6 sm:gap-6">
       {/* LEFT STAT */}
-
       <div className="flex min-w-0 flex-col items-end text-right">
         <span className="font-serif text-3xl tracking-tight text-white sm:text-4xl">
           100%
@@ -161,7 +187,6 @@ function HeroStats() {
       </div>
 
       {/* CENTER CTA */}
-
       <div className="flex justify-center">
         <Button
           to="/signup"
@@ -172,7 +197,6 @@ function HeroStats() {
       </div>
 
       {/* RIGHT STAT */}
-
       <div className="flex min-w-0 flex-col items-start text-left">
         <span className="font-serif text-3xl tracking-tight text-white sm:text-4xl">
           94
@@ -206,7 +230,6 @@ function RepositoryPanel() {
       <div className="relative rounded-xl border border-white/10 bg-[#02070A]/80 p-5">
         <div className="mb-5 flex items-center gap-3">
           <span className="h-2 w-2 rounded-full bg-[#0297DE] shadow-[0_0_14px_rgba(2,151,222,0.9)]" />
-
           <span className="h-1.5 w-24 rounded-full bg-white/20" />
         </div>
 
@@ -235,15 +258,11 @@ function ProofCorePanel() {
 
       <div className="relative flex h-36 w-36 items-center justify-center rounded-full border border-[#0297DE]/40 bg-[radial-gradient(circle,rgba(2,151,222,0.18),transparent_70%)] shadow-[0_0_50px_rgba(2,151,222,0.25)]">
         <div className="absolute inset-2 rounded-full border border-[#0297DE]/30" />
-
         <div className="absolute inset-5 rounded-full border border-dashed border-[#0297DE]/40" />
-
         <div className="h-10 w-10 rounded-full bg-[#0297DE] shadow-[0_0_35px_#0297DE,0_0_60px_rgba(2,151,222,0.5)]" />
       </div>
 
-      <p className="text-xs text-gray-300">
-        Evidence connected to skill
-      </p>
+      <p className="text-xs text-gray-300">Evidence connected to skill</p>
     </div>
   );
 }
@@ -260,9 +279,7 @@ function CapabilityPanel() {
           Capability Signal
         </p>
 
-        <p className="mt-2 text-sm font-medium text-gray-200">
-          Match score
-        </p>
+        <p className="mt-2 text-sm font-medium text-gray-200">Match score</p>
       </div>
 
       <div className="space-y-5 rounded-xl border border-white/10 bg-[#02070A]/80 p-5">
@@ -275,7 +292,6 @@ function CapabilityPanel() {
         </div>
 
         <span className="block h-1.5 w-2/3 rounded-full bg-white/10" />
-
         <span className="block h-1.5 w-5/6 rounded-full bg-white/10" />
       </div>
     </div>
@@ -295,25 +311,19 @@ export default function Hero() {
       <HeroKeyframes />
 
       {/* BACKGROUND */}
-
       <FlameEnvironment />
 
       {/* MAIN CONTENT */}
-
       <HeroContent />
 
       {/* STATS AND BUTTON */}
-
       <HeroStats />
 
       {/* BOTTOM SHELF */}
-
       <div className="relative z-10 mx-auto mt-20 w-full max-w-6xl px-6 pb-0">
         <div className="grid grid-cols-1 items-end gap-6 md:grid-cols-3">
           <RepositoryPanel />
-
           <ProofCorePanel />
-
           <CapabilityPanel />
         </div>
       </div>

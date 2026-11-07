@@ -16,8 +16,8 @@ const panelClass =
    from the bottom edge. It is viewed "through" ribbed glass:
    every vertical rib acts as a small cylindrical lens that
    re-samples the scene with a mirrored offset, a slight RGB
-   split, edge shading and a per-rib flicker. That lens step
-   is what produces the strip texture in the reference.
+   split and even edge shading. Ribs are perfectly regular;
+   all motion is a smooth sway and breathe of the flame shape.
 ------------------------------------------------------- */
 
 const VERT = `
@@ -42,7 +42,7 @@ const vec3 SKY_LOW = vec3(0.015, 0.050, 0.200);
 const vec3 BLUE    = vec3(0.120, 0.660, 1.000);  // #0297DE family
 const vec3 ORANGE  = vec3(1.000, 0.420, 0.170);  // #FC734D family
 const vec3 CORAL   = vec3(0.960, 0.260, 0.380);
-const vec3 HOT     = vec3(1.000, 0.930, 0.860);
+const vec3 HOT     = vec3(1.000, 0.840, 0.860);
 
 float hash21(vec2 p) {
   p = fract(p * vec2(123.34, 456.21));
@@ -80,29 +80,29 @@ float lobe(float x, float y, float cx, float w, float h) {
 
 // Each lobe is blended OVER the sky (mix), not added to it, so the hues
 // stay saturated instead of washing out to pink.
-vec3 scene(float x, float y, float hv, float streak) {
+vec3 scene(float x, float y, float hv, float streak, float sway) {
   vec3 col = mix(SKY_LOW, SKY_MID, smoothstep(0.0, 0.5, y));
   col = mix(col, SKY_TOP, smoothstep(0.4, 1.0, y));
 
-  float blue    = lobe(x, y, 0.400, 0.21, 0.78 * hv);
-  float orange  = lobe(x, y, 0.600, 0.21, 0.70 * hv);
-  float core    = lobe(x, y, 0.500, 0.06, 0.55 * hv);
-  float spread  = lobe(x, y, 0.500, 0.52, 0.52);
-  float coralL  = lobe(x, y, 0.080, 0.20, 0.30 * hv);
-  float orangeR = lobe(x, y, 0.930, 0.20, 0.30 * hv);
+  float blue    = lobe(x, y, 0.40 + sway, 0.21, 0.67 * hv);
+  float orange  = lobe(x, y, 0.60 - sway, 0.21, 0.61 * hv);
+  float core    = lobe(x, y, 0.50, 0.06, 0.47 * hv);
+  float spread  = lobe(x, y, 0.50, 0.52, 0.46);
+  float coralL  = lobe(x, y, 0.08, 0.20, 0.26 * hv);
+  float orangeR = lobe(x, y, 0.93, 0.20, 0.26 * hv);
 
   float hx = (x - 0.5) / 0.25;
   float haze = exp(-hx * hx) * (1.0 - smoothstep(0.25, 0.80, y));
 
-  float wB = clamp(blue * 1.35 + spread * 0.75, 0.0, 1.0) * streak;
+  float wB = clamp(blue * 1.35 + spread * 0.85, 0.0, 1.0) * streak;
   float wO = clamp(orange * 1.45 + orangeR * 0.70, 0.0, 1.0) * streak;
   float wC = clamp(coralL * 0.70, 0.0, 1.0);
 
-  col = mix(col, vec3(0.22, 0.45, 0.95), haze * 0.30);
+  col = mix(col, vec3(0.22, 0.45, 0.95), haze * 0.28);
   col = mix(col, BLUE, wB);
   col = mix(col, CORAL, wC);
   col = mix(col, ORANGE, wO);
-  col += HOT * (core + 0.55 * wB * wO);   // white seam where blue meets orange
+  col += HOT * (core * 0.45 + 0.22 * wB * wO);   // soft seam where blue meets orange
   return col;
 }
 
@@ -117,30 +117,29 @@ void main() {
   float ribUv = uRib / uRes.x;
   float cx    = (idx + 0.5) * ribUv;
 
-  // per-rib flicker: neighbours move together, each rib also jitters a little
-  float slow = fbm(vec2(idx * 0.07, uTime * 0.12));
-  float fast = vnoise(vec2(idx * 0.8, uTime * 0.9));
-  float hv = 0.88 + 0.34 * slow + 0.07 * fast;
+  // Flame shape is smooth across x (noise is sampled at low frequency),
+  // so neighbouring ribs always agree. No per-rib randomness.
+  float sway   = 0.012 * sin(uTime * 0.5);
+  float hv     = 0.92 + 0.16 * fbm(vec2(cx * 3.0, uTime * 0.10))
+                      + 0.04 * sin(uTime * 0.8 + cx * 5.0);
+  float streak = 0.90 + 0.20 * vnoise(vec2(cx * 18.0, y * 2.0 - uTime * 0.30));
 
-  float streak = 0.90 + 0.20 * vnoise(vec2(idx * 0.5, y * 3.0 - uTime * 0.35));
-  streak *= 0.97 + 0.03 * sin(uTime * 0.9);
-
-  // cylindrical lens: mirrored re-sample of the scene, split per channel
-  float span = 5.0 * ribUv;
-  float disp = 0.22;
+  // gentle cylindrical lens: mirrored re-sample of the scene, small RGB split
+  float span = 3.2 * ribUv;
+  float disp = 0.15;
   vec3 col;
-  col.r = scene(cx - c * span * (1.0 + disp), y, hv, streak).r;
-  col.g = scene(cx - c * span,                y, hv, streak).g;
-  col.b = scene(cx - c * span * (1.0 - disp), y, hv, streak).b;
+  col.r = scene(cx - c * span * (1.0 + disp), y, hv, streak, sway).r;
+  col.g = scene(cx - c * span,                y, hv, streak, sway).g;
+  col.b = scene(cx - c * span * (1.0 - disp), y, hv, streak, sway).b;
 
-  // rib shading and edge glint
-  float shade = 0.90 + 0.10 * cos(c * 1.5708);
+  // even rib shading and a faint edge glint
+  float shade = 0.88 + 0.12 * cos(c * 1.5708);
   float glint = smoothstep(0.78, 1.0, abs(c));
-  col *= shade * (0.97 + 0.06 * hash21(vec2(idx, 3.7)));
-  col += glint * 0.015 * (0.4 + col);
+  col *= shade;
+  col += glint * 0.012 * (0.4 + col);
 
   // grain hides gradient banding
-  col += (hash21(frag) - 0.5) * 0.016;
+  col += (hash21(frag) - 0.5) * 0.012;
 
   gl_FragColor = vec4(col, 1.0);
 }
@@ -265,7 +264,7 @@ function FlameEnvironment() {
       gl.viewport(0, 0, w, h);
       gl.uniform2f(uRes, w, h);
       // rib width in CSS px: finer on phones
-      gl.uniform1f(uRib, (canvas.clientWidth < 640 ? 6 : 9) * dpr);
+      gl.uniform1f(uRib, (canvas.clientWidth < 640 ? 5 : 7) * dpr);
       draw(performance.now());
     };
 

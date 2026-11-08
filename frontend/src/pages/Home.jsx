@@ -1,4 +1,5 @@
 import Hero from "../components/landing/Hero";
+import ProofNetwork from "../components/landing/ProofNetwork";
 import TrustStrip from "../components/landing/TrustStrip";
 import HowItWorks from "../components/landing/HowItWorks";
 import FlagshipDemo from "../components/landing/FlagshipDemo";
@@ -13,6 +14,7 @@ export default function Home() {
       <div className="relative z-[1] mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <TrustStrip />
       </div>
+      <ProofNetwork />
       <div className="relative py-20 lg:py-28">
         <HowItWorks />
       </div>

@@ -49,6 +49,7 @@ export default function SignupForm() {
   };
 
   const establishSession = async (token) => {
+    setUser(null);
     setToken(token);
     try {
       const me = await authApi.me();

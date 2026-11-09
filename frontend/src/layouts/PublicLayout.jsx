@@ -1,10 +1,12 @@
-import { useEffect, useRef } from "react";
+import { lazy, Suspense, useEffect, useRef } from "react";
 import { Outlet } from "react-router-dom";
 import { BackgroundBeams } from "../components/ui/background-beams";
 import { Particles } from "../components/ui/particles";
 import LandingNav from "../components/landing/LandingNav";
 import LandingFooter from "../components/landing/LandingFooter";
 import usePrefersReducedMotion from "../hooks/usePrefersReducedMotion";
+
+const SmoothScroll = lazy(() => import("../components/SmoothScroll"));
 
 /**
  * Public experience shell — cinematic FluxEdit canvas: volumetric spotlight,
@@ -39,7 +41,11 @@ export default function PublicLayout({ children }) {
         />
       </div>
       <LandingNav />
-      <main className="relative z-[1]">{children ?? <Outlet />}</main>
+      <Suspense fallback={<main className="relative z-[1]">{children ?? <Outlet />}</main>}>
+        <SmoothScroll>
+          <main className="relative z-[1]">{children ?? <Outlet />}</main>
+        </SmoothScroll>
+      </Suspense>
       <div className="relative z-[1]">
         <LandingFooter />
       </div>

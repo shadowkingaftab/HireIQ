@@ -52,6 +52,7 @@ export default function LoginForm() {
         setServerError("The service accepted the request but didn't start a session. Please try again.");
         return;
       }
+      setUser(null);
       setToken(token);
       try {
         const me = await authApi.me();

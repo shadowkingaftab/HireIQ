@@ -38,7 +38,6 @@ export const recruiterNav = [
   { label: "Candidate Search", to: "/candidates/search", icon: Search },
   { label: "Candidates", to: "/candidates", icon: Users },
   { label: "Jobs", to: "/jobs", icon: Briefcase },
-  { label: "Assessments", to: "/assessments", icon: ClipboardList },
   { label: "Matches", to: "/matches", icon: Target },
   { label: "Analytics", to: "/analytics", icon: BarChart3 },
   { label: "Reports", to: "/reports", icon: FileBarChart },
@@ -52,9 +51,9 @@ export const sharedNav = [
 
 export function primaryNavFor(role) {
   if (role === "candidate") return candidateNav;
-  // Recruiter + admin + unknown-role fallback see the full product surface.
+  if (role === "recruiter") return recruiterNav;
   if (role === "admin") return [...recruiterNav.slice(0, 1), ...sharedNav];
-  return recruiterNav;
+  return [];
 }
 
 /** Friendly breadcrumb labels — never expose raw technical segments. */

@@ -14,16 +14,20 @@ Evidence-first hiring intelligence platform. It helps candidates demonstrate cap
 
 ## Quick Start
 
-```bash
-# Backend
-cd proofhire/backend
-pip install -r requirements.txt
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+Run these in two terminals from the repository root. These commands use the
+root `backend` and `frontend` folders; `proofhire/` is a separate nested checkout.
 
-# Frontend
-cd proofhire/frontend
+```bash
+# Terminal 1: backend
+pip install -r backend/requirements.txt
+uvicorn backend.app.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+```bash
+# Terminal 2: frontend
+cd frontend
 npm install
-npm run dev -- --host 0.0.0.0
+npm run dev
 ```
 
 If you want to expose the app through ngrok, start the frontend first, then run:

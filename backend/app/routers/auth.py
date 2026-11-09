@@ -6,6 +6,8 @@ from backend.app.contracts.users import UserCreate, User as UserResponse
 from backend.app.core.security import create_access_token, verify_password, get_password_hash, ALGORITHM
 from backend.app.core.config import settings
 from backend.app.models.user import User
+from backend.app.models.role import Role
+from backend.app.core.constants import UserRole
 from backend.app.dependencies.auth import get_current_user
 from jose import jwt, JWTError
 
@@ -27,6 +29,11 @@ def signup(user_in: UserCreate, db: Session = Depends(get_db)):
         is_active=True,
         is_superuser=False,
     )
+    candidate_role = db.query(Role).filter(Role.name == UserRole.CANDIDATE.value).first()
+    if candidate_role is None:
+        candidate_role = Role(name=UserRole.CANDIDATE.value, description="Candidate")
+        db.add(candidate_role)
+    user.roles.append(candidate_role)
     db.add(user)
     db.commit()
     db.refresh(user)
@@ -48,6 +55,14 @@ def login(credentials: Login, db: Session = Depends(get_db)):
 
 @router.get("/me")
 def get_me(current_user: User = Depends(get_current_user)):
+    role_names = {role.name for role in current_user.roles}
+    role = (
+        UserRole.ADMIN.value
+        if current_user.is_superuser or UserRole.ADMIN.value in role_names
+        else UserRole.RECRUITER.value
+        if UserRole.RECRUITER.value in role_names or current_user.recruiter_profile is not None
+        else UserRole.CANDIDATE.value
+    )
     return {
         "user": {
             "id": current_user.id,
@@ -55,6 +70,7 @@ def get_me(current_user: User = Depends(get_current_user)):
             "full_name": current_user.full_name,
             "is_active": current_user.is_active,
             "is_superuser": current_user.is_superuser,
+            "role": role,
         }
     }
 

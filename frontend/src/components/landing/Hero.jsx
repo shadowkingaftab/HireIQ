@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import Button from "../ui/Button";
+import Constellation from "./Constellation";
 
 /* -------------------------------------------------------
    PANEL CONFIGURATION
@@ -35,10 +36,11 @@ precision mediump float;
 uniform vec2  uRes;   // drawing-buffer size, px
 uniform float uTime;  // seconds
 uniform float uRib;   // rib width, device px
+uniform float uDpr;   // device pixel ratio
 
-const vec3 SKY_TOP = vec3(0.040, 0.170, 0.600);
-const vec3 SKY_MID = vec3(0.030, 0.110, 0.400);
-const vec3 SKY_LOW = vec3(0.015, 0.050, 0.200);
+const vec3 SKY_TOP = vec3(0.010, 0.035, 0.150);
+const vec3 SKY_MID = vec3(0.008, 0.025, 0.110);
+const vec3 SKY_LOW = vec3(0.004, 0.012, 0.055);
 const vec3 BLUE    = vec3(0.120, 0.660, 1.000);  // #0297DE family
 const vec3 ORANGE  = vec3(1.000, 0.420, 0.170);  // #FC734D family
 const vec3 CORAL   = vec3(0.960, 0.260, 0.380);
@@ -98,12 +100,28 @@ vec3 scene(float x, float y, float hv, float streak, float sway) {
   float wO = clamp(orange * 1.45 + orangeR * 0.70, 0.0, 1.0) * streak;
   float wC = clamp(coralL * 0.70, 0.0, 1.0);
 
-  col = mix(col, vec3(0.22, 0.45, 0.95), haze * 0.28);
+  col = mix(col, vec3(0.22, 0.45, 0.95), haze * 0.20);
   col = mix(col, BLUE, wB);
   col = mix(col, CORAL, wC);
   col = mix(col, ORANGE, wO);
   col += HOT * (core * 0.45 + 0.22 * wB * wO);   // soft seam where blue meets orange
   return col;
+}
+
+// One candidate star per ~56 css px cell, twinkling. Drawn after the ribs so
+// stars stay crisp, and only where the sky is dark.
+float stars(vec2 frag, float t) {
+  float cell = 56.0 * uDpr;
+  vec2 g = floor(frag / cell);
+  vec2 f = frag / cell - g;
+  float h = hash21(g + 7.3);
+  vec2 p = vec2(hash21(g + 1.7), hash21(g + 9.1)) * 0.7 + 0.15;
+  float d = length((f - p) * cell) / uDpr;
+  float size = 0.60 + 1.1 * hash21(g + 4.4);
+  float core = 1.0 - smoothstep(0.0, size, d);
+  float tw = 0.65 + 0.35 * sin(t * (0.6 + 1.4 * hash21(g + 2.2)) + h * 40.0);
+  float gate = step(0.72, h);
+  return core * tw * gate * (0.5 + 0.5 * hash21(g + 5.5));
 }
 
 void main() {
@@ -137,6 +155,10 @@ void main() {
   float glint = smoothstep(0.78, 1.0, abs(c));
   col *= shade;
   col += glint * 0.012 * (0.4 + col);
+
+  // stars, only over the dark sky
+  float lum = dot(col, vec3(0.30, 0.55, 0.15));
+  col += vec3(0.75, 0.85, 1.00) * stars(frag, uTime) * (1.0 - smoothstep(0.10, 0.45, lum)) * 1.5;
 
   // grain hides gradient banding
   col += (hash21(frag) - 0.5) * 0.012;
@@ -241,6 +263,7 @@ function FlameEnvironment() {
     const uRes = gl.getUniformLocation(prog, "uRes");
     const uTime = gl.getUniformLocation(prog, "uTime");
     const uRib = gl.getUniformLocation(prog, "uRib");
+    const uDpr = gl.getUniformLocation(prog, "uDpr");
 
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const t0 = performance.now();
@@ -263,6 +286,7 @@ function FlameEnvironment() {
       }
       gl.viewport(0, 0, w, h);
       gl.uniform2f(uRes, w, h);
+      gl.uniform1f(uDpr, dpr);
       // rib width in CSS px: finer on phones
       gl.uniform1f(uRib, (canvas.clientWidth < 640 ? 5 : 7) * dpr);
       draw(performance.now());
@@ -522,6 +546,15 @@ export default function Hero() {
 
       <FlameEnvironment />
 
+      {/* CONSTELLATION: floats behind the content, hub sits above Proof Core */}
+
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-0 hidden h-[920px] overflow-hidden md:block"
+      >
+        <Constellation />
+      </div>
+
       {/* MAIN CONTENT */}
 
       <HeroContent />
@@ -532,7 +565,7 @@ export default function Hero() {
 
       {/* BOTTOM SHELF */}
 
-      <div className="relative z-10 mx-auto mt-20 w-full max-w-6xl px-6 pb-0">
+      <div className="relative z-10 mx-auto mt-auto w-full max-w-6xl px-6 pb-0 pt-20">
         <div className="grid grid-cols-1 items-end gap-6 md:grid-cols-3">
           <RepositoryPanel />
 

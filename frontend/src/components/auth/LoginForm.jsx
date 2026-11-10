@@ -107,7 +107,7 @@ export default function LoginForm() {
         {submitting ? "Signing in…" : "Sign in"}
       </Button>
 
-      <Divider label="new to proofhire" />
+      <Divider label="new to ORIONET" />
       <p className="text-center text-body-sm text-ink-muted">
         Create an account{" "}
         <Link

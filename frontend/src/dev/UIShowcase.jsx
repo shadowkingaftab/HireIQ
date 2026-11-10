@@ -31,7 +31,7 @@ export default function UIShowcase() {
         <Container size="md">
           <PageHeader
             eyebrow="Internal"
-            title="ProofHire UI Kit"
+            title="ORIONET UI Kit"
             description="Visual verification surface for the design system. Not routed in production."
             actions={
               <Button
@@ -122,7 +122,7 @@ export default function UIShowcase() {
                     <Input label="Email" type="email" placeholder="you@company.com" description="Work email recommended." />
                     <Input label="Password" type="password" placeholder="••••••••" />
                     <Input label="With icon" leadingIcon={Search} placeholder="Search candidates" />
-                    <Input label="With error" defaultValue="proofhire" error="That handle is already taken." />
+                    <Input label="With error" defaultValue="orionet" error="That handle is already taken." />
                   </Grid>
                 </CardContent>
               </Card>

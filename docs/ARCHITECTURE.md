@@ -2,7 +2,7 @@
 
 ## Overview
 
-ProofHire is a hiring intelligence platform built with FastAPI backend and React frontend. The system is organized into:
+ORIONET is a hiring intelligence platform built with FastAPI backend and React frontend. The system is organized into:
 
 - Backend: `proofhire/backend/app/`
 - Frontend: `proofhire/frontend/`

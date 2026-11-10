@@ -135,7 +135,7 @@ function HeroContent() {
       </h1>
 
       <p className="mt-6 max-w-xl text-sm leading-relaxed text-gray-400 sm:text-base">
-        ProofHire turns verified work into explainable capability signals.
+        ORIONET turns verified work into explainable capability signals.
         Recruiters see demonstrated skill, and every score traces back to its
         evidence.
       </p>

@@ -2,7 +2,7 @@
 
 ## Concepts
 
-Evidence is any verifiable artifact that supports a candidate's claimed capability. ProofHire treats evidence as first-class citizens rather than relying solely on self-reported information.
+Evidence is any verifiable artifact that supports a candidate's claimed capability. ORIONET treats evidence as first-class citizens rather than relying solely on self-reported information.
 
 ## Evidence Types
 - `github_repo` - Public repositories

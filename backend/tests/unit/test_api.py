@@ -5,7 +5,7 @@ from backend.app.core.config import Settings
 
 def test_settings_defaults():
     settings = Settings()
-    assert settings.PROJECT_NAME == "ProofHire"
+    assert settings.PROJECT_NAME == "ORIONET"
     assert settings.API_V1_STR == "/api/v1"
 
 

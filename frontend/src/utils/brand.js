@@ -4,8 +4,8 @@
  * across landing, authentication and application surfaces.
  */
 export const brand = {
-  name: "ProofHire",
-  shortMark: "PH",
+  name: "ORIONET",
+  shortMark: "ON",
   tagline: "Evidence-first hiring intelligence",
   statement: "The workspace where capability is proven.",
 };

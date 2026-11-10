@@ -4,7 +4,7 @@ from pydantic import AnyHttpUrl, validator
 
 
 class Settings(BaseSettings):
-    PROJECT_NAME: str = "ProofHire"
+    PROJECT_NAME: str = "ORIONET"
     VERSION: str = "0.1.0"
     API_V1_STR: str = "/api/v1"
     SECRET_KEY: str = "development_secret_key_change_me"

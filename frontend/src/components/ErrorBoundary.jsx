@@ -14,7 +14,7 @@ export default class ErrorBoundary extends Component {
   }
   componentDidCatch(error) {
     if (import.meta.env.DEV) {
-      console.error("[ProofHire] Uncaught render error:", error);
+      console.error("[ORIONET] Uncaught render error:", error);
     }
   }
   handleReload = () => window.location.reload();

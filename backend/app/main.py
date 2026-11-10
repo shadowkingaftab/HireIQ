@@ -63,6 +63,6 @@ app.include_router(admin.router, prefix=f"{settings.API_V1_STR}/admin", tags=["a
 
 @app.get("/")
 async def root():
-    return {"message": "Welcome to ProofHire API", "version": settings.VERSION}
+    return {"message": "Welcome to ORIONET API", "version": settings.VERSION}
 
 

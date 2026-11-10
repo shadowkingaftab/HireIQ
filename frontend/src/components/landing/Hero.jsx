@@ -3,13 +3,6 @@ import Button from "../ui/Button";
 import Constellation from "./Constellation";
 
 /* -------------------------------------------------------
-   PANEL CONFIGURATION
-------------------------------------------------------- */
-
-const panelClass =
-  "relative flex flex-col justify-between overflow-hidden rounded-t-2xl border border-white/10 border-b-0 border-t-white/20 bg-[#06111B]/80 p-6 backdrop-blur-xl shadow-2xl";
-
-/* -------------------------------------------------------
    BACKGROUND: REEDED-GLASS FLAME (WebGL)
 
    The scene is a navy sky with a blue lobe (left), an
@@ -86,10 +79,10 @@ vec3 scene(float x, float y, float hv, float streak, float sway) {
   vec3 col = mix(SKY_LOW, SKY_MID, smoothstep(0.0, 0.5, y));
   col = mix(col, SKY_TOP, smoothstep(0.4, 1.0, y));
 
-  float blue    = lobe(x, y, 0.40 + sway, 0.21, 0.67 * hv);
-  float orange  = lobe(x, y, 0.60 - sway, 0.21, 0.61 * hv);
-  float core    = lobe(x, y, 0.50, 0.06, 0.47 * hv);
-  float spread  = lobe(x, y, 0.50, 0.52, 0.46);
+  float blue    = lobe(x, y, 0.40 + sway, 0.21, 0.56 * hv);
+  float orange  = lobe(x, y, 0.60 - sway, 0.21, 0.50 * hv);
+  float core    = lobe(x, y, 0.50, 0.06, 0.38 * hv);
+  float spread  = lobe(x, y, 0.50, 0.52, 0.36);
   float coralL  = lobe(x, y, 0.08, 0.20, 0.26 * hv);
   float orangeR = lobe(x, y, 0.93, 0.20, 0.26 * hv);
 
@@ -437,102 +430,6 @@ function HeroStats() {
 }
 
 /* -------------------------------------------------------
-   REPOSITORY PANEL
-------------------------------------------------------- */
-
-function RepositoryPanel() {
-  return (
-    <div className={`${panelClass} h-[240px]`}>
-      <div>
-        <p className="font-mono text-xs uppercase tracking-[0.2em] text-gray-500">
-          Repository
-        </p>
-
-        <p className="mt-2 text-sm font-medium text-gray-200">
-          Verified contribution
-        </p>
-      </div>
-
-      <div className="relative rounded-xl border border-white/10 bg-[#02070A]/80 p-5">
-        <div className="mb-5 flex items-center gap-3">
-          <span className="h-2 w-2 rounded-full bg-[#0297DE] shadow-[0_0_14px_rgba(2,151,222,0.9)]" />
-
-          <span className="h-1.5 w-24 rounded-full bg-white/20" />
-        </div>
-
-        <div className="space-y-3">
-          <span className="block h-1.5 w-full rounded-full bg-white/10" />
-          <span className="block h-1.5 w-4/5 rounded-full bg-white/10" />
-          <span className="block h-1.5 w-3/5 rounded-full bg-white/10" />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* -------------------------------------------------------
-   PROOF CORE PANEL
-------------------------------------------------------- */
-
-function ProofCorePanel() {
-  return (
-    <div
-      className={`${panelClass} z-10 h-[280px] items-center border-[#0297DE]/40 bg-[#06111B]/90 text-center shadow-[0_-20px_80px_rgba(252,115,77,0.2)]`}
-    >
-      <p className="self-start font-mono text-xs uppercase tracking-[0.2em] text-gray-400">
-        Proof Core
-      </p>
-
-      <div className="relative flex h-36 w-36 items-center justify-center rounded-full border border-[#0297DE]/40 bg-[radial-gradient(circle,rgba(2,151,222,0.18),transparent_70%)] shadow-[0_0_50px_rgba(2,151,222,0.25)]">
-        <div className="absolute inset-2 rounded-full border border-[#0297DE]/30" />
-
-        <div className="absolute inset-5 rounded-full border border-dashed border-[#0297DE]/40" />
-
-        <div className="h-10 w-10 rounded-full bg-[#0297DE] shadow-[0_0_35px_#0297DE,0_0_60px_rgba(2,151,222,0.5)]" />
-      </div>
-
-      <p className="text-xs text-gray-300">
-        Evidence connected to skill
-      </p>
-    </div>
-  );
-}
-
-/* -------------------------------------------------------
-   CAPABILITY SIGNAL PANEL
-------------------------------------------------------- */
-
-function CapabilityPanel() {
-  return (
-    <div className={`${panelClass} h-[240px]`}>
-      <div>
-        <p className="font-mono text-xs uppercase tracking-[0.2em] text-gray-500">
-          Capability Signal
-        </p>
-
-        <p className="mt-2 text-sm font-medium text-gray-200">
-          Match score
-        </p>
-      </div>
-
-      <div className="space-y-5 rounded-xl border border-white/10 bg-[#02070A]/80 p-5">
-        <div className="flex items-center gap-3">
-          <span className="h-2 w-2 rounded-full bg-[#FC734D] shadow-[0_0_14px_rgba(252,115,77,0.9)]" />
-
-          <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-white/5">
-            <div className="h-full w-[88%] rounded-full bg-gradient-to-r from-[#0297DE] to-[#42C9FF]" />
-          </div>
-        </div>
-
-        <span className="block h-1.5 w-2/3 rounded-full bg-white/10" />
-
-        <span className="block h-1.5 w-5/6 rounded-full bg-white/10" />
-      </div>
-    </div>
-  );
-}
-
-/* -------------------------------------------------------
    MAIN HERO COMPONENT
 ------------------------------------------------------- */
 
@@ -563,17 +460,10 @@ export default function Hero() {
 
       <HeroStats />
 
-      {/* BOTTOM SHELF */}
+      {/* HORIZON: reserved space so the flame and the constellation hub sit
+          below the stats row on any screen height */}
 
-      <div className="relative z-10 mx-auto mt-auto w-full max-w-6xl px-6 pb-0 pt-20">
-        <div className="grid grid-cols-1 items-end gap-6 md:grid-cols-3">
-          <RepositoryPanel />
-
-          <ProofCorePanel />
-
-          <CapabilityPanel />
-        </div>
-      </div>
+      <div aria-hidden="true" className="mt-auto h-[170px] w-full md:h-[300px]" />
     </section>
   );
 }

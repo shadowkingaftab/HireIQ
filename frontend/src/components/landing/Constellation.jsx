@@ -6,13 +6,13 @@ import { LOGOS } from "./constellationLogos";
 
    A star chart of the person's proof. Every logo is a star,
    the asterism lines join them, and everything ultimately
-   connects to the bright star at the horizon: the profile.
+   connects to the glowing orb on the horizon: the profile.
    Left arm = verified platforms (cool), right arm = skills
    (warm), matching the blue / orange flame behind it.
 
    Geometry is in CSS px, measured from the horizontal centre
-   and from the BOTTOM of the hero, so the hub always sits just
-   above the Proof Core panel. Nodes drift slowly, the lines
+   and from the BOTTOM of the hero, so the hub always sits on the
+   horizon, below the stats row. Nodes drift slowly, the lines
    follow them, and light pulses run from each skill to the hub.
 ------------------------------------------------------- */
 
@@ -25,20 +25,31 @@ const SIDE = {
   R: { line: "#FFC2A6", halo: "#FC734D", spark: "#FFD2BC" },
 };
 
-// b = distance above the bottom edge of the hero
-const star = (id, x, b, r, side) => ({ id, kind: "star", x, y: H - b, r, side });
+// The chart is authored with the hub at b = 322; DROP lowers all of it so the hub
+// ends up at b = 160, on the horizon.
+const DROP = 162;
+
+// b = distance above the bottom edge of the hero (before DROP)
+const star = (id, x, b, r, side) => ({
+  id,
+  kind: "star",
+  x,
+  y: H - (b - DROP),
+  r,
+  side,
+});
 const logo = (id, label, x, b, r, side) => ({
   id,
   kind: "logo",
   label,
   logo: id,
   x,
-  y: H - b,
+  y: H - (b - DROP),
   r,
   side,
 });
 
-const HUB = { id: "hub", kind: "hub", x: 0, y: H - 322, r: 24, side: "L" };
+const HUB = { id: "hub", kind: "hub", x: 0, y: H - 160, r: 32, side: "L" };
 
 const NODES = [
   HUB,
@@ -113,7 +124,7 @@ const EDGE_LIST = EDGES.map(([a, b], k) => ({
 
 // Gap left between a line end and the star it points at.
 const gapOf = (n) =>
-  n.kind === "hub" ? 38 : n.kind === "logo" ? n.r + 9 : n.r + 5;
+  n.kind === "hub" ? 46 : n.kind === "logo" ? n.r + 9 : n.r + 5;
 
 // BFS from the hub: parent node + connecting edge for every node.
 const PARENT = new Array(NODES.length).fill(-1);
@@ -398,12 +409,18 @@ export default function Constellation({ profile = {} }) {
           <stop offset="0.6" stopColor="#FF8A5E" stopOpacity="0.1" />
           <stop offset="1" stopColor="#FF8A5E" stopOpacity="0" />
         </radialGradient>
+        <radialGradient id={`${id}-orb`}>
+          <stop offset="0" stopColor="#FFFFFF" />
+          <stop offset="0.45" stopColor="#FFE6D6" />
+          <stop offset="0.85" stopColor="#FFA77A" />
+          <stop offset="1" stopColor="#FF8A5E" />
+        </radialGradient>
         <radialGradient id={`${id}-spark`}>
           <stop offset="0" stopColor="#fff" stopOpacity="0.9" />
           <stop offset="1" stopColor="#fff" stopOpacity="0" />
         </radialGradient>
         <clipPath id={`${id}-avatar`}>
-          <circle r="21" />
+          <circle r="29" />
         </clipPath>
       </defs>
 
@@ -429,8 +446,8 @@ export default function Constellation({ profile = {} }) {
               x2={x2}
               y2={y2}
               stroke={SIDE[e.side].line}
-              strokeOpacity={on ? 1 : litEdges ? 0.12 : e.trunk ? 0.85 : 0.5}
-              strokeWidth={on ? 1.9 : e.trunk ? 1.7 : 1.2}
+              strokeOpacity={on ? 1 : litEdges ? 0.12 : e.trunk ? 0.95 : 0.5}
+              strokeWidth={on ? 1.9 : e.trunk ? 2 : 1.2}
             />
           );
         })}
@@ -441,7 +458,6 @@ export default function Constellation({ profile = {} }) {
         if (n.kind === "hub") return null;
 
         if (n.kind === "star") {
-          const spark = n.r >= 2.2;
           return (
             <g
               key={n.id}
@@ -450,16 +466,9 @@ export default function Constellation({ profile = {} }) {
               }}
               transform={`translate(${n.x} ${n.y})`}
             >
-              <circle r={n.r * 4.2} fill={`url(#${id}-spark)`} opacity="0.35" />
+              <circle r={n.r * 5} fill={`url(#${id}-spark)`} opacity="0.45" />
               <g className="cs-twinkle" style={{ animationDelay: `${(i * 0.7) % 4}s` }}>
                 <circle r={n.r} fill={SIDE[n.side].spark} />
-                {spark && (
-                  <path
-                    d={`M0 ${-n.r * 4.5}L${n.r * 0.35} 0L0 ${n.r * 4.5}L${-n.r * 0.35} 0Z M${-n.r * 4.5} 0L0 ${n.r * 0.35}L${n.r * 4.5} 0L0 ${-n.r * 0.35}Z`}
-                    fill={SIDE[n.side].spark}
-                    opacity="0.75"
-                  />
-                )}
               </g>
             </g>
           );
@@ -531,50 +540,38 @@ export default function Constellation({ profile = {} }) {
         </g>
       ))}
 
-      {/* HUB: the profile, the brightest star on the horizon */}
+      {/* HUB: the profile, a luminous orb on the horizon */}
       <g
         ref={(el) => {
           nodeEls.current[0] = el;
         }}
         transform={`translate(${HUB.x} ${HUB.y})`}
       >
-        <circle r="120" fill={`url(#${id}-sun)`} className="cs-sun" />
+        <circle r="150" fill={`url(#${id}-sun)`} className="cs-sun" />
         <circle
           className="cs-ring"
-          r="30"
+          r="44"
           fill="none"
           stroke="#fff"
           strokeOpacity="0.35"
           strokeDasharray="2 6"
         />
+        <circle r="38" fill="none" stroke="#fff" strokeOpacity="0.16" />
         {hubAvatar ? (
           <g>
-            <circle r="24" fill={PANEL} stroke="#fff" strokeOpacity="0.85" strokeWidth="1.5" />
+            <circle r="32" fill={PANEL} stroke="#fff" strokeOpacity="0.85" strokeWidth="1.5" />
             <image
               href={hubAvatar}
-              x="-21"
-              y="-21"
-              width="42"
-              height="42"
+              x="-29"
+              y="-29"
+              width="58"
+              height="58"
               preserveAspectRatio="xMidYMid slice"
               clipPath={`url(#${id}-avatar)`}
             />
           </g>
         ) : (
-          <g>
-            <path
-              d="M0 -36Q3 -3 36 0Q3 3 0 36Q-3 3 -36 0Q-3 -3 0 -36Z"
-              fill="#FFF4EC"
-              opacity="0.95"
-            />
-            <path
-              d="M0 -22Q2 -2 22 0Q2 2 0 22Q-2 2 -22 0Q-2 -2 0 -22Z"
-              fill="#FFD9C2"
-              opacity="0.6"
-              transform="rotate(45)"
-            />
-            <circle r="7" fill="#fff" />
-          </g>
+          <circle r="30" fill={`url(#${id}-orb)`} />
         )}
       </g>
     </svg>

@@ -101,22 +101,6 @@ vec3 scene(float x, float y, float hv, float streak, float sway) {
   return col;
 }
 
-// One candidate star per ~56 css px cell, twinkling. Drawn after the ribs so
-// stars stay crisp, and only where the sky is dark.
-float stars(vec2 frag, float t) {
-  float cell = 56.0 * uDpr;
-  vec2 g = floor(frag / cell);
-  vec2 f = frag / cell - g;
-  float h = hash21(g + 7.3);
-  vec2 p = vec2(hash21(g + 1.7), hash21(g + 9.1)) * 0.7 + 0.15;
-  float d = length((f - p) * cell) / uDpr;
-  float size = 0.60 + 1.1 * hash21(g + 4.4);
-  float core = 1.0 - smoothstep(0.0, size, d);
-  float tw = 0.65 + 0.35 * sin(t * (0.6 + 1.4 * hash21(g + 2.2)) + h * 40.0);
-  float gate = step(0.72, h);
-  return core * tw * gate * (0.5 + 0.5 * hash21(g + 5.5));
-}
-
 void main() {
   vec2 frag = gl_FragCoord.xy;
   float y = frag.y / uRes.y;
@@ -148,10 +132,6 @@ void main() {
   float glint = smoothstep(0.78, 1.0, abs(c));
   col *= shade;
   col += glint * 0.012 * (0.4 + col);
-
-  // stars, only over the dark sky
-  float lum = dot(col, vec3(0.30, 0.55, 0.15));
-  col += vec3(0.75, 0.85, 1.00) * stars(frag, uTime) * (1.0 - smoothstep(0.10, 0.45, lum)) * 1.5;
 
   // grain hides gradient banding
   col += (hash21(frag) - 0.5) * 0.012;

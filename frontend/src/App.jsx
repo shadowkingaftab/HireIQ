@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect } from "react";
+import { lazy, Suspense, useEffect, useRef } from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useAuthStore } from "./store/authStore";
 import ProtectedRoute from './routes/ProtectedRoute';
@@ -61,10 +61,34 @@ function ScrollToTop() {
 }
 
 export default function App() {
+  const backgroundRef = useRef(null);
+
+  useEffect(() => {
+    const background = backgroundRef.current;
+    if (!background) return undefined;
+
+    let frame = 0;
+    const updateParallax = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const offset = reducedMotion ? 0 : -Math.min(window.scrollY * 0.012, window.innerHeight * 0.04);
+        background.style.setProperty("--orionet-scroll-shift", `${offset}px`);
+      });
+    };
+
+    updateParallax();
+    window.addEventListener("scroll", updateParallax, { passive: true });
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", updateParallax);
+    };
+  }, []);
+
   return (
     <div className="relative isolate min-h-dvh">
       <div className="orionet-background" aria-hidden="true">
-        <img src="/orionet-background.png" alt="" />
+        <img ref={backgroundRef} src="/orionet-background-page.png" alt="" />
       </div>
       <ScrollToTop />
       <Routes>

@@ -1,3 +1,5 @@
+import Button from "../ui/Button";
+
 function HeroContent() {
   return (
     <div className="relative z-10 mx-auto flex w-full max-w-4xl flex-col items-center px-6 pt-40 text-center">
@@ -82,8 +84,7 @@ export default function Hero() {
 
       <HeroStats />
 
-      {/* HORIZON: reserved space so the flame and the constellation hub sit
-          below the stats row on any screen height */}
+      {/* Keep the hero spacing balanced on short and tall screens. */}
 
       <div aria-hidden="true" className="mt-auto h-[170px] w-full md:h-[300px]" />
     </section>

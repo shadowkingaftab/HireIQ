@@ -68,7 +68,7 @@ export default function AppShell() {
   }, []);
 
   return (
-    <div className="flex min-h-dvh bg-canvas bg-atmosphere">
+    <div className="flex min-h-dvh bg-transparent">
       <Sidebar collapsed={collapsed} onToggleCollapse={toggleCollapse} />
 
       <div className="flex min-w-0 flex-1 flex-col">

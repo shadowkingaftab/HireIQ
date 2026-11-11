@@ -62,7 +62,10 @@ function ScrollToTop() {
 
 export default function App() {
   return (
-    <>
+    <div className="relative isolate min-h-dvh">
+      <div className="orionet-background" aria-hidden="true">
+        <img src="/orionet-background.png" alt="" />
+      </div>
       <ScrollToTop />
       <Routes>
         {/* Public */}
@@ -127,6 +130,6 @@ export default function App() {
           element={<CandidateRoute>{page(AssessmentRunner)}</CandidateRoute>}
         />
       </Routes>
-    </>
+    </div>
   );
 }

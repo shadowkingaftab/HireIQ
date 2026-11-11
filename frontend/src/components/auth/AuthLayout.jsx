@@ -39,7 +39,7 @@ function EvidenceMotif() {
  */
 export default function AuthLayout({ title, subtitle, children }) {
   return (
-    <div className="flex min-h-dvh bg-canvas bg-atmosphere">
+    <div className="flex min-h-dvh bg-transparent">
       {/* Brand / message column */}
       <aside className="relative hidden w-[44%] max-w-xl flex-col justify-between border-r border-line-subtle bg-surface-1/50 p-10 lg:flex xl:p-14">
         <Link to="/" className="w-fit rounded-md focus-visible:outline-none" aria-label={`${brand.name} home`}>

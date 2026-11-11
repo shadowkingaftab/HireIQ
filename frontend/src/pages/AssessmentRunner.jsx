@@ -61,7 +61,7 @@ export default function AssessmentRunner() {
 
   if (!content) {
     return (
-      <div className="flex min-h-dvh items-center justify-center bg-canvas p-6">
+      <div className="flex min-h-dvh items-center justify-center bg-transparent p-6">
         <div className="max-w-md rounded-card border border-line-subtle bg-surface-1 p-6 text-center">
           <ShieldCheck size={22} aria-hidden="true" className="mx-auto mb-3 text-intel" />
           <h1 className="text-section text-ink-hi">{assessment.title}</h1>
@@ -98,7 +98,7 @@ export default function AssessmentRunner() {
   };
 
   return (
-    <div className="flex min-h-dvh flex-col bg-canvas bg-atmosphere">
+    <div className="flex min-h-dvh flex-col bg-transparent">
       {/* Runner chrome */}
       <header className="sticky top-0 z-sticky border-b border-line-subtle bg-surface-1/85 backdrop-blur-md">
         <div className="mx-auto flex max-w-4xl items-center gap-4 px-4 py-3 sm:px-6">

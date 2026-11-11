@@ -62,33 +62,105 @@ function ScrollToTop() {
 
 export default function App() {
   const backgroundRef = useRef(null);
+  const noiseOffsetRef = useRef(null);
+  const { pathname } = useLocation();
+  const isLanding = pathname === "/";
 
   useEffect(() => {
     const background = backgroundRef.current;
-    if (!background) return undefined;
+    const noiseOffset = noiseOffsetRef.current;
+    if (!background || !noiseOffset) return undefined;
 
     let frame = 0;
-    const updateParallax = () => {
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(() => {
-        const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        const offset = reducedMotion ? 0 : -Math.min(window.scrollY * 0.012, window.innerHeight * 0.04);
-        background.style.setProperty("--orionet-scroll-shift", `${offset}px`);
-      });
+    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const target = { x: 0, y: 0, scroll: 0 };
+    const current = { ...target };
+
+    const animateInput = () => {
+      frame = 0;
+      if (motion.matches) return;
+
+      current.x += (target.x - current.x) * 0.16;
+      current.y += (target.y - current.y) * 0.16;
+      current.scroll += (target.scroll - current.scroll) * 0.16;
+      background.style.setProperty("--orionet-pointer-x", `${current.x.toFixed(2)}px`);
+      background.style.setProperty("--orionet-pointer-y", `${current.y.toFixed(2)}px`);
+      background.style.setProperty("--orionet-scroll-shift", `${current.scroll.toFixed(2)}px`);
+      noiseOffset.setAttribute("dx", (current.x * 0.45).toFixed(2));
+      noiseOffset.setAttribute("dy", (current.y * 0.45 + current.scroll * 0.2).toFixed(2));
+
+      if (
+        Math.abs(target.x - current.x) > 0.05 ||
+        Math.abs(target.y - current.y) > 0.05 ||
+        Math.abs(target.scroll - current.scroll) > 0.05
+      ) {
+        frame = requestAnimationFrame(animateInput);
+      }
     };
 
-    updateParallax();
-    window.addEventListener("scroll", updateParallax, { passive: true });
+    const scheduleUpdate = () => {
+      if (!frame && !motion.matches) frame = requestAnimationFrame(animateInput);
+    };
+
+    const onPointerMove = (event) => {
+      if (event.pointerType === "touch" || motion.matches) return;
+      target.x = ((event.clientX / window.innerWidth) - 0.5) * 10;
+      target.y = ((event.clientY / window.innerHeight) - 0.5) * 8;
+      scheduleUpdate();
+    };
+
+    const resetPointer = (event) => {
+      if (event.relatedTarget) return;
+      target.x = 0;
+      target.y = 0;
+      scheduleUpdate();
+    };
+
+    const onScroll = () => {
+      target.scroll = motion.matches ? 0 : -Math.min(window.scrollY * 0.004, 14);
+      scheduleUpdate();
+    };
+
+    const onMotionChange = () => {
+      if (motion.matches) {
+        cancelAnimationFrame(frame);
+        frame = 0;
+        target.x = target.y = target.scroll = current.x = current.y = current.scroll = 0;
+        background.style.setProperty("--orionet-pointer-x", "0px");
+        background.style.setProperty("--orionet-pointer-y", "0px");
+        background.style.setProperty("--orionet-scroll-shift", "0px");
+        noiseOffset.setAttribute("dx", "0");
+        noiseOffset.setAttribute("dy", "0");
+      } else {
+        onScroll();
+      }
+    };
+
+    onScroll();
+    window.addEventListener("pointermove", onPointerMove, { passive: true });
+    window.addEventListener("pointerout", resetPointer, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true });
+    motion.addEventListener("change", onMotionChange);
     return () => {
       cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", updateParallax);
+      window.removeEventListener("pointermove", onPointerMove);
+      window.removeEventListener("pointerout", resetPointer);
+      window.removeEventListener("scroll", onScroll);
+      motion.removeEventListener("change", onMotionChange);
     };
   }, []);
 
   return (
     <div className="relative isolate min-h-dvh">
-      <div className="orionet-background" aria-hidden="true">
-        <img ref={backgroundRef} src="/orionet-background-page.png" alt="" />
+      <div className={`orionet-background${isLanding ? " orionet-background--landing" : ""}`} aria-hidden="true">
+        <img ref={backgroundRef} className="orionet-original-art" src="/orionet-background.png" alt="" />
+        <svg className="orionet-filter-defs" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <filter id="orionet-gesture-flow" x="-5%" y="-5%" width="110%" height="110%" colorInterpolationFilters="sRGB">
+            <feTurbulence type="fractalNoise" baseFrequency="0.006 0.018" numOctaves="1" seed="6" result="flameNoise" />
+            <feOffset ref={noiseOffsetRef} in="flameNoise" dx="0" dy="0" result="movingNoise" />
+            <feDisplacementMap in="SourceGraphic" in2="movingNoise" scale="5" xChannelSelector="R" yChannelSelector="G" />
+          </filter>
+        </svg>
       </div>
       <ScrollToTop />
       <Routes>

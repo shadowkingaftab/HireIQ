@@ -163,15 +163,64 @@
     background: #02040a;
   }
 
-  .orionet-background img {
+  .orionet-background:not(.orionet-background--landing) {
+    background-image:
+      linear-gradient(to bottom, #02040a 0%, transparent 28%, transparent 72%, #02040a 100%),
+      url("/orionet-flame-tile.png");
+    background-repeat: repeat-y;
+    background-size: 100% 100vh, auto 100vh;
+    background-position:
+      calc(50% + var(--orionet-pointer-x, 0px)) calc(var(--orionet-pointer-y, 0px) + var(--orionet-scroll-shift, 0px)),
+      calc(50% + var(--orionet-pointer-x, 0px)) calc(var(--orionet-pointer-y, 0px) + var(--orionet-scroll-shift, 0px));
+  }
+
+  .orionet-background--landing {
+    background-image: none;
+  }
+
+  .orionet-background:not(.orionet-background--landing) .orionet-original-art {
+    display: none;
+  }
+
+  .orionet-background .orionet-original-art {
     position: absolute;
-    inset: 0;
+    inset: 0 0 auto;
     width: 100%;
-    height: 100%;
+    height: 100dvh;
     object-fit: cover;
     object-position: center top;
-    transform: translate3d(0, var(--orionet-scroll-shift, 0px), 0);
-    transition: transform 180ms ease-out;
+    filter: url(#orionet-gesture-flow);
+    transform: translate3d(var(--orionet-pointer-x, 0px), calc(var(--orionet-pointer-y, 0px) + var(--orionet-scroll-shift, 0px)), 0);
+    will-change: transform;
+  }
+
+  .orionet-filter-defs {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+  }
+
+  .orionet-flame-section {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .orionet-flame-section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.42;
+    background-image:
+      linear-gradient(to bottom, rgba(2, 4, 10, 0.9), transparent 24%, transparent 76%, rgba(2, 4, 10, 0.9)),
+      url("/orionet-flame-tile.png");
+    background-repeat: no-repeat;
+    background-position: center, center center;
+    background-size: 100% 100%, auto 130%;
+    filter: url(#orionet-gesture-flow);
+    transform: translate3d(var(--orionet-pointer-x, 0px), calc(var(--orionet-pointer-y, 0px) + var(--orionet-scroll-shift, 0px)), 0);
     will-change: transform;
   }
 
@@ -650,6 +699,21 @@
   }
 
   .orionet-background img {
+    transform: none;
+  }
+
+  .orionet-background .orionet-original-art,
+  .orionet-flame-section::before {
+    filter: none;
+    transform: none;
+  }
+
+  .orionet-background:not(.orionet-background--landing) {
+    background-position: center top;
+    filter: none;
+  }
+
+  .orionet-flame-section::before {
     transform: none;
   }
 }

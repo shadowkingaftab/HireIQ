@@ -307,7 +307,7 @@ export default function ProofNetwork({
   return (
     <section
       aria-label="Connected profile network"
-      className="relative overflow-hidden bg-transparent px-6 py-24 text-white"
+      className="orionet-flame-section relative overflow-hidden bg-transparent px-6 py-24 text-white"
     >
       <NetworkStyles />
 

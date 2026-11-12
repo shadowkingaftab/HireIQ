@@ -63,8 +63,6 @@ function ScrollToTop() {
 export default function App() {
   const backgroundRef = useRef(null);
   const noiseOffsetRef = useRef(null);
-  const { pathname } = useLocation();
-  const isLanding = pathname === "/";
 
   useEffect(() => {
     const background = backgroundRef.current;
@@ -152,8 +150,8 @@ export default function App() {
 
   return (
     <div className="relative isolate min-h-dvh">
-      <div className={`orionet-background${isLanding ? " orionet-background--landing" : ""}`} aria-hidden="true">
-        <img ref={backgroundRef} className="orionet-original-art" src="/orionet-background.png" alt="" />
+      <div className="orionet-background" aria-hidden="true">
+        <img ref={backgroundRef} className="orionet-page-art" src="/orionet-background-continuous.png" alt="" />
         <svg className="orionet-filter-defs" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <filter id="orionet-gesture-flow" x="-5%" y="-5%" width="110%" height="110%" colorInterpolationFilters="sRGB">
             <feTurbulence type="fractalNoise" baseFrequency="0.006 0.018" numOctaves="1" seed="6" result="flameNoise" />

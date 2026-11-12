@@ -16,7 +16,7 @@ export default function TrustStrip() {
   return (
     <section aria-label="What ORIONET stands for">
       <Container>
-        <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
           {principles.map(({ icon: Icon, title, copy }) => (
             <li
               key={title}
@@ -36,3 +36,4 @@ export default function TrustStrip() {
     </section>
   );
 }
+

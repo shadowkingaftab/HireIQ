@@ -21,7 +21,7 @@ export default function SmoothScroll({ children }) {
     }
 
     const lenis = new Lenis({
-      duration: 1.15,
+      duration: 0.75,
       easing: (t) => Math.min(1, 1.001 - 2 ** (-10 * t)),
       smoothWheel: true,
       syncTouch: false,

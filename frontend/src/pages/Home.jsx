@@ -11,7 +11,7 @@ export default function Home() {
   return (
     <Stack gap="none">
       <Hero />
-      <section className="relative">
+      <section className="relative pb-24">
         <div className="relative z-[1] mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           <TrustStrip />
         </div>
@@ -32,3 +32,4 @@ export default function Home() {
     </Stack>
   );
 }
+

@@ -2,7 +2,7 @@ import Button from "../ui/Button";
 
 function HeroContent() {
   return (
-    <div className="relative z-10 mx-auto flex w-full max-w-4xl flex-col items-center px-6 pt-40 text-center">
+    <div className="relative z-10 mx-auto flex w-full max-w-4xl flex-col items-center px-6 pt-[clamp(7rem,18vh,11rem)] text-center">
       <h1 className="font-serif text-6xl leading-[0.95] tracking-tighter text-white sm:text-7xl md:text-8xl">
         Don&apos;t just claim,
         <br />
@@ -27,7 +27,7 @@ function HeroContent() {
 
 function HeroStats() {
   return (
-    <div className="relative z-10 mx-auto mt-12 grid w-full max-w-2xl grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3 px-6 sm:gap-6">
+    <div className="relative z-10 mx-auto mt-[clamp(2.5rem,7vh,4rem)] grid w-full max-w-2xl grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3 px-6 sm:gap-6">
       {/* LEFT STAT */}
 
       <div className="flex min-w-0 flex-col items-end text-right">
@@ -74,7 +74,7 @@ export default function Hero() {
   return (
     <section
       aria-labelledby="hero-title"
-      className="relative flex min-h-screen flex-col items-center overflow-hidden bg-transparent text-white"
+      className="relative flex min-h-[100svh] flex-col items-center overflow-hidden bg-transparent text-white md:min-h-[84svh]"
     >
       {/* MAIN CONTENT */}
 
@@ -86,7 +86,9 @@ export default function Hero() {
 
       {/* Keep the hero spacing balanced on short and tall screens. */}
 
-      <div aria-hidden="true" className="mt-auto h-[170px] w-full md:h-[300px]" />
+      <div aria-hidden="true" className="mt-auto h-[clamp(1rem,3vh,2rem)] w-full" />
     </section>
   );
 }
+
+

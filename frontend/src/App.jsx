@@ -8,7 +8,8 @@ import AdminRoute from './routes/AdminRoute';
 import AppShell from './components/layout/AppShell';
 import PublicLayout from './layouts/PublicLayout';
 
-const Home = lazy(() => import('./pages/Home'));
+const homePage = import('./pages/Home');
+const Home = lazy(() => homePage);
 const Login = lazy(() => import('./pages/Login'));
 const Signup = lazy(() => import('./pages/Signup'));
 const NotFound = lazy(() => import('./pages/NotFound'));
@@ -62,12 +63,10 @@ function ScrollToTop() {
 
 export default function App() {
   const backgroundRef = useRef(null);
-  const noiseOffsetRef = useRef(null);
 
   useEffect(() => {
     const background = backgroundRef.current;
-    const noiseOffset = noiseOffsetRef.current;
-    if (!background || !noiseOffset) return undefined;
+    if (!background) return undefined;
 
     let frame = 0;
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -84,9 +83,6 @@ export default function App() {
       background.style.setProperty("--orionet-pointer-x", `${current.x.toFixed(2)}px`);
       background.style.setProperty("--orionet-pointer-y", `${current.y.toFixed(2)}px`);
       background.style.setProperty("--orionet-scroll-shift", `${current.scroll.toFixed(2)}px`);
-      noiseOffset.setAttribute("dx", (current.x * 0.45).toFixed(2));
-      noiseOffset.setAttribute("dy", (current.y * 0.45 + current.scroll * 0.2).toFixed(2));
-
       if (
         Math.abs(target.x - current.x) > 0.05 ||
         Math.abs(target.y - current.y) > 0.05 ||
@@ -115,7 +111,7 @@ export default function App() {
     };
 
     const onScroll = () => {
-      target.scroll = motion.matches ? 0 : -Math.min(window.scrollY * 0.004, 14);
+      target.scroll = motion.matches ? 0 : -Math.min(window.scrollY * 0.035, 60);
       scheduleUpdate();
     };
 
@@ -127,8 +123,6 @@ export default function App() {
         background.style.setProperty("--orionet-pointer-x", "0px");
         background.style.setProperty("--orionet-pointer-y", "0px");
         background.style.setProperty("--orionet-scroll-shift", "0px");
-        noiseOffset.setAttribute("dx", "0");
-        noiseOffset.setAttribute("dy", "0");
       } else {
         onScroll();
       }
@@ -150,15 +144,9 @@ export default function App() {
 
   return (
     <div className="relative isolate min-h-dvh">
-      <div className="orionet-background" aria-hidden="true">
-        <img ref={backgroundRef} className="orionet-page-art" src="/orionet-background-continuous.png" alt="" />
-        <svg className="orionet-filter-defs" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <filter id="orionet-gesture-flow" x="-5%" y="-5%" width="110%" height="110%" colorInterpolationFilters="sRGB">
-            <feTurbulence type="fractalNoise" baseFrequency="0.006 0.018" numOctaves="1" seed="6" result="flameNoise" />
-            <feOffset ref={noiseOffsetRef} in="flameNoise" dx="0" dy="0" result="movingNoise" />
-            <feDisplacementMap in="SourceGraphic" in2="movingNoise" scale="5" xChannelSelector="R" yChannelSelector="G" />
-          </filter>
-        </svg>
+      <div ref={backgroundRef} className="orionet-background" aria-hidden="true">
+        <img className="orionet-page-art orionet-hero-art" src="/orionet-background.png" alt="" />
+        <img className="orionet-page-art orionet-teeth-art" src="/orionet-background-teeth.webp" alt="" />
       </div>
       <ScrollToTop />
       <Routes>

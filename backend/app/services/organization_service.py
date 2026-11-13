@@ -1,7 +1,9 @@
 from typing import List, Optional
-from sqlalchemy.orm import Session
+
 from backend.app.contracts.organizations import OrganizationCreate, OrganizationUpdate
 from backend.app.models.organization import Organization
+from sqlalchemy.orm import Session
+
 
 class OrganizationService:
     def list(self, db: Session) -> List[Organization]:

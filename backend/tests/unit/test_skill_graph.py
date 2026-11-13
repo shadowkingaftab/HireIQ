@@ -1,7 +1,6 @@
-import pytest
 
-from backend.app.utils.skill_ontology import SkillOntology
 from backend.app.utils.skill_adjacency import SkillAdjacency
+from backend.app.utils.skill_ontology import SkillOntology
 
 
 def test_skill_ontology_normalize():

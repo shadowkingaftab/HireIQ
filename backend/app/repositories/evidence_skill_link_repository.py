@@ -1,6 +1,6 @@
-from sqlalchemy.orm import Session
+from backend.app.models.evidence_skill_link import EvidenceSkillLink
 from backend.app.repositories.base_repository import BaseRepository
-from backend.app.models.evidence import EvidenceSkillLink
+
 
 class EvidenceSkillLinkRepository(BaseRepository[EvidenceSkillLink]):
     pass

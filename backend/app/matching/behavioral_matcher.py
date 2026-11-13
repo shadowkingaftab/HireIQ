@@ -1,4 +1,5 @@
-from typing import Any, Dict, List
+from typing import Any, Dict
+
 
 class BehavioralMatcher:
     def match(self, *, job: Dict[str, Any], candidate: Dict[str, Any]) -> Dict[str, Any]:

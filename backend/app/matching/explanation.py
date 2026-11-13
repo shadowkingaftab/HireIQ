@@ -1,8 +1,5 @@
 import logging
-from typing import Any, Dict, List, Optional
-
-from backend.app.ai.citation_builder import citation_builder
-from backend.app.evidence.explanation_builder import explanation_builder
+from typing import Any, Dict, List
 
 logger = logging.getLogger(__name__)
 

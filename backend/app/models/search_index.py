@@ -1,6 +1,7 @@
-from sqlalchemy import Column, Integer, String, Text, JSON, DateTime, func
 from backend.app.database import Base
 from backend.app.models.base import TimestampMixin
+from sqlalchemy import JSON, Column, DateTime, Integer, String, Text, func
+
 
 class SearchIndex(Base, TimestampMixin):
     __tablename__ = "search_indices"

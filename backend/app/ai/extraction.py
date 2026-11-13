@@ -25,8 +25,6 @@ class Extraction:
         return [s for s in skills if isinstance(s, str)]
 
     async def extract_experience(self, text: str, model_override: Optional[str] = None) -> Dict[str, Any]:
-        from backend.app.ai.prompt_renderer import PromptRenderer
-        renderer = PromptRenderer()
         prompt = (
             "Extract work experience from the following text. "
             "Return JSON with 'years', 'roles' (array of strings), and 'companies' (array of strings).\n\n"

@@ -1,6 +1,7 @@
-from sqlalchemy.orm import Session
-from backend.app.repositories.base_repository import BaseRepository
 from backend.app.models.interview import Interview
+from backend.app.repositories.base_repository import BaseRepository
+from sqlalchemy.orm import Session
+
 
 class InterviewRepository(BaseRepository[Interview]):
     def list_by_application(self, db: Session, *, application_id: int) -> list:

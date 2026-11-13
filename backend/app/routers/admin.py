@@ -1,6 +1,6 @@
-from fastapi import APIRouter, Depends
 from backend.app.contracts.admin import AdminAction, SystemStats
 from backend.app.services.audit_service import audit_service
+from fastapi import APIRouter
 
 router = APIRouter()
 

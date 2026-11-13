@@ -1,5 +1,6 @@
 from typing import Any, Dict, List
 
+
 class GitHubContributionFetcher:
     def __init__(self, client: Any = None):
         self.client = client

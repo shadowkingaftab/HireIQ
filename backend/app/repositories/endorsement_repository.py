@@ -1,6 +1,7 @@
-from sqlalchemy.orm import Session
-from backend.app.repositories.base_repository import BaseRepository
 from backend.app.models.endorsement import Endorsement
+from backend.app.repositories.base_repository import BaseRepository
+from sqlalchemy.orm import Session
+
 
 class EndorsementRepository(BaseRepository[Endorsement]):
     def list_by_candidate(self, db: Session, *, candidate_id: int) -> list:

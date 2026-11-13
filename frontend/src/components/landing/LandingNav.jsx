@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import Button from "../ui/Button";
 import { brand } from "../../utils/brand";
+import BrandLogo from "../BrandLogo";
 
 const anchors = [
   { href: "#how-it-works", label: "How it works" },
@@ -17,13 +18,7 @@ export default function LandingNav() {
           className="flex items-center gap-2.5 rounded-md focus-visible:outline-none"
           aria-label={`${brand.name} home`}
         >
-          <span
-            aria-hidden="true"
-            className="flex h-8 w-8 items-center justify-center rounded-lg border border-electric/40 bg-electric/10 font-mono text-[11px] font-bold tracking-tight text-electric-soft shadow-[0_0_18px_rgba(14,165,233,0.22)]"
-          >
-            {brand.shortMark}
-          </span>
-          <span className="text-body-sm font-semibold tracking-tight text-stellar">{brand.name}</span>
+          <BrandLogo variant="compact" tone="dark" />
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex" aria-label="Page sections">

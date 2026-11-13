@@ -1,6 +1,7 @@
-from typing import Optional, List
-from pydantic import EmailStr, Field
+from typing import Optional
+
 from backend.app.schemas import CoreModel
+from pydantic import EmailStr
 
 
 class UserBase(CoreModel):
@@ -10,19 +11,21 @@ class UserBase(CoreModel):
     is_superuser: bool = False
 
 
-class UserCreate(UserBase):
+class UserCreate(CoreModel):
+    email: EmailStr
+    full_name: Optional[str] = None
     password: str
 
 
-class UserUpdate(UserBase):
+class UserUpdate(CoreModel):
+    email: EmailStr
+    full_name: Optional[str] = None
+    is_active: Optional[bool] = None
     password: Optional[str] = None
 
 
 class UserInDBBase(UserBase):
     id: Optional[int] = None
-
-    class Config:
-        from_attributes = True
 
 
 class User(UserInDBBase):

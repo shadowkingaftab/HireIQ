@@ -1,20 +1,13 @@
-from fastapi.testclient import TestClient
-from backend.main import app
-
-client = TestClient(app)
-
-
-def test_health():
+def test_health(client):
     response = client.get("/health")
     assert response.status_code == 200
-    assert response.json()["status"] == "ok"
+    assert response.json() == {"status": "ok"}
 
 
-def test_openapi():
-    response = client.get("/openapi.json")
+def test_openapi_lists_current_api_routes(client):
+    response = client.get("/api/v1/openapi.json")
     assert response.status_code == 200
-    data = response.json()
-    assert "paths" in data
-    assert "/api/v1/auth/login" in data["paths"]
-    assert "/api/v1/jobs" in data["paths"]
-
+    paths = response.json()["paths"]
+    assert "/api/v1/auth/login" in paths
+    assert "/api/v1/jobs/" in paths
+    assert "/api/v1/matching/jobs/{job_id}/match" in paths

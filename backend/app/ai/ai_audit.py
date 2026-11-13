@@ -3,8 +3,8 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 
-from backend.app.ai.hallucination_guard import HallucinationGuard
 from backend.app.ai.citation_builder import CitationBuilder
+from backend.app.ai.hallucination_guard import HallucinationGuard
 
 logger = logging.getLogger(__name__)
 
@@ -29,7 +29,7 @@ class AIAudit:
         self.citation_builder = citation_builder or CitationBuilder()
         self._events: List[AuditEvent] = []
 
-    def record(
+    async def record(
         self,
         event_type: str,
         entity_type: str,
@@ -47,7 +47,7 @@ class AIAudit:
         hallucination_checks = []
         if response and citations:
             evidence_text = " ".join(c.get("excerpt", "") for c in citations)
-            check = self.guard.check(claim=response, evidence=evidence_text)
+            check = await self.guard.check(claim=response, evidence=evidence_text)
             hallucination_checks.append(check)
 
         event = AuditEvent(

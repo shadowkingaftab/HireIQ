@@ -1,4 +1,3 @@
-import pytest
 
 from backend.app.search.ranking import Ranker
 

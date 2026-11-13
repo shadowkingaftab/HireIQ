@@ -1,7 +1,6 @@
-from fastapi import APIRouter
-from backend.app.observability.health_checks import health_checks
-from backend.app.observability.readiness import readiness
 from backend.app.observability.liveness import liveness
+from backend.app.observability.readiness import readiness
+from fastapi import APIRouter
 
 router = APIRouter()
 

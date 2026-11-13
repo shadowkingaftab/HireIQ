@@ -1,7 +1,7 @@
-from sqlalchemy import Column, Integer, ForeignKey, String, Text, Boolean
-from sqlalchemy.orm import relationship
 from backend.app.database import Base
 from backend.app.models.base import TimestampMixin
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Text
+
 
 class DataConsent(Base, TimestampMixin):
     __tablename__ = "data_consents"

@@ -1,8 +1,8 @@
-from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session
+from backend.app.contracts.endorsements import Endorsement, EndorsementCreate
 from backend.app.database import get_db
-from backend.app.contracts.endorsements import EndorsementCreate, Endorsement
 from backend.app.services.endorsement_service import endorsement_service
+from fastapi import APIRouter, Depends, status
+from sqlalchemy.orm import Session
 
 router = APIRouter()
 

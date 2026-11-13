@@ -1,6 +1,6 @@
-from fastapi import APIRouter, Depends
+from backend.app.contracts.integrations import Integration, IntegrationCreate
 from backend.app.integrations.stripe.client import StripeIntegration
-from backend.app.contracts.integrations import IntegrationCreate, Integration
+from fastapi import APIRouter
 
 router = APIRouter()
 integration = StripeIntegration()

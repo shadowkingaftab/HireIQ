@@ -1,5 +1,6 @@
 from typing import Any, Dict, List
 
+
 class CodeForcesClient:
     def __init__(self):
         self.base_url = "https://codeforces.com/api"

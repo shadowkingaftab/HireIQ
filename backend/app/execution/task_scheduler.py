@@ -1,11 +1,11 @@
 import asyncio
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
-from backend.app.execution.execution_plan import ExecutionPlan
-from backend.app.execution.execution_context import ExecutionContext
-from backend.app.execution.task_graph import TaskGraph
 from backend.app.execution.dependency_resolver import DependencyResolver
+from backend.app.execution.execution_context import ExecutionContext
+from backend.app.execution.execution_plan import ExecutionPlan
+from backend.app.execution.task_graph import TaskGraph
 
 logger = logging.getLogger(__name__)
 

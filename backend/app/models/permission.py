@@ -1,7 +1,8 @@
-from sqlalchemy import Column, Integer, String
-from sqlalchemy.orm import relationship
 from backend.app.database import Base
 from backend.app.models.base import TimestampMixin
+from sqlalchemy import Column, Integer, String
+from sqlalchemy.orm import relationship
+
 
 class Permission(Base, TimestampMixin):
     __tablename__ = "permissions"

@@ -1,4 +1,3 @@
-from typing import Any, Dict, List
 
 class SkillConfidence:
     def compute(self, *, evidence_count: int, avg_reliability: float) -> float:

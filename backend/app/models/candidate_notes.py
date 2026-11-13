@@ -1,8 +1,7 @@
-from sqlalchemy import Column, Integer, Text, ForeignKey, Boolean
-from sqlalchemy.orm import relationship
-
 from backend.app.database import Base
 from backend.app.models.base import TimestampMixin
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, Text
+from sqlalchemy.orm import relationship
 
 
 class CandidateNote(Base, TimestampMixin):

@@ -1,20 +1,11 @@
-from fastapi.testclient import TestClient
-from backend.main import app
-
-client = TestClient(app)
-
-
-def test_admin_access():
-    response = client.get("/api/v1/users", headers={"Authorization": "Bearer admin-token"})
-    assert response.status_code in (200, 401)
+def test_me_requires_authentication(client):
+    response = client.get("/api/v1/auth/me")
+    assert response.status_code == 403
 
 
-def test_recruiter_access():
-    response = client.get("/api/v1/jobs", headers={"Authorization": "Bearer recruiter-token"})
-    assert response.status_code in (200, 401)
-
-
-def test_candidate_access_denied():
-    response = client.get("/api/v1/users", headers={"Authorization": "Bearer candidate-token"})
-    assert response.status_code in (403, 401)
-
+def test_me_rejects_invalid_bearer_token(client):
+    response = client.get(
+        "/api/v1/auth/me",
+        headers={"Authorization": "Bearer not-a-valid-token"},
+    )
+    assert response.status_code == 401

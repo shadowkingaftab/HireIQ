@@ -1,5 +1,6 @@
-from typing import Optional, List, Dict, Any
 from datetime import datetime
+from typing import Any, Dict, Optional
+
 from backend.app.schemas import CoreModel, TimestampModel
 
 

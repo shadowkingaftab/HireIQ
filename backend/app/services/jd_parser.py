@@ -1,4 +1,5 @@
-from typing import Any, Dict, List
+from typing import Any, Dict
+
 
 class JDParser:
     def parse(self, *, text: str) -> Dict[str, Any]:

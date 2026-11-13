@@ -1,6 +1,7 @@
-from fastapi import Query
-from backend.app.core.constants import DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE
 from backend.app.contracts.common import Params
+from backend.app.core.constants import DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE
+from fastapi import Query
+
 
 def get_pagination_params(
     page: int = Query(1, ge=1, description="Page number"),

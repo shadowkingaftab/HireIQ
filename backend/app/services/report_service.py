@@ -1,9 +1,10 @@
 from typing import List, Optional
-from sqlalchemy.orm import Session
+
 from backend.app.contracts.reports import ReportCreate
 from backend.app.models.report import Report
-from backend.app.storage.file_service import file_service
 from backend.app.templates.reports import render_template
+from sqlalchemy.orm import Session
+
 
 class ReportService:
     def list_by_organization(self, db: Session, *, organization_id: int) -> List[Report]:

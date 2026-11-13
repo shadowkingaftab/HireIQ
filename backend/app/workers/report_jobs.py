@@ -11,7 +11,9 @@ async def generate_report_job(payload: Dict[str, Any]) -> None:
         return
     try:
         from backend.app.services.report_service import report_service
-        await report_service.generate(report_id=report_id)
+        report = report_service.generate(report_id=report_id)
+        if report is None:
+            logger.error("Report generation is not configured for report %s", report_id)
     except Exception:
         logger.exception("Report job failed for %s", report_id)
 

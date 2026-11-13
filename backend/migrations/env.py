@@ -1,16 +1,16 @@
 from logging.config import fileConfig
 
 from alembic import context
-from sqlalchemy import engine_from_config, pool
-
 from backend.app.core.config import settings
+from sqlalchemy import engine_from_config, pool
 
 config = context.config
 
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-from backend.app.database import Base
+from backend.app.database import Base  # noqa: E402
+
 target_metadata = Base.metadata
 
 # Use the same database configured for the ProofHire application.

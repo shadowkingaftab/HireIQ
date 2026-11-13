@@ -1,8 +1,7 @@
-from sqlalchemy import Boolean, Column, Integer, String, ForeignKey, DateTime
-from sqlalchemy.orm import relationship
-
 from backend.app.database import Base
 from backend.app.models.base import TimestampMixin
+from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, String
+from sqlalchemy.orm import relationship
 
 
 class RefreshToken(Base, TimestampMixin):

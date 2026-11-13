@@ -1,7 +1,8 @@
-from sqlalchemy import Column, Integer, String, Text, Boolean
-from sqlalchemy.orm import relationship
 from backend.app.database import Base
 from backend.app.models.base import TimestampMixin
+from sqlalchemy import Boolean, Column, Integer, String, Text
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
 
 class Organization(Base, TimestampMixin):
     __tablename__ = "organizations"
@@ -12,7 +13,7 @@ class Organization(Base, TimestampMixin):
     description = Column(Text)
     website = Column(String(255))
     logo_url = Column(String(512))
-    is_active = Column(Boolean(), default=True)
+    is_active: Mapped[bool] = mapped_column(Boolean(), default=True)
     
     # Relationships
     members = relationship("OrganizationMember", back_populates="organization", cascade="all, delete-orphan")

@@ -1,8 +1,9 @@
-from typing import List
-from sqlalchemy.orm import Session
-from backend.app.repositories.job_repository import job_repository
-from backend.app.contracts.jobs import JobCreate, JobUpdate
+from typing import List, Optional
+
+from backend.app.contracts.jobs import JobCreate
 from backend.app.models.job import Job
+from backend.app.repositories.job_repository import job_repository
+from sqlalchemy.orm import Session
 
 
 class JobService:
@@ -15,6 +16,9 @@ class JobService:
 
     def list(self, db: Session) -> List[Job]:
         return job_repository.list(db)
+
+    def get(self, db: Session, *, job_id: int) -> Optional[Job]:
+        return job_repository.get(db, id=job_id)
 
     def list_by_org(self, db: Session, *, organization_id: int) -> List[Job]:
         return job_repository.get_by_organization(

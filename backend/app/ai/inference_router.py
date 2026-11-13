@@ -2,7 +2,6 @@ import logging
 from enum import Enum
 from typing import Any, Dict, Optional
 
-from backend.app.ai.model_registry import ModelInfo
 from backend.app.ai.llm_service import LLMService
 
 logger = logging.getLogger(__name__)

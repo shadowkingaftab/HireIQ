@@ -1,8 +1,11 @@
+from backend.app.contracts.organizations import (
+    Organization,
+    OrganizationCreate,
+)
+from backend.app.database import get_db
+from backend.app.services.organization_service import organization_service
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from backend.app.database import get_db
-from backend.app.contracts.organizations import OrganizationCreate, OrganizationUpdate, Organization
-from backend.app.services.organization_service import organization_service
 
 router = APIRouter()
 

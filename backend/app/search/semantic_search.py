@@ -2,8 +2,6 @@ import logging
 import math
 from typing import Any, Dict, List, Optional
 
-from backend.app.core.config import settings
-
 logger = logging.getLogger(__name__)
 
 

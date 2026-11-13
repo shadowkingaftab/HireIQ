@@ -1,5 +1,4 @@
 from enum import Enum
-from typing import Any, Dict
 
 
 class EventType(str, Enum):
@@ -15,6 +14,10 @@ class EventType(str, Enum):
     SEARCH_PERFORMED = "search.performed"
     APPLICATION_CREATED = "application.created"
     APPLICATION_STATUS_CHANGED = "application.status_changed"
+
+    @classmethod
+    def values(cls) -> list[str]:
+        return [event.value for event in cls]
 
 
 class EventTypes:
@@ -32,5 +35,5 @@ class EventTypes:
     APPLICATION_STATUS_CHANGED = EventType.APPLICATION_STATUS_CHANGED
 
     @classmethod
-    def values(cls) -> list:
-        return [e.value for e in cls]
+    def values(cls) -> list[str]:
+        return EventType.values()

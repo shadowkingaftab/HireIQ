@@ -1,8 +1,10 @@
 from typing import List, Optional
-from sqlalchemy.orm import Session
+
 from backend.app.contracts.subscriptions import SubscriptionCreate
-from backend.app.models.subscription import Subscription
 from backend.app.integrations.stripe.client import StripeClient
+from backend.app.models.subscription import Subscription
+from sqlalchemy.orm import Session
+
 
 class PaymentService:
     def __init__(self, stripe_client: Optional[StripeClient] = None):

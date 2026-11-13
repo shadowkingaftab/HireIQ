@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { brand } from "../../utils/brand";
+import BrandLogo from "../BrandLogo";
 
 const links = [
   { href: "#how-it-works", label: "How it works" },
@@ -10,20 +11,12 @@ const links = [
 export default function LandingFooter() {
   return (
     <footer className="border-t border-electric/10 bg-[#030712]/50 backdrop-blur-sm">
-      <div className="mx-auto flex w-full max-w-7xl flex-col items-center justify-between gap-6 px-4 py-10 sm:flex-row sm:px-6 lg:px-8">
-        <div className="flex items-center gap-2.5">
-          <span
-            aria-hidden="true"
-            className="flex h-7 w-7 items-center justify-center rounded-lg border border-electric/40 bg-electric/10 font-mono text-[10px] font-bold text-electric-soft"
-          >
-            {brand.shortMark}
-          </span>
-          <div>
-            <p className="text-body-sm font-semibold text-stellar">{brand.name}</p>
-            <p className="font-mono text-micro tracking-wide text-nebula/70">
-              Evidence-first hiring intelligence
-            </p>
-          </div>
+      <div className="mx-auto flex w-full max-w-7xl flex-col items-center justify-between gap-7 px-4 py-8 sm:flex-row sm:gap-8 sm:px-6 lg:px-8">
+        <div className="flex flex-col items-center gap-2 sm:items-start">
+          <BrandLogo variant="compact" tone="dark" />
+          <p className="font-mono text-micro tracking-wide text-nebula/70">
+            Evidence-first hiring intelligence
+          </p>
         </div>
 
         <nav aria-label="Footer" className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">

@@ -1,5 +1,5 @@
 import logging
-from typing import List, Optional
+from typing import List
 
 logger = logging.getLogger(__name__)
 
@@ -9,8 +9,9 @@ class SkillMapper:
         if not text_content:
             return []
         try:
-            from backend.app.ai.extraction import extraction
             import asyncio
+
+            from backend.app.ai.extraction import extraction
             return asyncio.run(extraction.extract_skills(text_content))
         except Exception:
             logger.exception("Skill mapping failed")

@@ -1,7 +1,7 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
-from sqlalchemy.orm import relationship
 from backend.app.database import Base
 from backend.app.models.base import TimestampMixin
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, String
+
 
 class APIKey(Base, TimestampMixin):
     __tablename__ = "api_keys"

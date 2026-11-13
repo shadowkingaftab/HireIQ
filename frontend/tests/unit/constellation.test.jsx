@@ -1,16 +1,14 @@
 import { describe, expect, it } from "vitest";
 import { render, screen } from "@testing-library/react";
-import EvidenceConstellation from "../../src/components/landing/EvidenceConstellation";
+import ProofNetwork from "../../src/components/landing/ProofNetwork";
 
-describe("EvidenceConstellation", () => {
-  it("renders the accessible evidence-to-match graph", () => {
-    const { container } = render(<EvidenceConstellation />);
+describe("ProofNetwork", () => {
+  it("renders the connected profile network and its accessible nodes", () => {
+    render(<ProofNetwork />);
 
-    expect(
-      screen.getByRole("img", {
-        name: /repositories, assessments and contributions support verified skills/i,
-      })
-    ).toBeDefined();
-    expect(container.querySelectorAll(".constellation-match-node, .constellation-mobile-match")).toHaveLength(2);
+    expect(screen.getByRole("group", { name: /profile connected to coding platforms and skills/i })).toBeDefined();
+    expect(screen.getByRole("link", { name: /github \(opens in a new tab\)/i })).toBeDefined();
+    expect(screen.getByRole("link", { name: /linkedin \(opens in a new tab\)/i })).toBeDefined();
+    expect(screen.getByText("PYTHON")).toBeDefined();
   });
 });

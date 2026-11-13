@@ -1,8 +1,9 @@
-from sqlalchemy import Column, Integer, String, Text, ForeignKey, Enum, JSON
-from sqlalchemy.orm import relationship
+from backend.app.core.constants import JobStatus
 from backend.app.database import Base
 from backend.app.models.base import TimestampMixin
-from backend.app.core.constants import JobStatus
+from sqlalchemy import JSON, Column, Enum, ForeignKey, Integer, String, Text
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
 
 class Job(Base, TimestampMixin):
     __tablename__ = "jobs"
@@ -14,7 +15,7 @@ class Job(Base, TimestampMixin):
     location = Column(String(255))
     salary_min = Column(Integer)
     salary_max = Column(Integer)
-    status = Column(Enum(JobStatus), default=JobStatus.DRAFT, nullable=False)
+    status: Mapped[JobStatus] = mapped_column(Enum(JobStatus), default=JobStatus.DRAFT, nullable=False)
     
     # Metadata for matching
     ideal_skills = Column(JSON, default=list) # List of skill IDs

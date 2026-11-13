@@ -1,7 +1,9 @@
 from typing import List, Optional
-from sqlalchemy.orm import Session
-from backend.app.contracts.recruiters import RecruiterCreate, RecruiterUpdate
+
+from backend.app.contracts.recruiters import RecruiterCreate
 from backend.app.models.recruiter import Recruiter
+from sqlalchemy.orm import Session
+
 
 class RecruiterService:
     def list_by_organization(self, db: Session, *, organization_id: int) -> List[Recruiter]:

@@ -1,8 +1,8 @@
-from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session
+from backend.app.contracts.reports import Report, ReportCreate
 from backend.app.database import get_db
-from backend.app.contracts.reports import ReportCreate, Report
 from backend.app.services.report_service import report_service
+from fastapi import APIRouter, Depends, status
+from sqlalchemy.orm import Session
 
 router = APIRouter()
 

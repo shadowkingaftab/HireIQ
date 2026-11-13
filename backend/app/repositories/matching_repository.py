@@ -1,6 +1,7 @@
-from sqlalchemy.orm import Session
-from backend.app.repositories.base_repository import BaseRepository
 from backend.app.models.match_result import MatchResult
+from backend.app.repositories.base_repository import BaseRepository
+from sqlalchemy.orm import Session
+
 
 class MatchResultRepository(BaseRepository[MatchResult]):
     def list_by_job(self, db: Session, *, job_id: int) -> list:

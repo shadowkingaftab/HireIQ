@@ -1,6 +1,7 @@
-from typing import Generic, List, TypeVar, Optional
-from pydantic import BaseModel, Field
+from typing import Generic, List, TypeVar
+
 from backend.app.core.constants import DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE
+from pydantic import BaseModel, Field
 
 T = TypeVar("T")
 

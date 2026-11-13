@@ -1,5 +1,6 @@
-from fastapi import Request
 from backend.app.core.exceptions import AppError
+from fastapi import Request
+
 
 async def rate_limit_dependency(request: Request):
     # This is a placeholder for actual rate limiting logic (e.g. using Redis)

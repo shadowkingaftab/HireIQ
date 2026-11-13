@@ -1,5 +1,6 @@
 from typing import Any, Dict
 
+
 class HackerRankMapper:
     def map_result_to_evidence(self, result: Dict[str, Any]) -> Dict[str, Any]:
         return {

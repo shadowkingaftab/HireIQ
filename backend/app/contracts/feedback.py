@@ -1,6 +1,5 @@
-from typing import Optional, List
-from pydantic import Field
 from backend.app.schemas import CoreModel, TimestampModel
+from pydantic import Field
 
 
 class FeedbackBase(CoreModel):

@@ -1,7 +1,7 @@
 import logging
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, Optional
 
-from backend.app.ai.model_registry import ModelRegistry, ModelInfo
+from backend.app.ai.model_registry import ModelInfo, ModelRegistry
 
 logger = logging.getLogger(__name__)
 
@@ -84,7 +84,7 @@ class LLMService:
             temperature=temperature,
             messages=[{"role": "user", "content": prompt}],
         )
-        return response.content[0].text if response.content else ""
+        return getattr(response.content[0], "text", "") if response.content else ""
 
 
 llm_service = LLMService()

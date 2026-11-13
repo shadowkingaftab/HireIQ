@@ -1,6 +1,6 @@
-from sqlalchemy.orm import Session
-from backend.app.repositories.base_repository import BaseRepository
 from backend.app.models.capability_score import CapabilityScore
+from backend.app.repositories.base_repository import BaseRepository
+
 
 class CapabilityScoreRepository(BaseRepository[CapabilityScore]):
     pass

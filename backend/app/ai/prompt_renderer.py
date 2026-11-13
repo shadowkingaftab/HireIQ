@@ -1,7 +1,7 @@
 import logging
 from typing import Any, Dict, Optional
 
-from backend.app.ai.prompt_registry import PromptRegistry, PromptTemplate
+from backend.app.ai.prompt_registry import PromptRegistry
 
 logger = logging.getLogger(__name__)
 

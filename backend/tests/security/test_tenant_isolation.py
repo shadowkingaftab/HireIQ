@@ -1,19 +1,11 @@
-from fastapi.testclient import TestClient
-from backend.main import app
-
-client = TestClient(app)
-
-
-def test_tenant_isolation():
-    response_a = client.get("/api/v1/candidates", headers={"Authorization": "Bearer tenant-a-token"})
-    response_b = client.get("/api/v1/candidates", headers={"Authorization": "Bearer tenant-b-token"})
-    assert response_a.status_code in (200, 401)
-    assert response_b.status_code in (200, 401)
-    if response_a.status_code == 200 and response_b.status_code == 200:
-        assert response_a.json() != response_b.json()
+def test_unknown_user_token_cannot_access_protected_identity(client):
+    response = client.get(
+        "/api/v1/auth/me",
+        headers={"Authorization": "Bearer tenant-a-token"},
+    )
+    assert response.status_code == 401
 
 
-def test_cross_tenant_job_access():
-    response = client.get("/api/v1/jobs/999", headers={"Authorization": "Bearer tenant-a-token"})
-    assert response.status_code in (404, 401, 403)
-
+def test_nonexistent_job_does_not_expose_a_record(client):
+    response = client.get("/api/v1/jobs/999")
+    assert response.status_code == 404

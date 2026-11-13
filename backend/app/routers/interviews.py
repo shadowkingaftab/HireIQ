@@ -1,8 +1,8 @@
+from backend.app.contracts.interviews import Interview, InterviewCreate, InterviewUpdate
+from backend.app.database import get_db
+from backend.app.services.interview_service import interview_service
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from backend.app.database import get_db
-from backend.app.contracts.interviews import InterviewCreate, InterviewUpdate, Interview
-from backend.app.services.interview_service import interview_service
 
 router = APIRouter()
 

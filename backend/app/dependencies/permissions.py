@@ -1,6 +1,9 @@
 from typing import List
+
 from backend.app.core.constants import UserRole
 from backend.app.dependencies.auth import get_current_active_user
+from fastapi import Depends, HTTPException
+
 
 def require_roles(roles: List[UserRole]):
     def checker(current_user = Depends(get_current_active_user)):

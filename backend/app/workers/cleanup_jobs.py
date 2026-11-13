@@ -1,6 +1,5 @@
 import logging
 from datetime import datetime, timezone
-from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -8,7 +7,6 @@ logger = logging.getLogger(__name__)
 async def run_cleanup_job() -> None:
     try:
         from backend.app.governance.retention_policy import retention_policy
-        from backend.app.evidence.contracts import NormalizedEvidence
 
         now = datetime.now(timezone.utc).isoformat()
         rules = retention_policy.list_rules()

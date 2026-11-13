@@ -76,7 +76,7 @@ export const skillsApi = {
 };
 
 export const notificationsApi = {
-  list: (userId) => request(`/notifications?user_id=${encodeURIComponent(userId)}`),
+  list: () => request("/notifications"),
   markRead: (id) => request(`/notifications/${id}/read`, { method: "PATCH" }),
 };
 

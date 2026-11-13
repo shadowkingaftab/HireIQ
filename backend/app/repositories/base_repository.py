@@ -1,6 +1,7 @@
-from typing import Generic, List, Optional, TypeVar, Any
-from sqlalchemy.orm import Session
+from typing import Any, Generic, List, Optional, TypeVar
+
 from sqlalchemy import select
+from sqlalchemy.orm import Session
 
 T = TypeVar("T")
 
@@ -12,7 +13,7 @@ class BaseRepository(Generic[T]):
         return db.get(self.model, id)
 
     def list(self, db: Session) -> List[T]:
-        return db.execute(select(self.model)).scalars().all()
+        return list(db.execute(select(self.model)).scalars().all())
 
     def create(self, db: Session, *, obj_in: Any) -> T:
         db_obj = self.model(**obj_in.dict() if hasattr(obj_in, "dict") else obj_in)

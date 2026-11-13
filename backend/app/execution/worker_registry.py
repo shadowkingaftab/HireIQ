@@ -1,6 +1,4 @@
-from typing import Any, Dict, Optional
-
-from backend.app.execution.execution_plan import ExecutionPlan
+from typing import Any, Dict, List, Optional
 
 
 class WorkerRegistry:

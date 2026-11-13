@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 from backend.app.events.event_bus import Event, EventBus, event_bus
 from backend.app.events.event_types import EventType

@@ -1,4 +1,5 @@
-from typing import Any, Dict, Optional
+from typing import Any, Dict
+
 
 class GreenhouseService:
     async def sync(self, *, api_key: str) -> Dict[str, Any]:

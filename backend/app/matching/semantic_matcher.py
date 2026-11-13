@@ -1,9 +1,8 @@
-from typing import Dict, Any
-from backend.app.models.job import Job
-from backend.app.models.candidate import Candidate
+from typing import Any, Dict
+
 
 class SemanticMatcher:
-    def match(self, *, job: Job, candidate: Candidate) -> Dict[str, Any]:
+    def match(self, *, job: Any, candidate: Any) -> Dict[str, Any]:
         # NLP based matching of text descriptions
         return {"score": 0.85, "matches": []}
 

@@ -1,4 +1,5 @@
-from typing import Optional, List
+from typing import List, Optional
+
 from backend.app.schemas import CoreModel, TimestampModel
 
 

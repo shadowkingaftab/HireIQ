@@ -1,8 +1,8 @@
-from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
+from backend.app.contracts.analytics import AnalyticsSummary
 from backend.app.database import get_db
 from backend.app.services.analytics_service import analytics_service
-from backend.app.contracts.analytics import AnalyticsSummary
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
 
 router = APIRouter()
 

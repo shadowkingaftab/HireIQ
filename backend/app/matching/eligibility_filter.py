@@ -1,5 +1,6 @@
 from typing import Any, Dict, List
 
+
 class EligibilityFilter:
     def filter(self, *, candidates: List[Dict[str, Any]], job: Dict[str, Any]) -> List[Dict[str, Any]]:
         return candidates

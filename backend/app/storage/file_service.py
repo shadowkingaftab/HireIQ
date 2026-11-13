@@ -3,7 +3,6 @@ from typing import Optional
 
 from backend.app.storage.base import BaseStorage
 from backend.app.storage.local import LocalStorage
-from backend.app.storage.object_storage import ObjectStorage
 
 logger = logging.getLogger(__name__)
 

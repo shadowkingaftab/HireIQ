@@ -1,8 +1,8 @@
-from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session
+from backend.app.contracts.teams import Team, TeamCreate
 from backend.app.database import get_db
-from backend.app.contracts.teams import TeamCreate, TeamUpdate, Team
 from backend.app.services.team_service import team_service
+from fastapi import APIRouter, Depends, status
+from sqlalchemy.orm import Session
 
 router = APIRouter()
 

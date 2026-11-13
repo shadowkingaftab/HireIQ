@@ -1,5 +1,7 @@
-from typing import Optional, List, Dict, Any
+from typing import Any, Dict, List, Optional
+
 from backend.app.schemas import CoreModel
+from pydantic import Field
 
 
 class MatchingResult(CoreModel):
@@ -12,7 +14,6 @@ class MatchingResult(CoreModel):
 
 
 class MatchingRequest(CoreModel):
-    job_id: int
     candidate_ids: Optional[List[int]] = None
-    limit: int = 10
+    limit: int = Field(default=10, ge=1, le=100)
 

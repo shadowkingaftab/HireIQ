@@ -1,14 +1,17 @@
-from sqlalchemy import Column, Integer, Text, ForeignKey, Enum, Float, JSON
-from sqlalchemy.orm import relationship
+from backend.app.core.constants import ApplicationStatus
 from backend.app.database import Base
 from backend.app.models.base import TimestampMixin
-from backend.app.core.constants import ApplicationStatus
+from sqlalchemy import JSON, Column, Enum, Float, ForeignKey, Integer, Text
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
 
 class Application(Base, TimestampMixin):
     __tablename__ = "applications"
 
     id = Column(Integer, primary_key=True, index=True)
-    status = Column(Enum(ApplicationStatus), default=ApplicationStatus.APPLIED, nullable=False)
+    status: Mapped[ApplicationStatus] = mapped_column(
+        Enum(ApplicationStatus), default=ApplicationStatus.APPLIED, nullable=False
+    )
     cover_letter = Column(Text)
     
     # Matching and scoring

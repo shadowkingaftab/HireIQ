@@ -1,8 +1,7 @@
-from sqlalchemy import Boolean, Column, Integer, String, Enum, Table, ForeignKey
-from sqlalchemy.orm import relationship
 from backend.app.database import Base
 from backend.app.models.base import TimestampMixin
-from backend.app.core.constants import UserRole
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Table
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 # Association table for User-Role (Many-to-Many)
 user_roles = Table(
@@ -19,8 +18,8 @@ class User(Base, TimestampMixin):
     email = Column(String(255), unique=True, index=True, nullable=False)
     hashed_password = Column(String(255), nullable=False)
     full_name = Column(String(255), index=True)
-    is_active = Column(Boolean(), default=True)
-    is_superuser = Column(Boolean(), default=False)
+    is_active: Mapped[bool] = mapped_column(Boolean(), default=True)
+    is_superuser: Mapped[bool] = mapped_column(Boolean(), default=False)
     
     # Relationships
     roles = relationship("Role", secondary=user_roles, back_populates="users")

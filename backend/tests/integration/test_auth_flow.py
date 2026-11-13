@@ -1,22 +1,22 @@
-import pytest
-from httpx import AsyncClient
+def test_signup_login_and_me_round_trip(client):
+    user = {
+        "email": "candidate@example.com",
+        "password": "correct-horse-battery-staple",
+        "full_name": "Test Candidate",
+    }
 
-from backend.main import app
+    signup = client.post("/api/v1/auth/signup", json=user)
+    assert signup.status_code == 201
+    assert signup.json()["token_type"] == "bearer"
 
+    login = client.post(
+        "/api/v1/auth/login",
+        json={"username": user["email"], "password": user["password"]},
+    )
+    assert login.status_code == 200
+    token = login.json()["access_token"]
 
-@pytest.mark.asyncio
-async def test_login_and_refresh():
-    async with AsyncClient(app=app, base_url="http://test") as client:
-        login_resp = await client.post(
-            "/api/v1/auth/login",
-            json={"email": "test@example.com", "password": "password"},
-        )
-        assert login_resp.status_code in (200, 401)
-        if login_resp.status_code == 200:
-            token = login_resp.json().get("access_token")
-            me_resp = await client.get(
-                "/api/v1/auth/me",
-                headers={"Authorization": f"Bearer {token}"},
-            )
-            assert me_resp.status_code == 200
-
+    me = client.get("/api/v1/auth/me", headers={"Authorization": f"Bearer {token}"})
+    assert me.status_code == 200
+    assert me.json()["user"]["email"] == user["email"]
+    assert me.json()["user"]["role"] == "candidate"

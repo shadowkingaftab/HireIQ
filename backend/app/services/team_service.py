@@ -1,7 +1,9 @@
-from typing import List, Optional
-from sqlalchemy.orm import Session
+from typing import List
+
 from backend.app.contracts.teams import TeamCreate, TeamUpdate
 from backend.app.models.team import Team
+from sqlalchemy.orm import Session
+
 
 class TeamService:
     def list_by_organization(self, db: Session, *, organization_id: int) -> List[Team]:

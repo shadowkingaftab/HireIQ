@@ -1,7 +1,7 @@
-from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
 from backend.app.core.exceptions import AppError
 from backend.app.core.logging import get_logger
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
 
 logger = get_logger(__name__)
 

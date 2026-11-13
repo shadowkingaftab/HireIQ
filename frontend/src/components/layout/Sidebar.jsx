@@ -4,23 +4,10 @@ import { useAuthStore } from "../../store/authStore";
 import { primaryNavFor, sharedNav } from "./navConfig";
 import Tooltip from "../ui/Tooltip";
 import { brand } from "../../utils/brand";
+import BrandLogo from "../BrandLogo";
 
 function BrandMark({ compact = false }) {
-  return (
-    <div className="flex items-center gap-2.5">
-      <span
-        aria-hidden="true"
-        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-intel/30 bg-intel-soft font-mono text-[11px] font-bold tracking-tight text-intel"
-      >
-        {brand.shortMark}
-      </span>
-      {!compact && (
-        <span className="truncate text-body-sm font-semibold tracking-tight text-ink-hi">
-          {brand.name}
-        </span>
-      )}
-    </div>
-  );
+  return <BrandLogo variant={compact ? "icon" : "compact"} tone="dark" />;
 }
 
 function NavLinkList({ items, collapsed = false }) {

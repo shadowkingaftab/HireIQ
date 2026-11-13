@@ -1,7 +1,8 @@
-from sqlalchemy import Column, Integer, ForeignKey, JSON, DateTime, func
-from sqlalchemy.orm import relationship
 from backend.app.database import Base
 from backend.app.models.base import TimestampMixin
+from sqlalchemy import JSON, Column, DateTime, ForeignKey, Integer, func
+from sqlalchemy.orm import relationship
+
 
 class EvidenceSnapshot(Base, TimestampMixin):
     __tablename__ = "evidence_snapshots"

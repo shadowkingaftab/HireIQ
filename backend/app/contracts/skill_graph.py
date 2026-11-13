@@ -1,5 +1,6 @@
-from typing import Optional, List, Dict, Any
-from backend.app.schemas import CoreModel, TimestampModel
+from typing import List, Optional
+
+from backend.app.schemas import CoreModel
 
 
 class SkillBase(CoreModel):

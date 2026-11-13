@@ -1,7 +1,7 @@
-from sqlalchemy import Column, String, Float, JSON, ForeignKey, Integer, DateTime, func
-from sqlalchemy.orm import relationship
 from backend.app.database import Base
 from backend.app.models.base import TimestampMixin
+from sqlalchemy import JSON, Column, DateTime, Integer, String, func
+
 
 class SkillGraph(Base, TimestampMixin):
     __tablename__ = "skill_graph_metadata"

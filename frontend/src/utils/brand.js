@@ -5,7 +5,6 @@
  */
 export const brand = {
   name: "ORIONET",
-  shortMark: "ON",
   tagline: "Evidence-first hiring intelligence",
   statement: "The workspace where capability is proven.",
 };

@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Generic, Optional, TypeVar
+from typing import Any, Optional, TypeVar
 
 from backend.app.core.config import settings
 

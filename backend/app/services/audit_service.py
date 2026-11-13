@@ -1,7 +1,8 @@
 from typing import List, Optional
-from sqlalchemy.orm import Session
+
 from backend.app.models.audit_log import AuditLog
-from backend.app.contracts.admin import AdminAction
+from sqlalchemy.orm import Session
+
 
 class AuditService:
     def record_action(self, *, actor_id: int, action_type: str, resource_id: Optional[str] = None, details: Optional[dict] = None) -> AuditLog:

@@ -1,5 +1,5 @@
 import logging
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Any, Dict, Optional
 
@@ -12,11 +12,7 @@ class ReliabilityScore:
     source: str
     freshness_days: Optional[int] = None
     verification_status: str = "unverified"
-    metadata: Dict[str, Any] = None
-
-    def __post_init__(self):
-        if self.metadata is None:
-            self.metadata = {}
+    metadata: Dict[str, Any] = field(default_factory=dict)
 
 
 class Reliability:

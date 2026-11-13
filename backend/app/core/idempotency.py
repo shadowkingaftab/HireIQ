@@ -1,6 +1,6 @@
-from fastapi import Request, Response
-from typing import Optional
-import uuid
+
+from fastapi import Request
+
 
 async def idempotency_middleware(request: Request, call_next):
     idempotency_key = request.headers.get("X-Idempotency-Key")

@@ -1,4 +1,5 @@
-from typing import Any, Dict, Optional
+from typing import Any, Dict
+
 
 class WebhookService:
     def send(self, *, event: str, payload: Dict[str, Any]) -> None:

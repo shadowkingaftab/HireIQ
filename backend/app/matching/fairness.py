@@ -1,7 +1,10 @@
 import logging
 from typing import Any, Dict, List, Optional
 
-from backend.app.governance.fairness_governance import fairness_governance
+from backend.app.governance.fairness_governance import (
+    FairnessMetric,
+    fairness_governance,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -14,7 +17,7 @@ class Fairness:
         min_score = min(scores)
         max_score = max(scores)
         disparity = max_score - min_score
-        fairness_governance.register_metric(fairness_governance.FairnessMetric(metric_id="score_disparity", name="Score disparity", description="Max-min score difference", threshold=0.3, direction="max"))
+        fairness_governance.register_metric(FairnessMetric(metric_id="score_disparity", name="Score disparity", description="Max-min score difference", threshold=0.3, direction="max"))
         report = fairness_governance.evaluate("score_disparity", 1.0 - disparity, details={"min_score": min_score, "max_score": max_score})
         return {"passed": report.passed, "disparity": disparity, "report": report}
 

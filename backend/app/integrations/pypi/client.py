@@ -1,4 +1,5 @@
-from typing import Any, Dict, List
+from typing import Any, Dict
+
 
 class PyPiClient:
     def __init__(self, api_key: str):

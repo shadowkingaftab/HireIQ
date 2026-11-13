@@ -1,6 +1,6 @@
-from sqlalchemy.orm import Session
-from backend.app.repositories.base_repository import BaseRepository
 from backend.app.models.skill import Skill
+from backend.app.repositories.base_repository import BaseRepository
+
 
 class SkillRepository(BaseRepository[Skill]):
     pass

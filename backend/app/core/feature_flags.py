@@ -1,5 +1,4 @@
-from typing import Dict, Optional
-from backend.app.core.config import settings
+from typing import Dict
 
 
 class FeatureFlags:

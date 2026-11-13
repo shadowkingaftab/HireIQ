@@ -1,7 +1,7 @@
-from typing import Optional, List
-from pydantic import Field
-from backend.app.schemas import CoreModel, TimestampModel
+from typing import Optional
+
 from backend.app.core.constants import JobStatus
+from backend.app.schemas import CoreModel, TimestampModel
 
 
 class JobBase(CoreModel):

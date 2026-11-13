@@ -1,5 +1,6 @@
 from typing import Any, Dict, List, Optional
 
+
 class GitHubClient:
     def __init__(self, token: Optional[str] = None):
         self.token = token

@@ -1,4 +1,3 @@
-import pytest
 
 from backend.app.search.query_parser import QueryParser
 

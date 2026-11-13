@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { ShieldCheck, ScanSearch, Lock } from "lucide-react";
 import Container from "../ui/Container";
 import { brand } from "../../utils/brand";
+import BrandLogo from "../BrandLogo";
 
 const proofPoints = [
   { icon: ShieldCheck, label: "Evidence-backed signals" },
@@ -43,15 +44,7 @@ export default function AuthLayout({ title, subtitle, children }) {
       {/* Brand / message column */}
       <aside className="relative hidden w-[44%] max-w-xl flex-col justify-between border-r border-line-subtle bg-surface-1/50 p-10 lg:flex xl:p-14">
         <Link to="/" className="w-fit rounded-md focus-visible:outline-none" aria-label={`${brand.name} home`}>
-          <span className="flex items-center gap-2.5">
-            <span
-              aria-hidden="true"
-              className="flex h-8 w-8 items-center justify-center rounded-lg border border-intel/30 bg-intel-soft font-mono text-[11px] font-bold tracking-tight text-intel"
-            >
-              {brand.shortMark}
-            </span>
-            <span className="text-body-sm font-semibold tracking-tight text-ink-hi">{brand.name}</span>
-          </span>
+          <BrandLogo variant="compact" tone="dark" />
         </Link>
 
         <div>
@@ -81,15 +74,7 @@ export default function AuthLayout({ title, subtitle, children }) {
       <main className="flex flex-1 flex-col">
         <div className="flex items-center justify-between p-5 lg:hidden">
           <Link to="/" className="rounded-md focus-visible:outline-none" aria-label={`${brand.name} home`}>
-            <span className="flex items-center gap-2">
-              <span
-                aria-hidden="true"
-                className="flex h-7 w-7 items-center justify-center rounded-lg border border-intel/30 bg-intel-soft font-mono text-[10px] font-bold text-intel"
-              >
-                {brand.shortMark}
-              </span>
-              <span className="text-body-sm font-semibold text-ink-hi">{brand.name}</span>
-            </span>
+            <BrandLogo variant="compact" tone="dark" />
           </Link>
         </div>
 

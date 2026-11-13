@@ -1,15 +1,17 @@
+from backend.app.contracts.auth import Login, Token
+from backend.app.contracts.users import UserCreate
+from backend.app.core.constants import UserRole
+from backend.app.core.security import (
+    create_access_token,
+    get_password_hash,
+    verify_password,
+)
+from backend.app.database import get_db
+from backend.app.dependencies.auth import get_current_user
+from backend.app.models.role import Role
+from backend.app.models.user import User
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from backend.app.database import get_db
-from backend.app.contracts.auth import Login, Token, TokenPayload
-from backend.app.contracts.users import UserCreate, User as UserResponse
-from backend.app.core.security import create_access_token, verify_password, get_password_hash, ALGORITHM
-from backend.app.core.config import settings
-from backend.app.models.user import User
-from backend.app.models.role import Role
-from backend.app.core.constants import UserRole
-from backend.app.dependencies.auth import get_current_user
-from jose import jwt, JWTError
 
 router = APIRouter()
 
@@ -44,7 +46,7 @@ def signup(user_in: UserCreate, db: Session = Depends(get_db)):
 @router.post("/login", response_model=Token)
 def login(credentials: Login, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == credentials.username).first()
-    if not user or not verify_password(credentials.password, user.hashed_password):
+    if not user or not verify_password(credentials.password, str(user.hashed_password)):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect email or password.",

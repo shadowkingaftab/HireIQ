@@ -1,7 +1,9 @@
-from typing import List, Optional
-from sqlalchemy.orm import Session
+from typing import List
+
 from backend.app.contracts.feedback import FeedbackCreate
 from backend.app.models.feedback import Feedback
+from sqlalchemy.orm import Session
+
 
 class FeedbackService:
     def list_by_application(self, db: Session, *, application_id: int) -> List[Feedback]:

@@ -1,7 +1,7 @@
-from sqlalchemy import Column, Integer, String, Text, ForeignKey, Table
-from sqlalchemy.orm import relationship
 from backend.app.database import Base
 from backend.app.models.base import TimestampMixin
+from sqlalchemy import Column, ForeignKey, Integer, String, Table, Text
+from sqlalchemy.orm import relationship
 
 # Association table for Team-User (Many-to-Many)
 team_members = Table(

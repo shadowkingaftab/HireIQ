@@ -1,5 +1,6 @@
 from typing import Any, Dict
 
+
 class StackOverflowMapper:
     def map_answer_to_evidence(self, answer: Dict[str, Any]) -> Dict[str, Any]:
         return {

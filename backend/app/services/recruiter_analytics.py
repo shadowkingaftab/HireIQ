@@ -1,5 +1,7 @@
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict
+
 from sqlalchemy.orm import Session
+
 
 class RecruiterAnalytics:
     def summary(self, db: Session, *, recruiter_id: int) -> Dict[str, Any]:

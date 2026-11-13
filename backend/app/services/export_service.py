@@ -1,4 +1,5 @@
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List
+
 
 class ExportService:
     def export_csv(self, *, data: List[Dict[str, Any]], filename: str) -> str:

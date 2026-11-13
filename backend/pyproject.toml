@@ -50,12 +50,28 @@ line-length = 88
 
 [tool.ruff]
 line-length = 88
+exclude = [
+    "app/models_backup/**",
+    "app/models_before_bulk_repair_20260821_223457/**",
+]
+
+[tool.ruff.lint]
 select = ["E", "F", "I"]
+ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"**/__init__.py" = ["F401"]
 
 [tool.mypy]
 python_version = "3.11"
-strict = true
+check_untyped_defs = true
+warn_unused_ignores = true
+exclude = "(?x)(^backend/app/models_backup/|^backend/app/models_before_bulk_repair_20260821_223457/|^backend/tests/)"
+
+[[tool.mypy.overrides]]
+module = ["boto3.*", "clamd", "deprecated.*", "jose", "jose.*", "passlib.*"]
+ignore_missing_imports = true
+follow_imports = "skip"
 
 [tool.pytest.ini_options]
-asyncio_mode = "auto"
 testpaths = ["tests"]

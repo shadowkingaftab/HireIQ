@@ -1,6 +1,7 @@
-from sqlalchemy.orm import Session
-from backend.app.repositories.base_repository import BaseRepository
 from backend.app.models.job import Job
+from backend.app.repositories.base_repository import BaseRepository
+from sqlalchemy.orm import Session
+
 
 class JobRepository(BaseRepository[Job]):
     def get_by_organization(self, db: Session, *, organization_id: int) -> list:

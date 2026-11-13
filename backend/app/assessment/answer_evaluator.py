@@ -14,26 +14,8 @@ class AnswerEvaluator:
         return 0.0
 
     def _evaluate_code(self, question: Dict[str, Any], answer: str) -> float:
-        tests = question.get("tests", [])
-        if not tests:
-            return 0.0
-        passed = 0
-        for test in tests:
-            if self._run_test(answer, test):
-                passed += 1
-        return passed / len(tests)
-
-    def _run_test(self, code: str, test: Dict[str, Any]) -> bool:
-        try:
-            compiled = compile(code, "<string>", "exec")
-            namespace: Dict[str, Any] = {}
-            exec(compiled, namespace)
-            func = namespace.get(test.get("function"))
-            if func is None:
-                return False
-            return func(*test.get("args", [])) == test.get("expected")
-        except Exception:
-            return False
-
+        # Never execute candidate code in the API process. Code questions need a
+        # separately isolated runner before they can be safely graded.
+        raise RuntimeError("Code grading is unavailable until an isolated sandbox is configured")
 
 evaluator = AnswerEvaluator()

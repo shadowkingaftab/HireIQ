@@ -1,7 +1,8 @@
-from sqlalchemy import Column, Integer, String, Text, ForeignKey, JSON
-from sqlalchemy.orm import relationship
 from backend.app.database import Base
 from backend.app.models.base import TimestampMixin
+from sqlalchemy import JSON, Column, ForeignKey, Integer, String, Text
+from sqlalchemy.orm import relationship
+
 
 class Candidate(Base, TimestampMixin):
     __tablename__ = "candidates"
@@ -25,6 +26,13 @@ class Candidate(Base, TimestampMixin):
     external_accounts = relationship("ExternalAccount", back_populates="candidate", cascade="all, delete-orphan")
     capability_scores = relationship("CapabilityScore", back_populates="candidate", cascade="all, delete-orphan")
     portfolios = relationship("Portfolio", back_populates="candidate", cascade="all, delete-orphan")
+
+    @property
+    def skills(self):
+        data = self.skills_data or {}
+        if isinstance(data, dict):
+            return data.get("skills", list(data.keys()))
+        return data
 
     def __repr__(self):
         return f"<Candidate(user_id={self.user_id})>"

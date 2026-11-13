@@ -1,5 +1,7 @@
-from typing import Any, Dict, Optional
+from typing import Any, Dict
+
 from sqlalchemy.orm import Session
+
 
 class AnalyticsRepository:
     def summary(self, db: Session, *, organization_id: int) -> Dict[str, Any]:

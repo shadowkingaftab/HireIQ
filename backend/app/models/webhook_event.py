@@ -1,7 +1,7 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, JSON, DateTime
-from sqlalchemy.orm import relationship
 from backend.app.database import Base
 from backend.app.models.base import TimestampMixin
+from sqlalchemy import JSON, Column, DateTime, Integer, String
+
 
 class WebhookEvent(Base, TimestampMixin):
     __tablename__ = "webhook_events"

@@ -1,15 +1,35 @@
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
 from backend.app.core.config import settings
 from backend.app.core.exception_handlers import add_exception_handlers
 from backend.app.lifecycle import register_lifecycle_handlers
-import backend.app.models
 from backend.app.routers import (
-    admin, analytics, applications, assessments, auth, candidates, 
-    endorsements, evidence, feedback, health, integrations, interviews, 
-    jobs, matching, notifications, organizations, recruiters, reports, 
-    search, skill_graph, skills, subscriptions, teams, users, webhooks
+    admin,
+    analytics,
+    applications,
+    assessments,
+    auth,
+    candidates,
+    endorsements,
+    evidence,
+    feedback,
+    health,
+    integrations,
+    interviews,
+    jobs,
+    matching,
+    notifications,
+    organizations,
+    recruiters,
+    reports,
+    search,
+    skill_graph,
+    skills,
+    subscriptions,
+    teams,
+    users,
+    webhooks,
 )
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -35,7 +55,7 @@ register_lifecycle_handlers(app)
 add_exception_handlers(app)
 
 # Include Routers
-app.include_router(health.router, prefix=f"{settings.API_V1_STR}/health", tags=["health"])
+app.include_router(health.router, prefix=settings.API_V1_STR, tags=["health"])
 app.include_router(auth.router, prefix=f"{settings.API_V1_STR}/auth", tags=["auth"])
 app.include_router(users.router, prefix=f"{settings.API_V1_STR}/users", tags=["users"])
 app.include_router(organizations.router, prefix=f"{settings.API_V1_STR}/organizations", tags=["organizations"])
@@ -60,6 +80,12 @@ app.include_router(feedback.router, prefix=f"{settings.API_V1_STR}/feedback", ta
 app.include_router(endorsements.router, prefix=f"{settings.API_V1_STR}/endorsements", tags=["endorsements"])
 app.include_router(reports.router, prefix=f"{settings.API_V1_STR}/reports", tags=["reports"])
 app.include_router(admin.router, prefix=f"{settings.API_V1_STR}/admin", tags=["admin"])
+
+
+@app.get("/health", include_in_schema=False)
+def root_health():
+    return health.health()
+
 
 @app.get("/")
 async def root():

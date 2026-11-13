@@ -1,7 +1,6 @@
 import logging
 from typing import Any, Dict, List
 
-from backend.app.evidence.contracts import NormalizedEvidence
 from backend.app.evidence.confidence import confidence as confidence_service
 from backend.app.evidence.reliability import reliability as reliability_service
 

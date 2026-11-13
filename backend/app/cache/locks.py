@@ -1,7 +1,4 @@
-import asyncio
 import logging
-import time
-from typing import Optional
 
 from backend.app.cache.client import cache_client
 from backend.app.cache.keys import CacheKeys

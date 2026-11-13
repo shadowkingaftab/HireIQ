@@ -1,9 +1,7 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, JSON, DateTime
-from sqlalchemy.orm import relationship
-from sqlalchemy.sql import func
-
 from backend.app.database import Base
 from backend.app.models.base import TimestampMixin
+from sqlalchemy import JSON, Column, DateTime, ForeignKey, Integer, String
+from sqlalchemy.orm import relationship
 
 
 class Report(Base, TimestampMixin):

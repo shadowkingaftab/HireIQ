@@ -1,10 +1,12 @@
-from typing import List, Dict, Any
+from typing import Any, Dict
+
+from backend.app.matching.evidence_quality_matcher import evidence_quality_matcher
+from backend.app.matching.experience_matcher import experience_matcher
 from backend.app.matching.feature_builder import feature_builder
 from backend.app.matching.graph_matcher import graph_matcher
-from backend.app.matching.experience_matcher import experience_matcher
-from backend.app.matching.evidence_quality_matcher import evidence_quality_matcher
-from backend.app.matching.uncertainty import uncertainty
 from backend.app.matching.score_calibrator import score_calibrator
+from backend.app.matching.uncertainty import uncertainty
+
 
 class ScoringEngine:
     def calculate_score(self, *, job: Dict[str, Any], candidate: Dict[str, Any]) -> Dict[str, Any]:

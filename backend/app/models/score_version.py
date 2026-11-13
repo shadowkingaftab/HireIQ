@@ -1,6 +1,6 @@
-from sqlalchemy import Boolean, Column, Integer, String, Text, JSON
 from backend.app.database import Base
 from backend.app.models.base import TimestampMixin
+from sqlalchemy import JSON, Boolean, Column, Integer, String, Text
 
 
 class ScoreVersion(Base, TimestampMixin):

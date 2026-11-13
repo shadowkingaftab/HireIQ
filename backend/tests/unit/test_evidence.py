@@ -1,5 +1,3 @@
-import pytest
-
 from backend.app.evidence.validator import Validator
 
 
@@ -10,5 +8,10 @@ def test_validator_returns_true():
 
 def test_validator_empty_data():
     validator = Validator()
-    assert validator.validate(evidence_data={}) is True
+    assert validator.validate(evidence_data={}) is False
+
+
+def test_validator_requires_evidence_source():
+    validator = Validator()
+    assert validator.validate(evidence_data={"content": {"name": "sample"}}) is False
 

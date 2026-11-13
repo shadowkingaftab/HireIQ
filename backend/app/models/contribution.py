@@ -1,7 +1,8 @@
-from sqlalchemy import Column, Integer, ForeignKey, String, Text, JSON
-from sqlalchemy.orm import relationship
 from backend.app.database import Base
 from backend.app.models.base import TimestampMixin
+from sqlalchemy import JSON, Column, ForeignKey, Integer, String
+from sqlalchemy.orm import relationship
+
 
 class Contribution(Base, TimestampMixin):
     __tablename__ = "contributions"

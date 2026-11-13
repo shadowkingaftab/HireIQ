@@ -1,5 +1,6 @@
 from typing import Any, Dict
 
+
 class ConfidenceEstimator:
     def estimate(self, *, score: float, evidence_count: int) -> Dict[str, Any]:
         if evidence_count == 0:

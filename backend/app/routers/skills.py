@@ -1,8 +1,8 @@
-from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
+from backend.app.contracts.skill_graph import SkillGraphQuery
 from backend.app.database import get_db
 from backend.app.services.skill_graph_service import skill_graph_service
-from backend.app.contracts.skill_graph import SkillGraphQuery
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
 
 router = APIRouter()
 

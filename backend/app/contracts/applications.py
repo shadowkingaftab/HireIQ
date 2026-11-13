@@ -1,6 +1,7 @@
-from typing import Optional, List, Dict, Any
-from backend.app.schemas import CoreModel, TimestampModel
+from typing import Optional
+
 from backend.app.core.constants import ApplicationStatus
+from backend.app.schemas import CoreModel, TimestampModel
 
 
 class ApplicationBase(CoreModel):

@@ -1,7 +1,7 @@
-from sqlalchemy import Column, Integer, String, Integer, ForeignKey
-from sqlalchemy.orm import relationship
 from backend.app.database import Base
 from backend.app.models.base import TimestampMixin
+from sqlalchemy import Column, ForeignKey, Integer, String
+
 
 class FileAsset(Base, TimestampMixin):
     __tablename__ = "file_assets"

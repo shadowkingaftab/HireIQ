@@ -1,5 +1,5 @@
-from fastapi import APIRouter, Request
 from backend.app.integrations.stripe.client import StripeIntegration
+from fastapi import APIRouter, Request
 
 router = APIRouter()
 integration = StripeIntegration()

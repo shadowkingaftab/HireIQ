@@ -1,5 +1,6 @@
 from typing import Any, Dict, List
 
+
 class LeetCodeClient:
     def __init__(self):
         self.base_url = "https://leetcode.com/graphql"

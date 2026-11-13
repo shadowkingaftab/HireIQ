@@ -1,14 +1,15 @@
-from typing import Any, Dict, Optional
-from sqlalchemy.orm import Session
-from backend.app.core.security import create_access_token, verify_password, get_password_hash
-from backend.app.models.user import User
+from typing import Optional
+
+from backend.app.core.security import create_access_token, verify_password
 from backend.app.models.refresh_token import RefreshToken
-from backend.app.core.config import settings
+from backend.app.models.user import User
+from sqlalchemy.orm import Session
+
 
 class AuthService:
     def authenticate(self, db: Session, *, email: str, password: str) -> Optional[User]:
         user = db.query(User).filter(User.email == email).first()
-        if not user or not verify_password(password, user.hashed_password):
+        if not user or not verify_password(password, str(user.hashed_password)):
             return None
         return user
 
@@ -27,7 +28,7 @@ class AuthService:
     def revoke_refresh_token(self, db: Session, *, token: str) -> None:
         db_obj = db.query(RefreshToken).filter(RefreshToken.token == token).first()
         if db_obj:
-            db_obj.revoked = True
+            setattr(db_obj, "revoked", True)
             db.commit()
 
 

@@ -1,10 +1,11 @@
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, Field
 from backend.app.events.event_types import EventType
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class EventSchema(BaseModel):
+    model_config = ConfigDict(use_enum_values=True)
     event_type: EventType
     entity_type: str
     entity_id: str
@@ -13,6 +14,4 @@ class EventSchema(BaseModel):
     timestamp: Optional[str] = None
     version: str = Field(default="1.0")
 
-    class Config:
-        use_enum_values = True
 

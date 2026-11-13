@@ -10,7 +10,7 @@ import { EmptyState } from "../components/ui";
 import { useNotificationStore } from "../store/notificationStore";
 import { toast } from "../store/toastStore";
 import { useDomainData } from "../hooks/useDomainData";
-import { notificationsApi } from "../services/api";
+import { authApi, notificationsApi } from "../services/api";
 import { DEMO_NOTIFICATIONS } from "../demo/demoData";
 import { formatRelativeTime } from "../utils/formatters";
 
@@ -27,7 +27,10 @@ export default function Notifications() {
   const store = useNotificationStore();
   const q = useDomainData(
     ["notifications", "list"],
-    () => notificationsApi.list(101),
+    async () => {
+      await authApi.me();
+      return notificationsApi.list();
+    },
     DEMO_NOTIFICATIONS
   );
 

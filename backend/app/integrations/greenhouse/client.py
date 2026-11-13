@@ -1,4 +1,5 @@
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
+
 
 class GreenhouseClient:
     def __init__(self, api_key: Optional[str] = None):

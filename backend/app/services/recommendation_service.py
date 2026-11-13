@@ -1,5 +1,6 @@
 from typing import Any, Dict, List
 
+
 class RecommendationService:
     def recommend_jobs(self, *, candidate_id: int, limit: int = 10) -> List[Dict[str, Any]]:
         return []

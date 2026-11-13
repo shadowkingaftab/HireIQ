@@ -1,4 +1,3 @@
-from fastapi import Request
 from backend.app.core.rate_limits import rate_limit_dependency
 
 # This re-exports or wraps the core rate limiting logic for use as a dependency

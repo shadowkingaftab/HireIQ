@@ -1,9 +1,9 @@
 import logging
 from typing import Any, Dict, List, Optional
 
-from backend.app.search.semantic_search import SemanticSearch
 from backend.app.search.filters import SearchFilters
 from backend.app.search.ranking import Ranker
+from backend.app.search.semantic_search import SemanticSearch
 
 logger = logging.getLogger(__name__)
 

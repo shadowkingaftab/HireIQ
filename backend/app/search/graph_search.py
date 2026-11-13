@@ -1,8 +1,6 @@
 import logging
 from typing import Any, Dict, List, Optional
 
-from backend.app.core.config import settings
-
 logger = logging.getLogger(__name__)
 
 
@@ -37,7 +35,7 @@ class GraphSearch:
         limit: int = 20,
     ) -> List[Dict[str, Any]]:
         related = await self.find_related_candidates(candidate_id, max_hops=2)
-        scored = []
+        scored: List[Dict[str, Any]] = []
         for node in related:
             if filters:
                 if not self._matches_filters(node, filters):

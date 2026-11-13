@@ -1,7 +1,9 @@
 from typing import List, Optional
-from sqlalchemy.orm import Session
+
 from backend.app.contracts.interviews import InterviewCreate, InterviewUpdate
 from backend.app.models.interview import Interview
+from sqlalchemy.orm import Session
+
 
 class InterviewService:
     def list_by_application(self, db: Session, *, application_id: int) -> List[Interview]:

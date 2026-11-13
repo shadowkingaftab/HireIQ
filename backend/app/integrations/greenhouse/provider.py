@@ -1,5 +1,7 @@
 from typing import Any, Dict
+
 from backend.app.integrations.base.provider import BaseProvider
+
 
 class GreenhouseProvider(BaseProvider):
     name = "greenhouse"

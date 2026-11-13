@@ -1,10 +1,12 @@
-from sqlalchemy.orm import Session
+from typing import Any
+
+from backend.app.models.evidence_snapshot import EvidenceSnapshot
 from backend.app.repositories.base_repository import BaseRepository
-from backend.app.models.evidence import Evidence
+
 
 class EvidenceSnapshotRepository(BaseRepository[Any]):
     pass
 
 
-evidence_snapshot_repository = EvidenceSnapshotRepository(None)
+evidence_snapshot_repository = EvidenceSnapshotRepository(EvidenceSnapshot)
 

@@ -1,5 +1,5 @@
 import logging
-from typing import List, Optional, Set
+from typing import Set
 
 from backend.app.cache.client import cache_client
 from backend.app.cache.keys import CacheKeys
@@ -32,12 +32,12 @@ class CacheInvalidation:
     async def invalidate_candidate(self, candidate_id: str) -> None:
         await self.invalidate(CacheKeys.candidate(candidate_id))
         await self.invalidate_pattern(CacheKeys.search_results("*"))
-        await self.invalidate_pattern(CacheKeys.match(f"{candidate_id}:*"))
+        await self.invalidate_pattern(f"match:{candidate_id}:*")
 
     async def invalidate_job(self, job_id: str) -> None:
         await self.invalidate(CacheKeys.job(job_id))
         await self.invalidate_pattern(CacheKeys.search_results("*"))
-        await self.invalidate_pattern(CacheKeys.match(f"*:{job_id}"))
+        await self.invalidate_pattern(f"match:*:{job_id}")
 
     async def invalidate_search(self) -> None:
         await self.invalidate_pattern(CacheKeys.search_results("*"))

@@ -1,7 +1,7 @@
 import logging
-from typing import List, Optional
+from typing import Any, Dict, List, Optional
 
-from backend.app.ai.model_registry import ModelRegistry, ModelInfo
+from backend.app.ai.model_registry import ModelInfo, ModelRegistry
 
 logger = logging.getLogger(__name__)
 
@@ -46,7 +46,10 @@ class EmbeddingService:
         except ImportError:
             raise RuntimeError("openai package is required for OpenAI embeddings")
         client = openai.AsyncOpenAI()
-        response = await client.embeddings.create(input=text, model=model.model_id, dimensions=model.dimensions)
+        arguments: Dict[str, Any] = {"input": text, "model": model.model_id}
+        if model.dimensions is not None:
+            arguments["dimensions"] = model.dimensions
+        response = await client.embeddings.create(**arguments)
         return response.data[0].embedding
 
     def clear_cache(self) -> None:

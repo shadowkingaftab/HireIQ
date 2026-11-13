@@ -1,8 +1,8 @@
+from backend.app.contracts.recruiters import Recruiter, RecruiterCreate
+from backend.app.database import get_db
+from backend.app.services.recruiter_service import recruiter_service
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from backend.app.database import get_db
-from backend.app.contracts.recruiters import RecruiterCreate, RecruiterUpdate, Recruiter
-from backend.app.services.recruiter_service import recruiter_service
 
 router = APIRouter()
 

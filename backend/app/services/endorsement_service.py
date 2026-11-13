@@ -1,7 +1,9 @@
-from typing import List, Optional
-from sqlalchemy.orm import Session
+from typing import List
+
 from backend.app.contracts.endorsements import EndorsementCreate
 from backend.app.models.endorsement import Endorsement
+from sqlalchemy.orm import Session
+
 
 class EndorsementService:
     def list_by_candidate(self, db: Session, *, candidate_id: int) -> List[Endorsement]:

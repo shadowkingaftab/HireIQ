@@ -1,8 +1,11 @@
-from typing import Optional
 import logging
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
-from backend.app.observability.health_checks import HealthCheck, HealthResult, health_checks
+from backend.app.observability.health_checks import (
+    HealthCheck,
+    HealthResult,
+    health_checks,
+)
 
 logger = logging.getLogger(__name__)
 

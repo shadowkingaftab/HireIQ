@@ -1,7 +1,7 @@
-from sqlalchemy import Column, String, Text, ForeignKey, Table
-from sqlalchemy.orm import relationship
 from backend.app.database import Base
 from backend.app.models.base import TimestampMixin
+from sqlalchemy import Column, ForeignKey, String, Table, Text
+from sqlalchemy.orm import relationship
 
 # Self-referential table for skill relationships (Skill Graph edges)
 skill_relationships = Table(

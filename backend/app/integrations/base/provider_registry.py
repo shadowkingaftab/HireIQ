@@ -1,5 +1,7 @@
-from typing import Any, Dict, Optional
+from typing import Dict, List, Optional
+
 from backend.app.integrations.base.provider import BaseProvider
+
 
 class ProviderRegistry:
     def __init__(self):

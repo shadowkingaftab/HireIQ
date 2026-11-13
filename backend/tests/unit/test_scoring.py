@@ -1,26 +1,26 @@
-from backend.app.matching.scorer import Scorer
+from backend.app.matching.graph_matcher import GraphMatcher
 
 
 def test_skill_overlap_scoring():
-    scorer = Scorer()
+    scorer = GraphMatcher()
     job = {"skills": ["python", "sql", "docker"]}
     candidate = {"skills": ["python", "sql"]}
-    score = scorer.score(job, candidate)
-    assert round(score, 2) == round(2 / 3, 2)
+    result = scorer.match(job=job, candidate=candidate)
+    assert round(result["score"], 2) == round(2 / 3, 2)
 
 
 def test_no_skill_overlap():
-    scorer = Scorer()
+    scorer = GraphMatcher()
     job = {"skills": ["python"]}
     candidate = {"skills": ["java"]}
-    score = scorer.score(job, candidate)
-    assert score == 0.0
+    result = scorer.match(job=job, candidate=candidate)
+    assert result["score"] == 0.0
 
 
 def test_exact_match():
-    scorer = Scorer()
+    scorer = GraphMatcher()
     job = {"skills": ["python", "django"]}
     candidate = {"skills": ["python", "django"]}
-    score = scorer.score(job, candidate)
-    assert score == 1.0
+    result = scorer.match(job=job, candidate=candidate)
+    assert result["score"] == 1.0
 

@@ -1,7 +1,8 @@
-from sqlalchemy import Column, Integer, String, Float, ForeignKey, JSON
-from sqlalchemy.orm import relationship
 from backend.app.database import Base
 from backend.app.models.base import TimestampMixin
+from sqlalchemy import JSON, Column, Float, ForeignKey, Integer, String
+from sqlalchemy.orm import relationship
+
 
 class CapabilityScore(Base, TimestampMixin):
     __tablename__ = "capability_scores"

@@ -1,8 +1,10 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Enum
-from sqlalchemy.orm import relationship
+import uuid
+
 from backend.app.database import Base
 from backend.app.models.base import TimestampMixin
-import uuid
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, String
+from sqlalchemy.orm import relationship
+
 
 class Invitation(Base, TimestampMixin):
     __tablename__ = "invitations"

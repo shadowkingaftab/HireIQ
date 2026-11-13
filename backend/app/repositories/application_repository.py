@@ -1,6 +1,6 @@
-from sqlalchemy.orm import Session
-from backend.app.repositories.base_repository import BaseRepository
 from backend.app.models.application import Application
+from backend.app.repositories.base_repository import BaseRepository
+
 
 class ApplicationRepository(BaseRepository[Application]):
     pass

@@ -1,6 +1,8 @@
-from typing import Any, Dict, Optional
-from sqlalchemy.orm import Session
+from typing import Optional
+
 from backend.app.models.data_consent import DataConsent
+from sqlalchemy.orm import Session
+
 
 class ConsentService:
     def grant(self, db: Session, *, user_id: int, purpose: str) -> DataConsent:
@@ -13,7 +15,7 @@ class ConsentService:
     def revoke(self, db: Session, *, user_id: int, purpose: str) -> Optional[DataConsent]:
         db_obj = db.query(DataConsent).filter(DataConsent.user_id == user_id, DataConsent.purpose == purpose).first()
         if db_obj:
-            db_obj.granted = False
+            setattr(db_obj, "granted", False)
             db.commit()
             db.refresh(db_obj)
         return db_obj

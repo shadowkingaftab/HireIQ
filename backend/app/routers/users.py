@@ -1,14 +1,18 @@
+from backend.app.contracts.users import User, UserCreate, UserUpdate
+from backend.app.database import get_db
+from backend.app.dependencies.auth import get_current_active_user
+from backend.app.models.user import User as UserModel
+from backend.app.services.user_service import user_service
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from backend.app.database import get_db
-from backend.app.contracts.users import UserCreate, UserUpdate, User
-from backend.app.services.user_service import user_service
 
 router = APIRouter()
 
 
 @router.get("/", response_model=list[User])
-def list_users(db: Session = Depends(get_db)):
+def list_users(db: Session = Depends(get_db), current_user: UserModel = Depends(get_current_active_user)):
+    if not current_user.is_superuser:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Insufficient permissions")
     return user_service.list(db=db)
 
 
@@ -18,7 +22,9 @@ def create_user(user_in: UserCreate, db: Session = Depends(get_db)):
 
 
 @router.get("/{user_id}", response_model=User)
-def get_user(user_id: int, db: Session = Depends(get_db)):
+def get_user(user_id: int, db: Session = Depends(get_db), current_user: UserModel = Depends(get_current_active_user)):
+    if current_user.id != user_id and not current_user.is_superuser:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Insufficient permissions")
     user = user_service.get(db=db, user_id=user_id)
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
@@ -26,7 +32,9 @@ def get_user(user_id: int, db: Session = Depends(get_db)):
 
 
 @router.put("/{user_id}", response_model=User)
-def update_user(user_id: int, user_in: UserUpdate, db: Session = Depends(get_db)):
+def update_user(user_id: int, user_in: UserUpdate, db: Session = Depends(get_db), current_user: UserModel = Depends(get_current_active_user)):
+    if current_user.id != user_id and not current_user.is_superuser:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Insufficient permissions")
     user = user_service.update(db=db, user_id=user_id, user_in=user_in)
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
@@ -34,6 +42,9 @@ def update_user(user_id: int, user_in: UserUpdate, db: Session = Depends(get_db)
 
 
 @router.delete("/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_user(user_id: int, db: Session = Depends(get_db)):
-    user_service.delete(db=db, user_id=user_id)
+def delete_user(user_id: int, db: Session = Depends(get_db), current_user: UserModel = Depends(get_current_active_user)):
+    if current_user.id != user_id and not current_user.is_superuser:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Insufficient permissions")
+    if not user_service.delete(db=db, user_id=user_id):
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
 

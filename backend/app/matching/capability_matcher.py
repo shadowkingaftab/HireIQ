@@ -3,6 +3,7 @@ from typing import Any, Dict
 from backend.app.matching.graph_matcher import graph_matcher
 from backend.app.matching.semantic_matcher import semantic_matcher
 
+
 class CapabilityMatcher:
     def match(self, *, job: Dict[str, Any], candidate: Dict[str, Any]) -> Dict[str, Any]:
         semantic = semantic_matcher.match(job=job, candidate=candidate)

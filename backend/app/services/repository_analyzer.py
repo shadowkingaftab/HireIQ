@@ -1,4 +1,5 @@
-from typing import List, Dict, Any
+from typing import Any, Dict
+
 
 class RepositoryAnalyzer:
     def analyze(self, *, repo_data: Dict[str, Any]) -> Dict[str, Any]:

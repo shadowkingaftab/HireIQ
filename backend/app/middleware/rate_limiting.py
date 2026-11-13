@@ -1,12 +1,10 @@
 import logging
 import time
-from typing import Callable, Dict, Optional
+from typing import Any, Callable, Optional
 
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 from starlette.responses import JSONResponse, Response
-
-from backend.app.core.exceptions import AppError
 
 logger = logging.getLogger(__name__)
 
@@ -43,13 +41,16 @@ class RateLimitingMiddleware(BaseHTTPMiddleware):
         return f"rate_limit:{client.host if client else 'unknown'}"
 
     async def _check_rate_limit(self, key: str) -> tuple:
+        redis_client = self.redis_client
+        if redis_client is None:
+            return True, self.default_limit, 0
         now = int(time.time())
         window_start = now - (now % self.window_seconds)
         count_key = f"{key}:{window_start}"
         try:
-            count = await self.redis_client.incr(count_key)
+            count = await redis_client.incr(count_key)
             if count == 1:
-                await self.redis_client.expire(count_key, self.window_seconds)
+                await redis_client.expire(count_key, self.window_seconds)
             remaining = max(self.default_limit - count, 0)
             if count > self.default_limit:
                 retry_after = self.window_seconds - (now - window_start)

@@ -1,5 +1,5 @@
-from typing import List, Dict, Any
-from backend.app.matching.pipeline import matching_pipeline
+from typing import Any, Dict, List
+
 
 class RankingPipeline:
     def rank_results(self, results: List[Dict[str, Any]]) -> List[Dict[str, Any]]:

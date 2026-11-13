@@ -1,7 +1,8 @@
-from sqlalchemy import Column, Integer, String, Text, ForeignKey
-from sqlalchemy.orm import relationship
 from backend.app.database import Base
 from backend.app.models.base import TimestampMixin
+from sqlalchemy import Column, ForeignKey, Integer, String, Text
+from sqlalchemy.orm import relationship
+
 
 class Endorsement(Base, TimestampMixin):
     __tablename__ = "endorsements"

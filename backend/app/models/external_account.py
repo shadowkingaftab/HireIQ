@@ -1,7 +1,8 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, JSON, Boolean
-from sqlalchemy.orm import relationship
 from backend.app.database import Base
 from backend.app.models.base import TimestampMixin
+from sqlalchemy import JSON, Boolean, Column, ForeignKey, Integer, String
+from sqlalchemy.orm import relationship
+
 
 class ExternalAccount(Base, TimestampMixin):
     __tablename__ = "external_accounts"

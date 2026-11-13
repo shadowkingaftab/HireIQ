@@ -1,5 +1,7 @@
-from typing import Any, Dict, Optional
+from typing import Any, Dict
+
 from sqlalchemy.orm import Session
+
 
 class GraphQueryEngine:
     def query(self, db: Session, *, skill_names: list, depth: int = 1) -> Dict[str, Any]:

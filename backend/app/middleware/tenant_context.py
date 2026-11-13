@@ -1,11 +1,9 @@
 import logging
-from typing import Callable, Optional
+from typing import Callable
 
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 from starlette.responses import Response
-
-from backend.app.core.exceptions import ForbiddenError
 
 logger = logging.getLogger(__name__)
 

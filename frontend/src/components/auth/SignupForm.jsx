@@ -152,15 +152,15 @@ export default function SignupForm() {
         {submitting ? "Creating account…" : "Create account"}
       </Button>
 
-      <p className="text-center text-micro leading-relaxed text-ink-faint">
+      <p className="text-center text-micro leading-relaxed text-slate-300">
         You control what evidence is shared. Public profiles are opt-in.
       </p>
 
       <Divider label="already have an account" />
-      <p className="text-center text-body-sm text-ink-muted">
+      <p className="text-center text-body-sm text-slate-300">
         <Link
           to="/login"
-          className="rounded font-medium text-intel transition-colors hover:text-intel-firm focus-visible:outline-none"
+          className="rounded font-semibold text-[#FFB36B] underline decoration-[#FFB36B]/50 underline-offset-4 transition-colors hover:text-[#FFD08A] focus-visible:outline-none"
         >
           Sign in
         </Link>

@@ -108,11 +108,11 @@ export default function LoginForm() {
       </Button>
 
       <Divider label="new to ORIONET" />
-      <p className="text-center text-body-sm text-ink-muted">
+      <p className="text-center text-body-sm text-slate-300">
         Create an account{" "}
         <Link
           to="/signup"
-          className="rounded font-medium text-intel transition-colors hover:text-intel-firm focus-visible:outline-none"
+          className="rounded font-semibold text-[#FFB36B] underline decoration-[#FFB36B]/50 underline-offset-4 transition-colors hover:text-[#FFD08A] focus-visible:outline-none"
         >
           Build your proof
         </Link>

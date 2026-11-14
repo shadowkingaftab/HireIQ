@@ -236,6 +236,34 @@
 }
 
 @layer components {
+  .auth-layout label {
+    color: #ffffff;
+    font-weight: 600;
+  }
+
+  .auth-layout input {
+    color: #ffffff;
+    font-weight: 500;
+  }
+
+  .auth-layout input::placeholder {
+    color: #94a3b8;
+    opacity: 1;
+  }
+
+  .auth-layout input:disabled {
+    color: #cbd5e1;
+  }
+
+  .auth-layout input ~ button {
+    color: #cbd5e1;
+  }
+
+  .auth-layout [id$="-desc"] {
+    color: #cbd5e1;
+    font-weight: 500;
+  }
+
   /* Layered panel: the standard card surface. Restrained glass — one blur,
      one hairline, no glow. */
   .panel {

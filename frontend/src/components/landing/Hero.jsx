@@ -1,5 +1,5 @@
 import Button from "../ui/Button";
-import Constellation from "./Constellation";
+import TrustStrip from "./TrustStrip";
 
 function HeroContent() {
   return (
@@ -85,11 +85,9 @@ export default function Hero() {
 
       <HeroStats />
 
-      <Constellation />
-
-      {/* Keep the hero spacing balanced on short and tall screens. */}
-
-      <div aria-hidden="true" className="mt-auto h-[clamp(1rem,3vh,2rem)] w-full" />
+      <div className="relative z-10 mt-auto w-full pb-8 pt-12 sm:pb-10">
+        <TrustStrip />
+      </div>
     </section>
   );
 }

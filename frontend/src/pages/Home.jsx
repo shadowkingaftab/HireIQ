@@ -1,5 +1,5 @@
 import Hero from "../components/landing/Hero";
-import TrustStrip from "../components/landing/TrustStrip";
+import ProofConstellation from "../components/landing/ProofConstellation";
 import HowItWorks from "../components/landing/HowItWorks";
 import FlagshipDemo from "../components/landing/FlagshipDemo";
 import Pathways from "../components/landing/Pathways";
@@ -10,11 +10,7 @@ export default function Home() {
   return (
     <Stack gap="none">
       <Hero />
-      <section className="relative pb-24">
-        <div className="relative z-[1] mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-          <TrustStrip />
-        </div>
-      </section>
+      <ProofConstellation />
       <div className="relative py-20 lg:py-28">
         <HowItWorks />
       </div>

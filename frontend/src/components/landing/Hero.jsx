@@ -77,8 +77,6 @@ export default function Hero() {
       aria-labelledby="hero-title"
       className="relative flex min-h-[100svh] flex-col items-center overflow-hidden bg-transparent text-white md:min-h-[84svh]"
     >
-      <Constellation />
-
       {/* MAIN CONTENT */}
 
       <HeroContent />
@@ -86,6 +84,8 @@ export default function Hero() {
       {/* STATS AND BUTTON */}
 
       <HeroStats />
+
+      <Constellation />
 
       {/* Keep the hero spacing balanced on short and tall screens. */}
 

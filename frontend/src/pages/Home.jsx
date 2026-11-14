@@ -1,5 +1,4 @@
 import Hero from "../components/landing/Hero";
-import ProofNetwork from "../components/landing/ProofNetwork";
 import TrustStrip from "../components/landing/TrustStrip";
 import HowItWorks from "../components/landing/HowItWorks";
 import FlagshipDemo from "../components/landing/FlagshipDemo";
@@ -16,7 +15,6 @@ export default function Home() {
           <TrustStrip />
         </div>
       </section>
-      <ProofNetwork />
       <div className="relative py-20 lg:py-28">
         <HowItWorks />
       </div>

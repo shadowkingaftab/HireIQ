@@ -1,4 +1,5 @@
 import Button from "../ui/Button";
+import Constellation from "./Constellation";
 
 function HeroContent() {
   return (
@@ -76,6 +77,8 @@ export default function Hero() {
       aria-labelledby="hero-title"
       className="relative flex min-h-[100svh] flex-col items-center overflow-hidden bg-transparent text-white md:min-h-[84svh]"
     >
+      <Constellation />
+
       {/* MAIN CONTENT */}
 
       <HeroContent />

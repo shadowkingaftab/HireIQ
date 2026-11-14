@@ -1,579 +1,311 @@
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import Mascot from "../Mascot";
 import { LOGOS } from "./constellationLogos";
 
-/* -------------------------------------------------------
-   CONSTELLATION (hero background layer)
-
-   A star chart of the person's proof. Every logo is a star,
-   the asterism lines join them, and everything ultimately
-   connects to the glowing orb on the horizon: the profile.
-   Left arm = verified platforms (cool), right arm = skills
-   (warm), matching the blue / orange flame behind it.
-
-   Geometry is in CSS px, measured from the horizontal centre
-   and from the BOTTOM of the hero, so the hub always sits on the
-   horizon, below the stats row. Nodes drift slowly, the lines
-   follow them, and light pulses run from each skill to the hub.
-------------------------------------------------------- */
-
-const W = 2000;
-const H = 920;
-const PANEL = "#06111B";
-
-const SIDE = {
-  L: { line: "#9CCBFF", halo: "#0297DE", spark: "#BFE0FF" },
-  R: { line: "#FFC2A6", halo: "#FC734D", spark: "#FFD2BC" },
-};
-
-// The chart is authored with the hub at b = 322; DROP lowers all of it so the hub
-// ends up at b = 160, on the horizon.
-const DROP = 162;
-
-// b = distance above the bottom edge of the hero (before DROP)
-const star = (id, x, b, r, side) => ({
-  id,
-  kind: "star",
-  x,
-  y: H - (b - DROP),
-  r,
-  side,
-});
-const logo = (id, label, x, b, r, side) => ({
-  id,
-  kind: "logo",
-  label,
-  logo: id,
-  x,
-  y: H - (b - DROP),
-  r,
-  side,
-});
-
-const HUB = { id: "hub", kind: "hub", x: 0, y: H - 160, r: 32, side: "L" };
-
-const NODES = [
-  HUB,
-
-  /* ---- left arm: verified platforms (core logos stay within +-740px) ---- */
-  star("l1", -215, 338, 2.4, "L"),
-  star("l2", -425, 314, 2.2, "L"),
-  logo("github", "GitHub", -540, 450, 29, "L"),
-  logo("leetcode", "LeetCode", -690, 340, 27, "L"),
-  logo("hackerrank", "HackerRank", -682, 505, 26, "L"),
-  logo("linkedin", "LinkedIn", -615, 618, 27, "L"),
-  logo("codeforces", "Codeforces", -510, 745, 25, "L"),
-  logo("codechef", "CodeChef", -880, 430, 25, "L"), // wide screens only
-  star("ls1", -470, 580, 2, "L"),
-  star("ls3", -860, 640, 2.2, "L"),
-  star("ls4", -735, 700, 1.8, "L"),
-  star("ls5", -420, 650, 1.8, "L"),
-  star("ls6", -950, 320, 1.8, "L"),
-
-  /* ---- right arm: skills ---- */
-  star("r1", 232, 330, 2.4, "R"),
-  star("r2", 448, 322, 2.2, "R"),
-  logo("python", "Python", 535, 452, 31, "R"),
-  logo("javascript", "JavaScript", 680, 336, 27, "R"),
-  logo("mysql", "MySQL", 690, 505, 26, "R"),
-  logo("react", "React", 625, 610, 27, "R"),
-  logo("node", "Node.js", 520, 745, 25, "R"),
-  logo("typescript", "TypeScript", 668, 742, 24, "R"),
-  logo("git", "Git", 840, 410, 24, "R"), // wide screens only
-  logo("docker", "Docker", 850, 640, 25, "R"),
-  logo("tailwind", "Tailwind", 960, 520, 22, "R"),
-  star("rs1", 478, 585, 2, "R"),
-  star("rs2", 622, 490, 2.6, "R"),
-  star("rs4", 640, 690, 1.8, "R"),
-  star("rs5", 905, 330, 2, "R"),
-  star("rs6", 598, 388, 1.8, "R"),
-  star("rs7", 425, 660, 1.8, "R"),
+/*
+ * Seeded star-chart layout: the same node list and viewport produce the same
+ * irregular arrangement on every load. Edit DEFAULT_NODES to change platforms
+ * and skills; the layout, paths, and mobile subset are derived from that list.
+ */
+const DEFAULT_NODES = [
+  { id: "github", label: "GitHub", side: "cool", url: "https://github.com" },
+  { id: "linkedin", label: "LinkedIn", side: "cool", url: "https://linkedin.com" },
+  { id: "leetcode", label: "LeetCode", side: "cool", url: "https://leetcode.com" },
+  { id: "codechef", label: "CodeChef", side: "cool", url: "https://codechef.com" },
+  { id: "hackerrank", label: "HackerRank", side: "cool", url: "https://hackerrank.com" },
+  { id: "codeforces", label: "Codeforces", side: "cool", url: "https://codeforces.com" },
+  { id: "python", label: "Python", side: "warm", url: "https://python.org" },
+  { id: "javascript", label: "JavaScript", side: "warm", url: "https://developer.mozilla.org/en-US/docs/Web/JavaScript" },
+  { id: "react", label: "React", side: "warm", url: "https://react.dev" },
+  { id: "node", label: "Node.js", side: "warm", url: "https://nodejs.org" },
+  { id: "mysql", label: "MySQL", side: "warm", url: "https://mysql.com" },
+  { id: "docker", label: "Docker", side: "warm", url: "https://docker.com" },
+  { id: "git", label: "Git", side: "warm", url: "https://git-scm.com" },
+  { id: "typescript", label: "TypeScript", side: "warm", url: "https://typescriptlang.org" },
+  { id: "tailwind", label: "Tailwind", side: "warm", url: "https://tailwindcss.com" },
 ];
+const MOBILE_IDS = new Set(["github", "linkedin", "leetcode", "python", "javascript", "react", "node", "mysql", "tailwind"]);
+const PLATFORM_IDS = new Set(["github", "linkedin", "leetcode", "codechef", "hackerrank", "codeforces"]);
+const GOLDEN_SEED = 0x0a71e7;
+const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
 
-const EDGES = [
-  // left arm
-  ["hub", "l1"], ["l1", "l2"], ["l2", "github"], ["l2", "leetcode"],
-  ["github", "leetcode"], ["github", "hackerrank"], ["leetcode", "hackerrank"],
-  ["github", "ls1"], ["ls1", "linkedin"], ["hackerrank", "linkedin"],
-  ["linkedin", "ls4"], ["ls4", "codeforces"], ["linkedin", "ls5"],
-  ["hackerrank", "codechef"], ["codechef", "ls6"], ["codechef", "ls3"],
-  // right arm
-  ["hub", "r1"], ["r1", "r2"], ["r2", "python"], ["r2", "javascript"],
-  ["python", "rs2"], ["rs2", "mysql"], ["javascript", "mysql"],
-  ["javascript", "rs6"], ["rs6", "python"], ["python", "rs1"],
-  ["rs1", "react"], ["mysql", "react"], ["react", "rs4"],
-  ["rs4", "typescript"], ["react", "node"], ["node", "rs7"],
-  ["mysql", "git"], ["git", "docker"], ["git", "tailwind"], ["git", "rs5"],
-];
-
-// Lines touching the hub or the horizon relays are the "trunk" and get more weight,
-// so they stay readable against the bright flame.
-const TRUNK = new Set(["hub", "l1", "l2", "r1", "r2"]);
-
-/* -------------------------------------------------------
-   GRAPH PREP (module scope, runs once)
-------------------------------------------------------- */
-
-const INDEX = Object.fromEntries(NODES.map((n, i) => [n.id, i]));
-const EDGE_LIST = EDGES.map(([a, b], k) => ({
-  k,
-  a: INDEX[a],
-  b: INDEX[b],
-  trunk: TRUNK.has(a) && TRUNK.has(b),
-  side: NODES[INDEX[a] === 0 ? INDEX[b] : INDEX[a]].side,
-}));
-
-// Gap left between a line end and the star it points at.
-const gapOf = (n) =>
-  n.kind === "hub" ? 46 : n.kind === "logo" ? n.r + 9 : n.r + 5;
-
-// BFS from the hub: parent node + connecting edge for every node.
-const PARENT = new Array(NODES.length).fill(-1);
-const PARENT_EDGE = new Array(NODES.length).fill(-1);
-{
-  const adj = NODES.map(() => []);
-  EDGE_LIST.forEach((e) => {
-    adj[e.a].push([e.b, e.k]);
-    adj[e.b].push([e.a, e.k]);
-  });
-  const seen = new Set([0]);
-  const queue = [0];
-  while (queue.length) {
-    const cur = queue.shift();
-    adj[cur].forEach(([nxt, k]) => {
-      if (!seen.has(nxt)) {
-        seen.add(nxt);
-        PARENT[nxt] = cur;
-        PARENT_EDGE[nxt] = k;
-        queue.push(nxt);
-      }
-    });
-  }
+function seeded(seed) {
+  let value = seed >>> 0;
+  return () => {
+    value = (value * 1664525 + 1013904223) >>> 0;
+    return value / 4294967296;
+  };
 }
 
-const pathToHub = (i) => {
-  const nodes = [i];
+function makeLayout(nodes, width, height, mobile, badgeSize) {
+  const random = seeded(GOLDEN_SEED + width * 13 + height * 7 + nodes.length);
+  const badgeRadius = badgeSize / 2;
+  const centerY = clamp(height * 0.68 + badgeRadius + 10, badgeRadius + 10, height - badgeRadius - 42);
+  const center = { id: "__center__", x: width / 2, y: centerY, radius: badgeRadius };
+  const nodeRadius = mobile ? 18 : 22;
+  const minGap = 90;
+  const maxRadius = Math.max(mobile ? 122 : 205, Math.min(mobile ? 240 : 470, width / 2 - nodeRadius - 18));
+  const placed = [];
+
+  nodes.forEach((item, index) => {
+    const inner = index < Math.ceil(nodes.length * 0.44);
+    const low = mobile ? (inner ? 130 : 170) : (inner ? 200 : 320);
+    const high = Math.min(maxRadius, mobile ? (inner ? 175 : 240) : (inner ? 260 : 470));
+    let point = null;
+    for (let tries = 0; tries < 420 && !point; tries += 1) {
+      const radius = low + random() * Math.max(1, high - low);
+      const angle = random() * Math.PI * 2;
+      const sideBias = (item.side === "cool" || PLATFORM_IDS.has(item.id) ? -1 : 1) * width * 0.055;
+      const x = center.x + Math.cos(angle) * radius + sideBias;
+      const y = center.y + Math.sin(angle) * radius * (mobile ? 0.72 : 0.82);
+      if (x < nodeRadius + 12 || x > width - nodeRadius - 12 || y < nodeRadius + 12 || y > height - nodeRadius - 12) continue;
+      if (placed.some((other) => Math.hypot(x - other.x, y - other.y) < minGap)) continue;
+      point = { ...item, x, y, radius: nodeRadius, phase: random() * Math.PI * 2, speed: 0.13 + random() * 0.1, amp: mobile ? 1.2 : 2.2 };
+    }
+    if (!point) {
+      const angle = random() * Math.PI * 2;
+      const radius = Math.min(maxRadius, low);
+      point = { ...item, x: clamp(center.x + Math.cos(angle) * radius, 30, width - 30), y: clamp(center.y + Math.sin(angle) * radius * 0.72, 30, height - 30), radius: nodeRadius, phase: random() * 7, speed: 0.16, amp: 0 };
+    }
+    placed.push(point);
+  });
+
+  // Four nearby badges link to the profile; the remaining chart is a sparse tree
+  // with a few local loops. Every badge has a route to the centre, with <26 edges.
   const edges = [];
-  while (PARENT[nodes[nodes.length - 1]] !== -1) {
-    const cur = nodes[nodes.length - 1];
-    edges.push(PARENT_EDGE[cur]);
-    nodes.push(PARENT[cur]);
+  const degree = new Map(placed.map((n) => [n.id, 0]));
+  const addEdge = (a, b) => {
+    if (!a || !b || edges.some((edge) => (edge.a === a.id && edge.b === b.id) || (edge.a === b.id && edge.b === a.id))) return false;
+    edges.push({ id: `edge-${edges.length}`, a: a.id, b: b.id, bend: (random() - 0.5) * 0.28 });
+    if (a.id !== center.id) degree.set(a.id, degree.get(a.id) + 1);
+    if (b.id !== center.id) degree.set(b.id, degree.get(b.id) + 1);
+    return true;
+  };
+  const byDistance = [...placed].sort((a, b) => Math.hypot(a.x - center.x, a.y - center.y) - Math.hypot(b.x - center.x, b.y - center.y));
+  byDistance.slice(0, Math.min(4, placed.length)).forEach((node) => addEdge(center, node));
+  placed.forEach((node) => {
+    if (degree.get(node.id)) return;
+    const candidates = placed.filter((other) => other !== node && degree.get(other.id) < 2 && !edges.some((e) => (e.a === node.id && e.b === other.id) || (e.b === node.id && e.a === other.id)));
+    candidates.sort((a, b) => Math.hypot(a.x - node.x, a.y - node.y) - Math.hypot(b.x - node.x, b.y - node.y));
+    if (candidates[0]) addEdge(node, candidates[0]);
+  });
+  for (let i = 0; i < placed.length && edges.length < 24; i += 1) {
+    for (let j = i + 1; j < placed.length && edges.length < 24; j += 1) {
+      if (degree.get(placed[i].id) >= 2 || degree.get(placed[j].id) >= 2) continue;
+      const distance = Math.hypot(placed[i].x - placed[j].x, placed[i].y - placed[j].y);
+      if (distance < maxRadius * 0.78 && random() > 0.64) addEdge(placed[i], placed[j]);
+    }
   }
-  return { nodes, edges };
-};
 
-const LOGO_IDX = NODES.map((n, i) => (n.kind === "logo" ? i : -1)).filter(
-  (i) => i >= 0
-);
+  const points = [center, ...placed];
+  const pointById = Object.fromEntries(points.map((p) => [p.id, p]));
+  const adjacency = new Map(points.map((p) => [p.id, []]));
+  edges.forEach((edge, index) => {
+    edge.index = index;
+    adjacency.get(edge.a).push([edge.b, index]);
+    adjacency.get(edge.b).push([edge.a, index]);
+  });
+  const paths = {};
+  placed.forEach((node) => {
+    const queue = ["__center__"];
+    const previous = new Map([["__center__", null]]);
+    while (queue.length && !previous.has(node.id)) {
+      const current = queue.shift();
+      adjacency.get(current).forEach(([next, edgeIndex]) => {
+        if (!previous.has(next)) { previous.set(next, [current, edgeIndex]); queue.push(next); }
+      });
+    }
+    let cursor = node.id;
+    const route = [];
+    while (cursor !== "__center__" && previous.has(cursor)) {
+      const [parent, edgeIndex] = previous.get(cursor);
+      route.push({ from: cursor, to: parent, edgeIndex });
+      cursor = parent;
+    }
+    paths[node.id] = route;
+  });
+  return { center, nodes: placed, points: pointById, edges, paths, stars: Array.from({ length: mobile ? 18 : 30 }, () => ({ x: random() * width, y: random() * height, r: 0.7 + random() * 1.5, delay: `${random() * 7}s`, duration: `${3 + random() * 4}s` })) };
+}
 
-// Per-node drift: small, slow, different for every node.
-const DRIFT = NODES.map((n, i) =>
-  n.kind === "hub"
-    ? null
-    : {
-        ax: 2.5 + ((i * 5) % 4) * 1.3,
-        ay: 2.5 + ((i * 3) % 4) * 1.3,
-        fx: 0.22 + ((i * 7) % 5) * 0.035,
-        fy: 0.19 + ((i * 11) % 5) * 0.03,
-        ph: i * 1.7,
-      }
-);
-
-function linePoints(a, b, pa, pb) {
+function curve(edge, points, positions, centerRadius) {
+  const a = points[edge.a];
+  const b = points[edge.b];
+  const pa = positions.get(edge.a) || a;
+  const pb = positions.get(edge.b) || b;
   const dx = pb.x - pa.x;
   const dy = pb.y - pa.y;
-  const d = Math.hypot(dx, dy) || 1;
-  const ga = gapOf(a);
-  const gb = gapOf(b);
-  if (d <= ga + gb + 2) return [pa.x, pa.y, pa.x, pa.y];
-  const ux = dx / d;
-  const uy = dy / d;
-  return [pa.x + ux * ga, pa.y + uy * ga, pb.x - ux * gb, pb.y - uy * gb];
+  const distance = Math.hypot(dx, dy) || 1;
+  const startGap = edge.a === "__center__" ? centerRadius + 10 : a.radius + 7;
+  const endGap = edge.b === "__center__" ? centerRadius + 10 : b.radius + 7;
+  const ux = dx / distance;
+  const uy = dy / distance;
+  const x1 = pa.x + ux * startGap;
+  const y1 = pa.y + uy * startGap;
+  const x2 = pb.x - ux * endGap;
+  const y2 = pb.y - uy * endGap;
+  const bend = edge.bend * Math.min(distance, 180);
+  const cx = (x1 + x2) / 2 - (dy / distance) * bend;
+  const cy = (y1 + y2) / 2 + (dx / distance) * bend;
+  return { d: `M${x1},${y1} Q${cx},${cy} ${x2},${y2}`, curve: [x1, y1, cx, cy, x2, y2] };
 }
 
-const BASE = NODES.map((n) => ({ x: n.x, y: n.y }));
+const pointOnCurve = ([x1, y1, cx, cy, x2, y2], t) => ({
+  x: (1 - t) ** 2 * x1 + 2 * (1 - t) * t * cx + t ** 2 * x2,
+  y: (1 - t) ** 2 * y1 + 2 * (1 - t) * t * cy + t ** 2 * y2,
+});
 
-/* -------------------------------------------------------
-   STYLES
-------------------------------------------------------- */
-
-function ConstellationStyles() {
-  return (
-    <style>{`
-      @keyframes cs-twinkle { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
-      @keyframes cs-flow { to { stroke-dashoffset: -40; } }
-      @keyframes cs-spin { to { transform: rotate(360deg); } }
-      @keyframes cs-breathe { 0%, 100% { opacity: 0.8; } 50% { opacity: 1; } }
-
-      .cs-twinkle { animation: cs-twinkle 3.8s ease-in-out infinite; }
-      .cs-flow { stroke-dasharray: 5 7; animation: cs-flow 1.4s linear infinite; }
-      .cs-ring { animation: cs-spin 40s linear infinite; }
-      .cs-sun { animation: cs-breathe 5s ease-in-out infinite; }
-
-      .cs-line { transition: stroke-opacity 0.35s, stroke-width 0.35s; }
-      .cs-logo { transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1); }
-      .cs-node:hover .cs-logo { transform: scale(1.14); }
-
-      @media (prefers-reduced-motion: reduce) {
-        .cs-twinkle, .cs-flow, .cs-ring, .cs-sun { animation: none; }
-        .cs-logo, .cs-line { transition: none; }
-      }
-    `}</style>
-  );
-}
-
-/* -------------------------------------------------------
-   COMPONENT
-------------------------------------------------------- */
-
-export default function Constellation({ profile = {} }) {
-  const uid = useId().replace(/[^a-zA-Z0-9]/g, "");
-  const id = `cs${uid}`;
-  const [active, setActive] = useState(-1);
-
+export default function Constellation({ size = 300, nodes = DEFAULT_NODES, title = "ORIO" }) {
+  const stageRef = useRef(null);
   const svgRef = useRef(null);
-  const nodeEls = useRef([]);
-  const lineEls = useRef([]);
-  const pulseEls = useRef([]);
+  const nodeRefs = useRef(new Map());
+  const edgeRefs = useRef(new Map());
+  const pulseRefs = useRef([]);
+  const [viewport, setViewport] = useState({ width: 0, height: 0, mobile: false });
+  const [active, setActive] = useState(null);
+  const chartNodes = useMemo(() => viewport.mobile ? (nodes === DEFAULT_NODES ? nodes.filter((node) => MOBILE_IDS.has(node.id)).slice(0, 9) : nodes.slice(0, 9)) : nodes.slice(0, 16), [nodes, viewport.mobile]);
+  const badgeSize = viewport.width ? Math.min(size, viewport.mobile ? viewport.width * 0.48 : size, Math.max(150, viewport.height * 0.32 - 56)) : size;
+  const layout = useMemo(() => makeLayout(chartNodes, viewport.width || 1440, viewport.height || 900, viewport.mobile, badgeSize), [chartNodes, viewport.width, viewport.height, viewport.mobile, badgeSize]);
 
-  const lit = active >= 0 ? pathToHub(active) : null;
-  const litEdges = lit ? new Set(lit.edges) : null;
-
-  /* drift + pulses -------------------------------------- */
   useEffect(() => {
-    const svg = svgRef.current;
-    if (!svg) return undefined;
-
-    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const pos = BASE.map((p) => ({ ...p }));
-    const pulses = [0, 1, 2].map(() => ({ on: false, path: [], t0: 0, dur: 3 }));
-    let nextSpawn = 0.8;
-    let raf = 0;
-    let last = 0;
-    let onScreen = true;
-    const t0 = performance.now();
-
-    const apply = (t, still) => {
-      NODES.forEach((n, i) => {
-        const d = DRIFT[i];
-        if (d && !still) {
-          pos[i].x = n.x + d.ax * Math.sin(t * d.fx + d.ph);
-          pos[i].y = n.y + d.ay * Math.cos(t * d.fy + d.ph * 1.3);
-        } else {
-          pos[i].x = n.x;
-          pos[i].y = n.y;
-        }
-        const el = nodeEls.current[i];
-        if (el) {
-          el.setAttribute(
-            "transform",
-            `translate(${pos[i].x.toFixed(2)} ${pos[i].y.toFixed(2)})`
-          );
-        }
-      });
-
-      EDGE_LIST.forEach((e) => {
-        const el = lineEls.current[e.k];
-        if (!el) return;
-        const [x1, y1, x2, y2] = linePoints(
-          NODES[e.a],
-          NODES[e.b],
-          pos[e.a],
-          pos[e.b]
-        );
-        el.setAttribute("x1", x1.toFixed(2));
-        el.setAttribute("y1", y1.toFixed(2));
-        el.setAttribute("x2", x2.toFixed(2));
-        el.setAttribute("y2", y2.toFixed(2));
-      });
-
-      if (still) return;
-
-      // light pulses travelling leaf -> hub along the live positions
-      if (t >= nextSpawn) {
-        const free = pulses.find((p) => !p.on);
-        if (free) {
-          const leaf = LOGO_IDX[Math.floor(Math.random() * LOGO_IDX.length)];
-          free.on = true;
-          free.path = pathToHub(leaf).nodes;
-          free.t0 = t;
-          free.dur = 2.4 + 0.55 * (free.path.length - 1);
-          free.side = NODES[leaf].side;
-        }
-        nextSpawn = t + 1.3 + Math.random() * 1.4;
-      }
-
-      pulses.forEach((p, k) => {
-        const el = pulseEls.current[k];
-        if (!el) return;
-        const u = (t - p.t0) / p.dur;
-        if (!p.on || u >= 1) {
-          p.on = false;
-          el.setAttribute("opacity", "0");
-          return;
-        }
-        const pts = p.path.map((i) => pos[i]);
-        let total = 0;
-        const segs = [];
-        for (let s = 0; s < pts.length - 1; s += 1) {
-          const l = Math.hypot(pts[s + 1].x - pts[s].x, pts[s + 1].y - pts[s].y);
-          segs.push(l);
-          total += l;
-        }
-        let dist = (u * u * (3 - 2 * u)) * total;
-        let s = 0;
-        while (s < segs.length - 1 && dist > segs[s]) {
-          dist -= segs[s];
-          s += 1;
-        }
-        const f = segs[s] ? Math.min(dist / segs[s], 1) : 0;
-        const x = pts[s].x + (pts[s + 1].x - pts[s].x) * f;
-        const y = pts[s].y + (pts[s + 1].y - pts[s].y) * f;
-        el.setAttribute("transform", `translate(${x.toFixed(1)} ${y.toFixed(1)})`);
-        el.setAttribute("opacity", String(Math.min(1, u * 7, (1 - u) * 5)));
-        el.setAttribute("fill", SIDE[p.side].spark);
-      });
-    };
-
-    const loop = (now) => {
-      raf = requestAnimationFrame(loop);
-      if (now - last < 33) return; // ~30 fps is plenty for slow drift
-      last = now;
-      apply((now - t0) / 1000, false);
-    };
-
-    const start = () => {
-      if (!raf && onScreen && !document.hidden && !motion.matches) {
-        raf = requestAnimationFrame(loop);
-      }
-    };
-    const stop = () => {
-      cancelAnimationFrame(raf);
-      raf = 0;
-    };
-
-    const onMotion = () => {
-      stop();
-      pulseEls.current.forEach((el) => el && el.setAttribute("opacity", "0"));
-      apply(0, motion.matches);
-      start();
-    };
-    const onVisibility = () => (document.hidden ? stop() : start());
-
-    const io = new IntersectionObserver(([entry]) => {
-      onScreen = entry.isIntersecting;
-      if (onScreen) start();
-      else stop();
-    });
-    io.observe(svg);
-
-    motion.addEventListener("change", onMotion);
-    document.addEventListener("visibilitychange", onVisibility);
-
-    apply(0, true);
-    start();
-
-    return () => {
-      stop();
-      io.disconnect();
-      motion.removeEventListener("change", onMotion);
-      document.removeEventListener("visibilitychange", onVisibility);
-    };
+    const stage = stageRef.current;
+    if (!stage) return undefined;
+    const measure = () => setViewport({ width: Math.round(stage.clientWidth), height: Math.round(stage.clientHeight), mobile: window.matchMedia("(max-width: 767px)").matches });
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(stage);
+    const media = window.matchMedia("(max-width: 767px)");
+    media.addEventListener("change", measure);
+    return () => { observer.disconnect(); media.removeEventListener("change", measure); };
   }, []);
 
-  /* render ---------------------------------------------- */
-  const hubAvatar = profile.avatarSrc;
+  useEffect(() => {
+    const stage = stageRef.current;
+    const svg = svgRef.current;
+    if (!stage || !svg || !viewport.width || !viewport.height) return undefined;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const positions = new Map(layout.nodes.map((node) => [node.id, { x: node.x, y: node.y }]));
+    positions.set("__center__", layout.center);
+    const rng = seeded(GOLDEN_SEED + 17);
+    const pulses = Array.from({ length: 3 }, (_, i) => ({ on: false, route: [], started: 0, duration: 5, next: 1 + i * 1.8 }));
+    let raf = 0;
+    let lastFrame = 0;
+    let visible = true;
+
+    const update = (time) => {
+      if (time - lastFrame < 32) { raf = requestAnimationFrame(update); return; }
+      lastFrame = time;
+      const seconds = time / 1000;
+      const still = reduced.matches;
+      layout.nodes.forEach((node) => {
+        const point = still ? node : { x: node.x + Math.sin(seconds * node.speed + node.phase) * node.amp, y: node.y + Math.cos(seconds * node.speed * 0.83 + node.phase) * node.amp * 0.82 };
+        positions.set(node.id, point);
+        nodeRefs.current.get(node.id)?.setAttribute("transform", `translate(${point.x.toFixed(2)} ${point.y.toFixed(2)})`);
+      });
+      layout.edges.forEach((edge) => {
+        const path = edgeRefs.current.get(edge.id);
+        if (path) path.setAttribute("d", curve(edge, layout.points, positions, badgeSize / 2).d);
+      });
+      if (!still) {
+        pulses.forEach((pulse, index) => {
+          if (!pulse.on && seconds >= pulse.next && layout.nodes.length) {
+            const source = layout.nodes[Math.floor(rng() * layout.nodes.length)];
+            pulse.route = layout.paths[source.id] || [];
+            pulse.started = seconds;
+            pulse.duration = Math.max(2.8, pulse.route.length * 1.15);
+            pulse.on = pulse.route.length > 0;
+            pulse.next = seconds + 4 + rng() * 4 + index * 0.7;
+          }
+          const el = pulseRefs.current[index];
+          if (!el) return;
+          if (!pulse.on) { el.setAttribute("opacity", "0"); return; }
+          const progress = (seconds - pulse.started) / pulse.duration;
+          if (progress >= 1) { pulse.on = false; el.setAttribute("opacity", "0"); return; }
+          const segment = Math.min(pulse.route.length - 1, Math.floor(progress * pulse.route.length));
+          const local = progress * pulse.route.length - segment;
+          const edgeInfo = pulse.route[segment];
+          const geometry = curve(layout.edges[edgeInfo.edgeIndex], layout.points, positions, badgeSize / 2);
+          const forward = layout.edges[edgeInfo.edgeIndex].a === edgeInfo.from;
+          const point = pointOnCurve(geometry.curve, forward ? local : 1 - local);
+          el.setAttribute("transform", `translate(${point.x.toFixed(2)} ${point.y.toFixed(2)})`);
+          el.setAttribute("opacity", String(Math.sin(Math.PI * progress) * 0.9));
+        });
+      }
+      raf = still ? 0 : requestAnimationFrame(update);
+    };
+    const start = () => { if (!raf && visible && !document.hidden && !reduced.matches) raf = requestAnimationFrame(update); };
+    const stop = () => { cancelAnimationFrame(raf); raf = 0; };
+    const setPaused = (paused) => { stage.classList.toggle("cs-paused", paused); if (paused) stop(); else start(); };
+    const onMotion = () => { stage.classList.toggle("cs-still", reduced.matches); if (reduced.matches) { stop(); update(performance.now()); } else start(); };
+    const onVisibility = () => setPaused(document.hidden || !visible);
+    const intersection = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; onVisibility(); }, { threshold: 0.01 });
+    intersection.observe(stage);
+    reduced.addEventListener("change", onMotion);
+    document.addEventListener("visibilitychange", onVisibility);
+    stage.classList.toggle("cs-still", reduced.matches);
+    if (reduced.matches) update(performance.now()); else start();
+    return () => { stop(); intersection.disconnect(); reduced.removeEventListener("change", onMotion); document.removeEventListener("visibilitychange", onVisibility); };
+  }, [layout, badgeSize, viewport.width, viewport.height]);
+
+  const activeEdges = active ? new Set(layout.paths[active]?.map((part) => part.edgeIndex) || []) : null;
+  const activeNodes = active ? new Set([active, ...(layout.paths[active] || []).map((part) => part.to)]) : null;
 
   return (
-    <svg
-      ref={svgRef}
-      aria-hidden="true"
-      viewBox={`${-W / 2} 0 ${W} ${H}`}
-      width={W}
-      height={H}
-      className="absolute bottom-0 left-1/2 -translate-x-1/2"
-      style={{ width: W, height: H, maxWidth: "none", pointerEvents: "none" }}
-    >
-      <ConstellationStyles />
-
-      <defs>
-        {["L", "R"].map((s) => (
-          <radialGradient key={s} id={`${id}-halo${s}`}>
-            <stop offset="0" stopColor={SIDE[s].halo} stopOpacity="0.38" />
-            <stop offset="0.6" stopColor={SIDE[s].halo} stopOpacity="0.1" />
-            <stop offset="1" stopColor={SIDE[s].halo} stopOpacity="0" />
-          </radialGradient>
-        ))}
-        <radialGradient id={`${id}-sun`}>
-          <stop offset="0" stopColor="#FFF1E8" stopOpacity="0.85" />
-          <stop offset="0.25" stopColor="#FFC9A8" stopOpacity="0.35" />
-          <stop offset="0.6" stopColor="#FF8A5E" stopOpacity="0.1" />
-          <stop offset="1" stopColor="#FF8A5E" stopOpacity="0" />
-        </radialGradient>
-        <radialGradient id={`${id}-orb`}>
-          <stop offset="0" stopColor="#FFFFFF" />
-          <stop offset="0.45" stopColor="#FFE6D6" />
-          <stop offset="0.85" stopColor="#FFA77A" />
-          <stop offset="1" stopColor="#FF8A5E" />
-        </radialGradient>
-        <radialGradient id={`${id}-spark`}>
-          <stop offset="0" stopColor="#fff" stopOpacity="0.9" />
-          <stop offset="1" stopColor="#fff" stopOpacity="0" />
-        </radialGradient>
-        <clipPath id={`${id}-avatar`}>
-          <circle r="29" />
-        </clipPath>
-      </defs>
-
-      {/* ASTERISM LINES */}
-      <g fill="none" strokeLinecap="round">
-        {EDGE_LIST.map((e) => {
-          const on = litEdges ? litEdges.has(e.k) : false;
-          const [x1, y1, x2, y2] = linePoints(
-            NODES[e.a],
-            NODES[e.b],
-            BASE[e.a],
-            BASE[e.b]
-          );
-          return (
-            <line
-              key={e.k}
-              ref={(el) => {
-                lineEls.current[e.k] = el;
-              }}
-              className={`cs-line${on ? " cs-flow" : ""}`}
-              x1={x1}
-              y1={y1}
-              x2={x2}
-              y2={y2}
-              stroke={SIDE[e.side].line}
-              strokeOpacity={on ? 1 : litEdges ? 0.12 : e.trunk ? 0.95 : 0.5}
-              strokeWidth={on ? 1.9 : e.trunk ? 2 : 1.2}
-            />
-          );
-        })}
-      </g>
-
-      {/* NODES */}
-      {NODES.map((n, i) => {
-        if (n.kind === "hub") return null;
-
-        if (n.kind === "star") {
-          return (
-            <g
-              key={n.id}
-              ref={(el) => {
-                nodeEls.current[i] = el;
-              }}
-              transform={`translate(${n.x} ${n.y})`}
-            >
-              <circle r={n.r * 5} fill={`url(#${id}-spark)`} opacity="0.45" />
-              <g className="cs-twinkle" style={{ animationDelay: `${(i * 0.7) % 4}s` }}>
-                <circle r={n.r} fill={SIDE[n.side].spark} />
-              </g>
+    <div ref={stageRef} className="constellation-stage pointer-events-none absolute inset-0 z-0 overflow-hidden">
+      <style>{`
+        @keyframes cs-twinkle { 0%,100% { opacity:.18; transform:scale(.8) } 50% { opacity:.85; transform:scale(1.25) } }
+        @keyframes cs-float { 0%,100% { transform:translateY(-4px) } 50% { transform:translateY(4px) } }
+        @keyframes cs-shimmer { 0%,72%,100% { transform:translateX(-180%) rotate(24deg); opacity:0 } 78% { opacity:.55 } 90% { transform:translateX(180%) rotate(24deg); opacity:0 } }
+        .constellation-stage .cs-star { animation:cs-twinkle var(--duration) ease-in-out var(--delay) infinite }
+        .constellation-stage .cs-float { animation:cs-float 6s ease-in-out infinite }
+        .constellation-stage .cs-shimmer { animation:cs-shimmer 8s ease-in-out infinite }
+        .constellation-stage .cs-edge,.constellation-stage .cs-star { pointer-events:none }
+        .constellation-stage .cs-edge { transition:opacity .2s,stroke .2s }
+        .constellation-stage .cs-node { pointer-events:all; cursor:pointer; outline:none; transition:opacity .2s }
+        .constellation-stage .cs-node:focus-visible circle:first-child { stroke:#fff; stroke-width:2.4 }
+        .constellation-stage .cs-node:hover circle:first-child { stroke-opacity:.9 }
+        .constellation-stage .cs-node-label { opacity:.62; transition:opacity .2s }
+        .constellation-stage .cs-orb { position:relative; display:flex; align-items:center; justify-content:center; width:100%; height:100%; overflow:hidden; border:1px solid rgba(229,246,255,.5); border-radius:50%; background:radial-gradient(ellipse at 32% 20%,rgba(247,253,255,.32),rgba(164,218,246,.12) 38%,rgba(30,70,105,.2) 76%,rgba(253,115,77,.12)); -webkit-backdrop-filter:blur(24px) saturate(1.6); backdrop-filter:blur(24px) saturate(1.6); box-shadow:0 0 56px rgba(2,151,222,.28),0 18px 46px rgba(252,115,77,.12),inset 0 1px 2px rgba(255,255,255,.76),inset 0 -2px 8px rgba(255,255,255,.22) }
+        .constellation-stage .cs-orb::before { content:""; position:absolute; inset:3px 8px auto 5px; height:43%; border-radius:100% 45% 60% 38%; background:radial-gradient(ellipse at 28% 0%,rgba(255,255,255,.52),rgba(218,243,255,.15) 48%,transparent 78%); filter:blur(4px); transform:rotate(-16deg); pointer-events:none }
+        .constellation-stage .cs-orb::after { content:""; position:absolute; inset:0; border-radius:inherit; background:linear-gradient(180deg,rgba(255,255,255,.34),transparent 15%,transparent 82%,rgba(255,255,255,.22)); opacity:.75; pointer-events:none }
+        .constellation-stage .cs-shimmer { position:absolute; z-index:2; top:-30%; bottom:-30%; left:0; width:32%; background:linear-gradient(90deg,transparent,rgba(255,255,255,.23),transparent); filter:blur(8px); pointer-events:none }
+        .constellation-stage .cs-mascot { position:relative; z-index:1; width:58%; height:auto; filter:drop-shadow(0 10px 12px rgba(0,0,0,.42)) drop-shadow(0 0 14px rgba(2,151,222,.3)) }
+        .constellation-stage .cs-orb-label { display:flex; min-width:116px; flex-direction:column; align-items:center; gap:2px; padding:7px 13px 6px; border:1px solid rgba(185,218,243,.15); border-radius:999px; color:#f2f7ff; background:rgba(3,10,24,.76); box-shadow:0 8px 25px rgba(0,0,0,.22); font:700 12px/1.1 ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:.14em; text-align:center }
+        .constellation-stage .cs-orb-label small { color:#aab9cb; font-size:8px; letter-spacing:.14em }
+        .constellation-stage.cs-paused .cs-star,.constellation-stage.cs-paused .cs-float,.constellation-stage.cs-paused .cs-shimmer,.constellation-stage.cs-still .cs-star,.constellation-stage.cs-still .cs-float,.constellation-stage.cs-still .cs-shimmer { animation:none }
+        @media(max-width:767px) { .constellation-stage .cs-node-label { opacity:0 } .constellation-stage .cs-node:focus .cs-node-label,.constellation-stage .cs-node:hover .cs-node-label { opacity:1 } }
+        @media(prefers-reduced-motion:reduce) { .constellation-stage .cs-star,.constellation-stage .cs-float,.constellation-stage .cs-shimmer { animation:none } .constellation-stage .cs-edge,.constellation-stage .cs-node-label,.constellation-stage .cs-node { transition:none } }
+      `}</style>
+      {viewport.width > 0 && viewport.height > 0 && (
+        <>
+          <div className="cs-horizon-glow absolute left-1/2 top-[68%] h-[42%] w-[min(92vw,1080px)] -translate-x-1/2 rounded-[50%]" aria-hidden="true" style={{ background: "radial-gradient(ellipse at 34% 52%,rgba(2,151,222,.22),transparent 46%),radial-gradient(ellipse at 66% 52%,rgba(252,115,77,.22),transparent 48%),radial-gradient(ellipse at 50% 66%,rgba(255,183,131,.24),transparent 40%)", filter: "blur(48px)" }} />
+          <svg ref={svgRef} className="absolute inset-0 h-full w-full" viewBox={`0 0 ${viewport.width} ${viewport.height}`} role="group" aria-label="A constellation of verified platforms and skills surrounding the ORIO profile">
+            {layout.stars.map((star, i) => <circle key={`star-${i}`} className="cs-star" cx={star.x} cy={star.y} r={star.r} fill={i % 5 === 0 ? "#d8efff" : "#8db9dc"} style={{ "--delay": star.delay, "--duration": star.duration }} />)}
+            <g fill="none" strokeLinecap="round">
+              {layout.edges.map((edge) => {
+                const selected = activeEdges?.has(edge.index);
+                const related = selected || (activeNodes && (activeNodes.has(edge.a) || activeNodes.has(edge.b)));
+                const warm = layout.points[edge.a]?.side === "warm" || layout.points[edge.b]?.side === "warm";
+                return <path key={edge.id} ref={(el) => el && edgeRefs.current.set(edge.id, el)} className="cs-edge" d={curve(edge, layout.points, new Map(), badgeSize / 2).d} stroke={selected ? "#fff" : warm ? "#FFC3A7" : "#A8D7F4"} strokeWidth={selected ? 1.7 : 1} opacity={active ? (related ? .85 : .08) : .42} />;
+              })}
             </g>
-          );
-        }
-
-        const s = n.r * 1.28;
-        return (
-          <g
-            key={n.id}
-            ref={(el) => {
-              nodeEls.current[i] = el;
-            }}
-            transform={`translate(${n.x} ${n.y})`}
-            className="cs-node"
-            onMouseEnter={() => setActive(i)}
-            onMouseLeave={() => setActive(-1)}
-          >
-            <g className="cs-logo">
-              <circle r={n.r + 20} fill={`url(#${id}-halo${n.side})`} />
-              <circle
-                r={n.r}
-                fill={PANEL}
-                fillOpacity="0.78"
-                stroke={SIDE[n.side].line}
-                strokeOpacity={active === i ? 0.9 : 0.3}
-                strokeWidth="1.2"
-                pointerEvents="all"
-              />
-              <image
-                href={LOGOS[n.logo]}
-                x={-s / 2}
-                y={-s / 2}
-                width={s}
-                height={s}
-                preserveAspectRatio="xMidYMid meet"
-              />
-              <text
-                y={n.r + 17}
-                textAnchor="middle"
-                className="font-mono"
-                fontSize="10.5"
-                letterSpacing="1.6"
-                fill="#DCE8FF"
-                fillOpacity={active === i ? 1 : 0.62}
-                stroke="#02070A"
-                strokeWidth="3"
-                strokeLinejoin="round"
-                paintOrder="stroke"
-              >
-                {n.label.toUpperCase()}
-              </text>
-            </g>
-          </g>
-        );
-      })}
-
-      {/* PULSES (leaf -> hub) */}
-      {[0, 1, 2].map((k) => (
-        <g
-          key={k}
-          ref={(el) => {
-            pulseEls.current[k] = el;
-          }}
-          opacity="0"
-          fill="#fff"
-        >
-          <circle r="9" opacity="0.28" />
-          <circle r="2.6" />
-        </g>
-      ))}
-
-      {/* HUB: the profile, a luminous orb on the horizon */}
-      <g
-        ref={(el) => {
-          nodeEls.current[0] = el;
-        }}
-        transform={`translate(${HUB.x} ${HUB.y})`}
-      >
-        <circle r="150" fill={`url(#${id}-sun)`} className="cs-sun" />
-        <circle
-          className="cs-ring"
-          r="44"
-          fill="none"
-          stroke="#fff"
-          strokeOpacity="0.35"
-          strokeDasharray="2 6"
-        />
-        <circle r="38" fill="none" stroke="#fff" strokeOpacity="0.16" />
-        {hubAvatar ? (
-          <g>
-            <circle r="32" fill={PANEL} stroke="#fff" strokeOpacity="0.85" strokeWidth="1.5" />
-            <image
-              href={hubAvatar}
-              x="-29"
-              y="-29"
-              width="58"
-              height="58"
-              preserveAspectRatio="xMidYMid slice"
-              clipPath={`url(#${id}-avatar)`}
-            />
-          </g>
-        ) : (
-          <circle r="30" fill={`url(#${id}-orb)`} />
-        )}
-      </g>
-    </svg>
+            {layout.nodes.map((node) => (
+              <a key={node.id} ref={(el) => el && nodeRefs.current.set(node.id, el)} className="cs-node" transform={`translate(${node.x} ${node.y})`} href={node.url} target="_blank" rel="noopener noreferrer" aria-label={`Open ${node.label} in a new tab`} onFocus={() => setActive(node.id)} onBlur={() => setActive(null)} onMouseEnter={() => setActive(node.id)} onMouseLeave={() => setActive(null)} opacity={active ? (activeNodes?.has(node.id) ? 1 : .14) : 1}>
+                <circle r={node.radius + 8} fill={node.side === "warm" ? "#FC734D" : "#0297DE"} fillOpacity=".08" stroke={node.side === "warm" ? "#FC734D" : "#0297DE"} strokeOpacity=".25" strokeWidth="1" />
+                <circle r={node.radius} fill="#07111F" fillOpacity=".92" stroke={node.side === "warm" ? "#FC734D" : "#0297DE"} strokeOpacity=".45" strokeWidth="1" />
+                <image href={LOGOS[node.id]} x={-13} y={-13} width="26" height="26" preserveAspectRatio="xMidYMid meet" />
+                <text className="cs-node-label" y={node.radius + 19} textAnchor="middle" fill="#DCEBFA" stroke="#02070A" strokeWidth="3.5" strokeLinejoin="round" paintOrder="stroke" fontFamily="ui-monospace,SFMono-Regular,Menlo,monospace" fontSize={viewport.mobile ? 9 : 10} letterSpacing="1.1">{node.label.toUpperCase()}</text>
+              </a>
+            ))}
+            {[0, 1, 2].map((i) => <circle key={`pulse-${i}`} ref={(el) => { pulseRefs.current[i] = el; }} r="3" fill={i === 1 ? "#FFC9AE" : "#C8EEFF"} filter="drop-shadow(0 0 5px #8fe2ff)" opacity="0" />)}
+            <foreignObject x={layout.center.x - badgeSize / 2} y={layout.center.y - badgeSize / 2} width={badgeSize} height={badgeSize + 58}>
+              <div xmlns="http://www.w3.org/1999/xhtml" className="flex h-full flex-col items-center" aria-hidden="true">
+                <div className="cs-orb" style={{ width: badgeSize, height: badgeSize }}><Mascot className="cs-mascot cs-float" title="" /><span className="cs-shimmer" /></div>
+                <div className="cs-orb-label mt-2"><span>{title}</span><small>VERIFIED PROFILE</small></div>
+              </div>
+            </foreignObject>
+          </svg>
+        </>
+      )}
+    </div>
   );
 }

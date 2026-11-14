@@ -92,7 +92,7 @@ export default function ProofConstellation() {
     return()=>{stop();observer.disconnect();document.removeEventListener("visibilitychange",visibility);reduced.removeEventListener("change",motion);};
   },[nodes,edges,particles]);
 
-  return <section ref={sectionRef} className="proof-constellation relative w-full overflow-hidden bg-transparent px-4 pb-12 pt-14 text-white sm:px-6 sm:pt-20">
+  return <section ref={sectionRef} className="proof-constellation relative w-full overflow-hidden bg-transparent px-4 pb-12 pt-2 text-white sm:px-6 sm:pt-3">
     <style>{`
       @keyframes pc-float{0%,100%{transform:translateY(-4px)}50%{transform:translateY(4px)}}
       @keyframes pc-shimmer{0%,72%,100%{transform:translateX(-180%) rotate(24deg);opacity:0}78%{opacity:.55}90%{transform:translateX(180%) rotate(24deg);opacity:0}}

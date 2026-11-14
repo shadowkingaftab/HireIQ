@@ -69,16 +69,18 @@ export default function Mascot({
 
       <path fill={`url(#${gradId})`} d={BODY} />
 
-      <g fill="#FFFFFF">
-        {EYES.map((d, i) => (
-          <path key={i} d={d} />
-        ))}
-      </g>
+      <g className="orio-mascot-eyes">
+        <g fill="#FFFFFF">
+          {EYES.map((d, i) => (
+            <path key={i} d={d} />
+          ))}
+        </g>
 
-      <g fill="#001466">
-        {PUPILS.map((d, i) => (
-          <path key={i} d={d} />
-        ))}
+        <g fill="#001466">
+          {PUPILS.map((d, i) => (
+            <path key={i} d={d} />
+          ))}
+        </g>
       </g>
     </svg>
   );

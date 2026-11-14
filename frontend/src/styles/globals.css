@@ -422,6 +422,22 @@
     transform: scale(0.995);
   }
 
+  .orion-orange-cta {
+    background: linear-gradient(135deg, #ff9a28 0%, #ff741e 52%, #f45424 100%) !important;
+    color: #ffffff !important;
+    border: 0 !important;
+    box-shadow: 0 5px 16px rgba(252, 115, 30, 0.25) !important;
+    transition: filter 200ms ease, transform 200ms ease;
+  }
+
+  .orion-orange-cta:hover {
+    background: linear-gradient(135deg, #ffad36 0%, #ff7d22 55%, #f45424 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 6px 20px rgba(252, 115, 30, 0.32) !important;
+    filter: saturate(1.08);
+    transform: translateY(-2px);
+  }
+
   .hero-secondary {
     background-color: transparent;
     border: 1px solid rgba(248, 250, 252, 0.22);

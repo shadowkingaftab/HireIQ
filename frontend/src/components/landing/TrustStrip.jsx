@@ -20,14 +20,29 @@ export default function TrustStrip() {
           {principles.map(({ icon: Icon, title, copy }) => (
             <li
               key={title}
-              className="landing-feature-card group flex items-start gap-3.5 rounded-2xl p-4"
+              className="group flex items-start gap-3.5"
+              style={{
+                background: "rgba(255,255,255,0.10)",
+                backdropFilter: "blur(18px)",
+                WebkitBackdropFilter: "blur(18px)",
+                border: "1px solid rgba(255,255,255,0.28)",
+                borderRadius: 16,
+                padding: 18,
+              }}
             >
-              <span className="feature-icon mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl">
+              <span
+                className="feature-icon mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
+                style={{
+                  background: "rgba(252,115,77,0.18)",
+                  border: "1px solid rgba(252,115,77,0.45)",
+                  color: "#FFB27A",
+                }}
+              >
                 <Icon size={17} aria-hidden="true" />
               </span>
               <div>
-                <p className="text-body-sm font-semibold text-stellar">{title}</p>
-                <p className="mt-1 font-sans text-meta leading-relaxed text-nebula">{copy}</p>
+                <p className="font-sans" style={{ color: "#FFFFFF", fontSize: 16, fontWeight: 600, lineHeight: 1.4 }}>{title}</p>
+                <p className="mt-1 font-sans" style={{ color: "#CBD5E1", fontSize: 14, lineHeight: 1.5 }}>{copy}</p>
               </div>
             </li>
           ))}

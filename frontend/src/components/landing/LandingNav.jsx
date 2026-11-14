@@ -49,7 +49,7 @@ export default function LandingNav() {
           <Button
             size="sm"
             to="/signup"
-            className="hero-cta rounded-full border-0 px-4 font-semibold"
+            className="orion-orange-cta rounded-full border-0 px-4 font-semibold"
           >
             Build your proof
           </Button>
